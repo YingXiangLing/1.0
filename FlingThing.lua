@@ -10,6 +10,9 @@ tool.Activated:Connect(function()
 	if game.Players.LocalPlayer:GetMouse().Target ~= nil then
 		if target == nil then
 			if not game.Players.LocalPlayer:GetMouse().Target.Parent:FindFirstChildOfClass("Humanoid") and game.Players.LocalPlayer:GetMouse().Target.Anchored == false then
+				local e = Instance.new("Message",workspace)
+				game.Debris:AddItem(e,2)
+				e.Text = "Remember! you need to have the networkclient ownership of the part you are trying to teleport, try to touch it a few times or stand on it if it dosent work."
 				local sb = Instance.new('SelectionBox',game.Players.LocalPlayer:GetMouse().Target)
 				sb.Adornee = game.Players.LocalPlayer:GetMouse().Target
 				sb.Name = "TeleportingBox"
@@ -24,10 +27,6 @@ tool.Activated:Connect(function()
 				task.wait()
 					game:GetService("RunService").Heartbeat:Wait()
 					game.Players.LocalPlayer.Character:PivotTo(CFrame.new(target.Position+Vector3.new(0,-1,0)))
-					firetouchinterest(game.Players.LocalPlayer.Character:FindFirstChild("Head"),target,0)
-					firetouchinterest(game.Players.LocalPlayer.Character:FindFirstChild("Head"),target,1)
-					game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):MoveTo(Vector3.new(math.random(-1000,1000),math.random(-1000,1000),math.random(-1000,1000)))
-				
 				wait(0.6)
 				game.Players.LocalPlayer.Character:PivotTo(oldp)
 				target.Position =  oldm
