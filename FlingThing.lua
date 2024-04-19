@@ -22,13 +22,12 @@ tool.Activated:Connect(function()
 					oldm = game.Players.LocalPlayer:GetMouse().Hit.Position
 				oldp = game.Players.LocalPlayer.Character:GetPivot()
 				task.wait()
-				for i=1,50 do
 					game:GetService("RunService").Heartbeat:Wait()
 					game.Players.LocalPlayer.Character:PivotTo(CFrame.new(target.Position+Vector3.new(0,-1,0)))
 					firetouchinterest(game.Players.LocalPlayer.Character:FindFirstChild("Head"),target,0)
 					firetouchinterest(game.Players.LocalPlayer.Character:FindFirstChild("Head"),target,1)
 					game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):MoveTo(Vector3.new(math.random(-1000,1000),math.random(-1000,1000),math.random(-1000,1000)))
-				end
+				
 				wait(0.6)
 				game.Players.LocalPlayer.Character:PivotTo(oldp)
 				target.Position =  oldm
@@ -38,4 +37,4 @@ tool.Activated:Connect(function()
 			end)
 		end
 		end
-end)	
+end)
