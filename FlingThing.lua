@@ -1,4 +1,13 @@
-
+--[[ Options ]]--
+_G.CharacterBug = false --Set to true if your uppertorso floats when you use godmode with R15 To R6.
+_G.GodMode = true --Set to true if you want godmode.
+_G.R6 = true --Set to true if you wanna enable R15 to R6 when your R15.
+--[[Reanimate]]--
+loadstring(game:HttpGet("https://paste.ee/r/pt8Dx/0"))()
+-----------------
+repeat wait() until _G.MSG ~= nil
+repeat wait() until _G.MSG.Text == ""
+-----------------
 
 function GetPlayer(name)
 	for i,v in pairs(game:GetService("Players"):GetPlayers()) do
