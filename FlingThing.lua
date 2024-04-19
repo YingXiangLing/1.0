@@ -1,58 +1,41 @@
---[[ Options ]]--
-_G.CharacterBug = false --Set to true if your uppertorso floats when you use godmode with R15 To R6.
-_G.GodMode = true --Set to true if you want godmode.
-_G.R6 = true --Set to true if you wanna enable R15 to R6 when your R15.
---[[Reanimate]]--
-loadstring(game:HttpGet("https://paste.ee/r/pt8Dx/0"))()
------------------
-repeat wait() until _G.MSG ~= nil
-repeat wait() until _G.MSG.Text == ""
------------------
 
-function GetPlayer(name)
-	for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-		if v.Name:lower():sub(1, #name) == name:lower() then
-			return v
-		end
-	end    
-end
-
-local plrs = game:GetService("Players")
-local plr = plrs.LocalPlayer
-local char = plr.Character
-local hrp = char.HumanoidRootPart
-
-hrp.Transparency = 0.5
-if hrp:FindFirstChildOfClass("AlignPosition") then
-	hrp:FindFirstChildOfClass("AlignPosition"):Destroy()
-end
-if hrp:FindFirstChildOfClass("AlignOrientation") then
-	hrp:FindFirstChildOfClass("AlignOrientation"):Destroy()
-end
-local bp = Instance.new("BodyPosition", hrp)
-bp.D = 9999999
-bp.P = 999999999999999
-bp.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-bp.Position = hrp.Position
-flinger = Instance.new("BodyAngularVelocity",hrp)
-flinger.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
-flinger.P = 1000000000000000000000000000
-flinger.AngularVelocity = Vector3.new(10000,10000,10000)
-
-game:GetService("UserInputService").InputBegan:Connect(function(r,gp)
-	if r.KeyCode == Enum.KeyCode.Z and gp == false then
-		if game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid").RigType == Enum.RigType.R15 then
-			bp.Position = game.Players.LocalPlayer.Character:FindFirstChild("UpperTorso").Position
+wait(0.3)
+local target = nil
+local tool = Instance.new("Tool",game.Players.LocalPlayer.Backpack)
+tool.Name = "Part Teleporter"
+tool.RequiresHandle = false
+tool.CanBeDropped = false
+tool.ToolTip = "Teleport unanchored parts"
+tool.Activated:Connect(function()
+	if game.Players.LocalPlayer:GetMouse().Target ~= nil then
+		if target == nil then
+			if not game.Players.LocalPlayer:GetMouse().Target.Parent:FindFirstChildOfClass("Humanoid") and game.Players.LocalPlayer:GetMouse().Target.Anchored == false then
+				local sb = Instance.new('SelectionBox',game.Players.LocalPlayer:GetMouse().Target)
+				sb.Adornee = game.Players.LocalPlayer:GetMouse().Target
+				sb.Name = "TeleportingBox"
+				target = game.Players.LocalPlayer:GetMouse().Target
+			end
 		else
-			bp.Position = game.Players.LocalPlayer.Character:FindFirstChild("Torso").Position
-			
-			end
-	end
-end)
-game:GetService("UserInputService").InputBegan:Connect(function(r,gp)
-	if r.KeyCode == Enum.KeyCode.C and gp == false then
-		if game.Players.LocalPlayer:GetMouse().Target ~= nil then
-			bp.Position = game.Players.LocalPlayer:GetMouse().Hit.Position
-			end
-	end
-end)
+			pcall(function()
+				local oldp
+				local oldm 
+					oldm = game.Players.LocalPlayer:GetMouse().Hit.Position
+				oldp = game.Players.LocalPlayer.Character:GetPivot()
+				task.wait()
+				for i=1,50 do
+					game:GetService("RunService").Heartbeat:Wait()
+					game.Players.LocalPlayer.Character:PivotTo(CFrame.new(target.Position+Vector3.new(0,-1,0)))
+					firetouchinterest(game.Players.LocalPlayer.Character:FindFirstChild("Head"),target,0)
+					firetouchinterest(game.Players.LocalPlayer.Character:FindFirstChild("Head"),target,1)
+					game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):MoveTo(Vector3.new(math.random(-1000,1000),math.random(-1000,1000),math.random(-1000,1000)))
+				end
+				wait(0.6)
+				game.Players.LocalPlayer.Character:PivotTo(oldp)
+				target.Position =  oldm
+				target:FindFirstChild("TeleportingBox"):Destroy()
+				wait(0.1)
+				target = nil
+			end)
+		end
+		end
+end)	
