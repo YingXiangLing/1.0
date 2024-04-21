@@ -16,6 +16,9 @@ for _, v in ipairs(workspace:GetDescendants()) do
      eeeee = Instance.new("BodyPosition",v)
      eeeee.P = 99999999999999999999999999
       eeeee.Position = SetOldPosition
+			
+			v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+			
   end
   end
 end
