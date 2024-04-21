@@ -28,15 +28,11 @@ tool.Activated:Connect(function()
 			end
 		else
 			pcall(function()
-				local oldp
 				local oldm 
 				oldm = game.Players.LocalPlayer:GetMouse().Hit.Position
-				oldp = game.Players.LocalPlayer.Character:GetPivot()
 				task.wait()
 				game:GetService("RunService").Heartbeat:Wait()
-				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(target.Position+Vector3.new(0,-1,0)))
 				wait(0.6)
-				game.Players.LocalPlayer.Character:PivotTo(oldp)
 				target.Position =  oldm
 				target:FindFirstChild("TeleportingBox"):Destroy()
 				wait(0.1)
@@ -64,15 +60,14 @@ toole.Activated:Connect(function()
 				sb.Name = "TeleportingBox"
 				targete = game.Players.LocalPlayer:GetMouse().Target
 				pcall(function()
-					local oldp
+				
 					local oldm 
 					oldm = game.Players.LocalPlayer:GetMouse().Hit.Position
-					oldp = game.Players.LocalPlayer.Character:GetPivot()
+					
 					task.wait()
 					game:GetService("RunService").Heartbeat:Wait()
-					game.Players.LocalPlayer.Character:PivotTo(CFrame.new(targete.Position+Vector3.new(0,-1,0)))
 					wait(0.6)
-					game.Players.LocalPlayer.Character:PivotTo(oldp)
+					
 					targete.Position =  Vector3.new(0,-70,0)
 					targete:FindFirstChild("TeleportingBox"):Destroy()
 					wait(0.1)
