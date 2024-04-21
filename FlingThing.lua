@@ -1,6 +1,6 @@
 
 wait(0.3)
-game.Players.LocalPlayer.CharacterAdded:Connect(function() 
+
 		game.Players.LocalPlayer.MaxSimulationRadius = 1000
 		game.Players.LocalPlayer.SimulationRadius = 1000
 		
@@ -78,4 +78,3 @@ toole.Activated:Connect(function()
 			end
 		end
 		end)
-	end)
