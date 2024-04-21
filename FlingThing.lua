@@ -1,7 +1,7 @@
 
 wait(0.3)
 
-		game.Players.LocalPlayer.MaxSimulationRadius = 1000
+		game.Players.LocalPlayer.MaximumSimulationRadius = 1000
 		game.Players.LocalPlayer.SimulationRadius = 1000
 		
 local target = nil
