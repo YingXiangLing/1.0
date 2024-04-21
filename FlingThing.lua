@@ -1,5 +1,9 @@
 
 wait(0.3)
+game.Players.LocalPlayer.CharacterAdded:Connect(function() 
+		game.Players.LocalPlayer.MaxSimulationRadius = 1000
+		game.Players.LocalPlayer.SimulationRadius = 1000
+		
 local target = nil
 local tool = Instance.new("Tool",game.Players.LocalPlayer.Backpack)
 tool.Name = "Part Teleporter"
@@ -74,4 +78,4 @@ toole.Activated:Connect(function()
 			end
 		end
 		end)
-
+	end)
