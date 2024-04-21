@@ -3,7 +3,11 @@ wait(0.3)
 
 		game.Players.LocalPlayer.MaximumSimulationRadius = 1000
 		game.Players.LocalPlayer.SimulationRadius = 1000
-		
+local SetOldPosition 
+SetOldPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+		game.Players.LocalPlayer.Character.Humanoid.Health = 0
+wait(game.Players.RespawnTime+2)
+game.Players.LocalPlayer.Character:PivotTo(CFrame.new(SetOldPosition))
 local target = nil
 local tool = Instance.new("Tool",game.Players.LocalPlayer.Backpack)
 tool.Name = "Part Teleporter"
