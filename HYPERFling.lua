@@ -11,7 +11,7 @@ local function Fling(TargetName)
 	if Players:FindFirstChild(TargetName) then
 		local oldpos;oldpos=plr.Character:FindFirstChild("HumanoidRootPart").CFrame
 		local HRP = plr.Character:FindFirstChild("HumanoidRootPart")
-                HRP.Transparency = 0
+                HRP.Transparency = 0.5
 		HRP:FindFirstChildOfClass("Motor6D").Enabled = false
 		local Target = Players:FindFirstChild(TargetName).Character
 		workspace.CurrentCamera.CameraSubject = Target:FindFirstChild("Head")
