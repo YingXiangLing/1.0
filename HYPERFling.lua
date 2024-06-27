@@ -11,7 +11,7 @@ local function Fling(TargetName)
 	if Players:FindFirstChild(TargetName) then
 		local oldpos;oldpos=plr.Character:FindFirstChild("HumanoidRootPart").CFrame
 		local HRP = plr.Character:FindFirstChild("HumanoidRootPart")
-                HRP.Transparency = 0.5
+		HRP.Transparency = 0.5
 		HRP.BrickColor = BrickColor.new("Persimmon")
 		HRP:FindFirstChildOfClass("Motor6D").Enabled = false
 		local Target = Players:FindFirstChild(TargetName).Character
@@ -19,18 +19,36 @@ local function Fling(TargetName)
 		HRP.CFrame = Target:GetPivot()
 		plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Physics)
 		local otick;otick=tick()
+		local MODEL = Instance.new("Model",workspace)
+		Instance.new("Humanoid",MODEL).Name = "1"
 		repeat
+			HRP.Parent = MODEL
 			HRP.Position = Target.HumanoidRootPart.Position+(Target:FindFirstChildOfClass("Humanoid").MoveDirection*11)
+			for _, v in ipairs(plr.Character:GetChildren()) do
+				pcall(function()
+					HRP.Velocity = Vector3.new(99999,99999,99999)
+					HRP.AssemblyAngularVelocity= Vector3.new(99999,99999,99999)
+				end)
+			end
 			HRP.Velocity = Vector3.new(99999,99999,99999)
 			HRP.AssemblyAngularVelocity= Vector3.new(99999,99999,99999)
 			task.wait()
 		until Target:FindFirstChild("HumanoidRootPart").Velocity.Magnitude >= 99 or tick()-otick >= 3
+		MODEL:FindFirstChild("1"):Destroy()
 		task.wait(.1)
 		workspace.CurrentCamera.CameraSubject = plr.Character:FindFirstChild("Head")
+		HRP.Parent = plr.Character
+		MODEL:Destroy()
 		plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
 		plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
 		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
 		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
+		for _, v in ipairs(MODEL:GetChildren()) do
+			pcall(function()
+				v.Velocity = Vector3.new(0,0,0)
+				v.AssemblyAngularVelocity= Vector3.new(0,0,0)
+			end)
+		end
 		task.wait(.1)
 		plr.Character:FindFirstChild("Head").Anchored = false
 		plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
@@ -42,6 +60,12 @@ local function Fling(TargetName)
 		plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
 		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
 		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
+		for _, v in ipairs(MODEL:GetChildren()) do
+			pcall(function()
+				v.Velocity = Vector3.new(0,0,0)
+				v.AssemblyAngularVelocity= Vector3.new(0,0,0)
+			end)
+		end
 		plr.Character:PivotTo(oldpos)
 		CanUse = true
 		plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
