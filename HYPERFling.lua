@@ -22,7 +22,6 @@ local function Fling(TargetName)
 			end
 			ANGLR.P += 5255
 			ANGLR.MaxTorque = Vector3.new(5255,5255,5255)
-			HRP.Velocity = Vector3.new(100,100,100)
 			ANGLR.AngularVelocity = Vector3.new(5255,5255,5255)
 			task.wait()
 		until Target:FindFirstChild("HumanoidRootPart").Velocity.Magnitude >= 99 or tick()-otick >= 3
