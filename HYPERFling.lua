@@ -8,7 +8,6 @@ local CanUse = true
 local function Fling(TargetName)
 	if Players:FindFirstChild(TargetName) then
 		local HRP = plr.Character:FindFirstChild("HumanoidRootPart")
-		HRP:FindFirstChildOfClass("Motor6D").Enabled = false
 		local Target = Players:FindFirstChild(TargetName).Character
 		workspace.CurrentCamera.CameraSubject = Target:FindFirstChild("Head")
 		HRP.CFrame = Target:GetPivot()
@@ -27,7 +26,7 @@ local function Fling(TargetName)
 			ANGLR.AngularVelocity = Vector3.new(9999999999999,999999999999,999999999)
 			game:GetService("RunService").RenderStepped:Wait()
 			task.wait()
-		until Target:FindFirstChild("HumanoidRootPart").Velocity.Magnitude >= 50 or tick()-otick >= 1.5
+		until Target:FindFirstChild("HumanoidRootPart").Velocity.Magnitude >= 99 or tick()-otick >= 1.5
 		workspace.CurrentCamera.CameraSubject = plr.Character:FindFirstChild("Head")
 	end
 end
