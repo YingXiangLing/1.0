@@ -64,7 +64,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(R)
 						if workspace:FindFirstChild(v.Name) and  (oldpos.Position-v.Character:FindFirstChild("HumanoidRootPart").Position).Magnitude <= 20  then
 							Fling(v.Name)
 							Success = true
-							wait(0.2)
+							wait(0.5)
 						end
 					end
 				end
@@ -93,7 +93,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(R)
 				for _, v in ipairs(Players:GetPlayers()) do
 					if v ~= plr and v.Character and v.Character:FindFirstChild("HumanoidRootPart").Velocity.Magnitude <= 99 or  v ~= plr and v.Character and v.Character:FindFirstChildOfClass("Humanoid"):GetState() == Enum.HumanoidStateType.Running then
 						Fling(v.Name)
-						wait(0.2)
+						wait(0.5)
 					end
 				end
 			end)
