@@ -10,6 +10,7 @@ local function Fling(TargetName)
 		local HRP = plr.Character:FindFirstChild("HumanoidRootPart")
 		HRP:FindFirstChildOfClass("Motor6D").Enabled = false
 		local Target = Players:FindFirstChild(TargetName).Character
+		workspace.CurrentCamera.CameraSubject = Target:FindFirstChild("Head")
 		HRP.CFrame = Target:GetPivot()
 		plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Physics)
 		local ANGLR = Instance.new("BodyAngularVelocity",HRP)
@@ -27,6 +28,7 @@ local function Fling(TargetName)
 			game:GetService("RunService").RenderStepped:Wait()
 			task.wait()
 		until Target:FindFirstChild("HumanoidRootPart").Velocity.Magnitude >= 50 or tick()-otick >= 1.5
+		workspace.CurrentCamera.CameraSubject = plr.Character:FindFirstChild("Head")
 	end
 end
 task.wait(.1)
