@@ -16,7 +16,7 @@ local function Fling(TargetName)
 		local ANGLR = Instance.new("BodyAngularVelocity",HRP)
 		local otick;otick=tick()
 		repeat
-			HRP.Position = Target:GetPivot()
+			HRP.Position = Target.HumanoidRootPart.Position+Target:FindFirstChildOfClass("Humanoid").MoveDirection
 			ANGLR.P = 999999999999999
 			ANGLR.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
 			HRP.Velocity = Vector3.new(100,100,100)
