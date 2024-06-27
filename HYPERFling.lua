@@ -11,12 +11,12 @@ local function Fling(TargetName)
 		local Target = Players:FindFirstChild(TargetName).Character
 		HRP.CFrame = Target:GetPivot()
 		HRP:FindFirstChildOfClass("Motor6D").Enabled = false
-		plr.Character:FindFirstChild("Torso").Anchored = true
+		plr.Character:FindFirstChild("Head").Anchored = true
 		plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Physics)
 		local ANGLR = Instance.new("BodyAngularVelocity",HRP)
 		local otick;otick=tick()
 		repeat
-			HRP.Position = Target.HumanoidRootPart.Position
+			HRP.Position = Target:GetPivot()
 			ANGLR.P = 999999999999999
 			ANGLR.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
 			HRP.Velocity = Vector3.new(100,100,100)
@@ -57,7 +57,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(R)
 				plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
 				plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
 				task.wait(.1)
-				plr.Character:FindFirstChild("Torso").Anchored = false
+				plr.Character:FindFirstChild("Head").Anchored = false
 				plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
 				plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
 				plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
@@ -95,7 +95,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(R)
 			plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
 			plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
 			task.wait(.1)
-			plr.Character:FindFirstChild("Torso").Anchored = false
+			plr.Character:FindFirstChild("Head").Anchored = false
 			plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
 			plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
 			plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
