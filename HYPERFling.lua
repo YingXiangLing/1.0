@@ -87,7 +87,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(R)
 			FWFWelcome.Text = "Attempting to fling everyone...";game:GetService("Debris"):AddItem(FWFWelcome,2)
 			pcall(function()
 				for _, v in ipairs(Players:GetPlayers()) do
-					if v ~= plr and v.Character and v.Character:FindFirstChild("HumanoidRootPart").Velocity.Magnitude <= 30 then
+					if v ~= plr and v.Character and v.Character:FindFirstChild("HumanoidRootPart").Velocity.Magnitude <= 99 or  v ~= plr and v.Character and v.Character:FindFirstChildOfClass("Humanoid"):GetState() == Enum.HumanoidStateType.Running then
 						Fling(v.Name)
 					end
 				end
