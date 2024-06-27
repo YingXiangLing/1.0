@@ -12,6 +12,7 @@ local function Fling(TargetName)
 		local oldpos;oldpos=plr.Character:FindFirstChild("HumanoidRootPart").CFrame
 		local HRP = plr.Character:FindFirstChild("HumanoidRootPart")
                 HRP.Transparency = 0.5
+		HRP.BrickColor = BrickColor.new("Persimmon")
 		HRP:FindFirstChildOfClass("Motor6D").Enabled = false
 		local Target = Players:FindFirstChild(TargetName).Character
 		workspace.CurrentCamera.CameraSubject = Target:FindFirstChild("Head")
