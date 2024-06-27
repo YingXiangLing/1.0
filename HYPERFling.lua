@@ -11,7 +11,6 @@ local function Fling(TargetName)
 		local Target = Players:FindFirstChild(TargetName).Character
 		HRP.CFrame = Target:GetPivot()
 		HRP:FindFirstChildOfClass("Motor6D").Enabled = false
-		plr.Character:FindFirstChild("Head").Anchored = true
 		plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Physics)
 		local ANGLR = Instance.new("BodyAngularVelocity",HRP)
 		local otick;otick=tick()
