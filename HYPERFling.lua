@@ -15,7 +15,11 @@ local function Fling(TargetName)
 		local ANGLR = Instance.new("BodyAngularVelocity",HRP)
 		local otick;otick=tick()
 		repeat
-			HRP.Position = Target.HumanoidRootPart.Position+(Target:FindFirstChildOfClass("Humanoid").MoveDirection*11)
+			if Target:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.Seated then
+				HRP.Position = Target.HumanoidRootPart.Position+(Target:FindFirstChildOfClass("Humanoid").MoveDirection*11)
+			else
+				HRP.Position = Target.HumanoidRootPart.CFrame*CFrame.new(0,-2,-6)
+			end
 			ANGLR.P = 999999999999999
 			ANGLR.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
 			HRP.Velocity = Vector3.new(100,100,100)
@@ -88,27 +92,27 @@ game:GetService("UserInputService").InputBegan:Connect(function(R)
 			end)
 			wait(0.2)
 			pcall(function()
-			plr.Character:FindFirstChild("HumanoidRootPart"):FindFirstChildOfClass("BodyAngularVelocity"):Destroy()
-			plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-			plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-			plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
-			plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
-			task.wait(.1)
-			plr.Character:FindFirstChild("Head").Anchored = false
-			plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-			plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
-			plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
-			plr.Character:FindFirstChild("HumanoidRootPart"):FindFirstChildOfClass("Motor6D").Enabled = true
-			CanUse = false
-			repeat
-				task.wait()
+				plr.Character:FindFirstChild("HumanoidRootPart"):FindFirstChildOfClass("BodyAngularVelocity"):Destroy()
+				plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
 				plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
 				plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
 				plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
-				plr.Character:PivotTo(oldpos)
-			until tick()-otick >= 0.2
-			CanUse = true
-			plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
+				task.wait(.1)
+				plr.Character:FindFirstChild("Head").Anchored = false
+				plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
+				plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
+				plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
+				plr.Character:FindFirstChild("HumanoidRootPart"):FindFirstChildOfClass("Motor6D").Enabled = true
+				CanUse = false
+				repeat
+					task.wait()
+					plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
+					plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
+					plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
+					plr.Character:PivotTo(oldpos)
+				until tick()-otick >= 0.2
+				CanUse = true
+				plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
 			end)
 		end
 	end
