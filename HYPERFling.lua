@@ -8,6 +8,7 @@ local CanUse = true
 local function Fling(TargetName)
 	if Players:FindFirstChild(TargetName) then
 		local HRP = plr.Character:FindFirstChild("HumanoidRootPart")
+		HRP:FindFirstChildOfClass("Motor6D").Enabled = false
 		local Target = Players:FindFirstChild(TargetName).Character
 		workspace.CurrentCamera.CameraSubject = Target:FindFirstChild("Head")
 		HRP.CFrame = Target:GetPivot()
