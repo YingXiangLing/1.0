@@ -20,8 +20,8 @@ local function Fling(TargetName)
 			else
 				HRP.Position = Target.HumanoidRootPart.CFrame*CFrame.new(0,-2,-6)
 			end
-			ANGLR.P += 999999
-			ANGLR.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
+			ANGLR.P += 5255
+			ANGLR.MaxTorque = Vector3.new(5255,5255,5255)
 			HRP.Velocity = Vector3.new(100,100,100)
 			ANGLR.AngularVelocity = Vector3.new(5255,5255,5255)
 			game:GetService("RunService").RenderStepped:Wait()
