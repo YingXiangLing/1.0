@@ -23,7 +23,7 @@ local function Fling(TargetName)
 			ANGLR.P += 999999
 			ANGLR.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
 			HRP.Velocity = Vector3.new(100,100,100)
-			ANGLR.AngularVelocity = Vector3.new(9999999999999,999999999999,999999999)
+			ANGLR.AngularVelocity = Vector3.new(99999,99999,99999)
 			game:GetService("RunService").RenderStepped:Wait()
 			task.wait()
 		until Target:FindFirstChild("HumanoidRootPart").Velocity.Magnitude >= 99 or tick()-otick >= 3
