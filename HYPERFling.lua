@@ -45,8 +45,8 @@ local function Fling(TargetName)
 		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
 		for _, v in ipairs(plr.Character:GetChildren()) do
 			pcall(function()
-				v.Velocity = Vector3.new(0,0,0)
-				v.AssemblyAngularVelocity= Vector3.new(0,0,0)
+				HRP.Velocity = Vector3.new(0,0,0)
+				HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
 			end)
 		end
 		task.wait(.1)
