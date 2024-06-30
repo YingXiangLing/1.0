@@ -50,7 +50,6 @@ local function Fling(TargetName)
 			end)
 		end
 		task.wait(.5)
-		plr.Character:FindFirstChild("Head").Anchored = false
 		plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
 		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
 		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
@@ -62,6 +61,12 @@ local function Fling(TargetName)
 		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
 		for _, v in ipairs(plr.Character:GetChildren()) do
 			pcall(function()
+				HRP.Velocity = Vector3.new(0,0,0)
+				HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
+			end)
+		end
+			for _, v in ipairs(plr.Character:GetChildren()) do
+			pcall(function()
 				v.Velocity = Vector3.new(0,0,0)
 				v.AssemblyAngularVelocity= Vector3.new(0,0,0)
 			end)
@@ -70,6 +75,7 @@ local function Fling(TargetName)
 		CanUse = true
 		plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
 		HRP.Transparency = 1
+				plr.Character:FindFirstChild("Head").Anchored = false
 	end
 end
 task.wait(.1)
