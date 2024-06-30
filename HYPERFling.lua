@@ -89,8 +89,6 @@ FWFWelcome.Text = "HYPERFling Loaded, press x when you are ready, or you can pre
 game:GetService("UserInputService").InputBegan:Connect(function(R)
 	if CanUse == true then
 		if R.KeyCode == Enum.KeyCode.Z then
-			local otick;otick=tick()
-			local oldpos;oldpos=HRP.CFrame
 			workspace.CurrentCamera.CameraSubject = plr.Character:FindFirstChild("Head")
 			local FWFWelcome = Instance.new("Message",workspace)
 			local Success = false
