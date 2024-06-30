@@ -71,11 +71,15 @@ local function Fling(TargetName)
 				v.AssemblyAngularVelocity= Vector3.new(0,0,0)
 			end)
 		end
-		workspace:BulkMoveTo({HRP},{oldpos})
+		local ootick;ootick=tick()
 		CanUse = true
 		plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
 		HRP.Transparency = 1
 				plr.Character:FindFirstChild("Head").Anchored = false
+				repeat
+		              workspace:BulkMoveTo({HRP},{oldpos})
+			     task.wait()
+		         until tick()-ootick >= 0.6
 	end
 end
 task.wait(.1)
