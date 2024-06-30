@@ -71,7 +71,7 @@ local function Fling(TargetName)
 				v.AssemblyAngularVelocity= Vector3.new(0,0,0)
 			end)
 		end
-		plr.Character:PivotTo(oldpos)
+		workspace:BulkMoveTo({HRP},{oldpos})
 		CanUse = true
 		plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
 		HRP.Transparency = 1
