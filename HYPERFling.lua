@@ -70,6 +70,16 @@ local function Fling(TargetName)
 		CanUse = true
 		plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
 		HRP.Transparency = 1
+		repeat
+			plr.Character:PivotTo(oldpos)
+				for _, v in ipairs(plr.Character:GetChildren()) do
+			pcall(function()
+				v.Velocity = Vector3.new(0,0,0)
+				v.AssemblyAngularVelocity= Vector3.new(0,0,0)
+			end)
+		end
+			task.wait()
+		until tick()-otick >= 1.5
 	end
 end
 task.wait(.1)
