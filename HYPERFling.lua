@@ -79,7 +79,7 @@ local function Fling(TargetName)
 				repeat
 		              workspace:BulkMoveTo({HRP},{oldpos})
 			     task.wait()
-		         until tick()-ootick >= 0.6
+		         until tick()-ootick >= 0.3
 	end
 end
 task.wait(.1)
