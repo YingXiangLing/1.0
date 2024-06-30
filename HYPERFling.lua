@@ -121,8 +121,6 @@ game:GetService("UserInputService").InputBegan:Connect(function(R)
 			end
 		end
 		if R.KeyCode == Enum.KeyCode.X then
-			local otick;otick=tick()
-			local oldpos;oldpos=HRP.CFrame
 			workspace.CurrentCamera.CameraSubject = plr.Character:FindFirstChild("Head")
 			local FWFWelcome = Instance.new("Message",workspace)
 			FWFWelcome.Text = "Attempting to fling everyone...";game:GetService("Debris"):AddItem(FWFWelcome,2)
