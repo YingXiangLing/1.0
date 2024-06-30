@@ -39,26 +39,26 @@ local function Fling(TargetName)
 		workspace.CurrentCamera.CameraSubject = plr.Character:FindFirstChild("Head")
 		HRP.Parent = plr.Character
 		MODEL:Destroy()
-		plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-		plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
-		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
+		HRP.Velocity = Vector3.new(0,0,0)
+		HRP.Velocity = Vector3.new(0,0,0)
+		HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
+		HRP.AssemblyLinearVelocity= Vector3.new(0,0,0)
 		for _, v in ipairs(plr.Character:GetChildren()) do
 			pcall(function()
 				HRP.Velocity = Vector3.new(0,0,0)
 				HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
 			end)
 		end
-		task.wait(.5)
-		plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
-		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
-		plr.Character:FindFirstChild("HumanoidRootPart"):FindFirstChildOfClass("Motor6D").Enabled = true
+		task.wait(.1)
+		HRP.Velocity = Vector3.new(0,0,0)
+		HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
+		HRP.AssemblyLinearVelocity= Vector3.new(0,0,0)
+		HRP:FindFirstChildOfClass("Motor6D").Enabled = true
 		CanUse = false
 		otick=tick()
-		plr.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity= Vector3.new(0,0,0)
-		plr.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity= Vector3.new(0,0,0)
+		HRP.Velocity = Vector3.new(0,0,0)
+		HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
+		HRP.AssemblyLinearVelocity= Vector3.new(0,0,0)
 		for _, v in ipairs(plr.Character:GetChildren()) do
 			pcall(function()
 				HRP.Velocity = Vector3.new(0,0,0)
@@ -86,7 +86,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(R)
 	if CanUse == true then
 		if R.KeyCode == Enum.KeyCode.Z then
 			local otick;otick=tick()
-			local oldpos;oldpos=plr.Character:FindFirstChild("HumanoidRootPart").CFrame
+			local oldpos;oldpos=HRP.CFrame
 			workspace.CurrentCamera.CameraSubject = plr.Character:FindFirstChild("Head")
 			local FWFWelcome = Instance.new("Message",workspace)
 			local Success = false
@@ -118,7 +118,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(R)
 		end
 		if R.KeyCode == Enum.KeyCode.X then
 			local otick;otick=tick()
-			local oldpos;oldpos=plr.Character:FindFirstChild("HumanoidRootPart").CFrame
+			local oldpos;oldpos=HRP.CFrame
 			workspace.CurrentCamera.CameraSubject = plr.Character:FindFirstChild("Head")
 			local FWFWelcome = Instance.new("Message",workspace)
 			FWFWelcome.Text = "Attempting to fling everyone...";game:GetService("Debris"):AddItem(FWFWelcome,2)
