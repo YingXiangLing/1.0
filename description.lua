@@ -19,6 +19,7 @@ do not execute bad scripts like neko
 /r or /respawn -> respawns your character
 /rj or /rejoin -> rejoins the server
 /run (code) -> runs code trough chat if the gui is broken
+permafrost commands: https://github.com/YingXiangLing/1.0/blob/main/permafrostcommands.lua
 made by china user
 
 tags (ignore):
