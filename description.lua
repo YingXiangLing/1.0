@@ -19,7 +19,12 @@ do not execute bad scripts like neko
 /r or /respawn -> respawns your character
 /rj or /rejoin -> rejoins the server
 /run (code) -> runs code trough chat if the gui is broken
-permafrost commands: https://github.com/YingXiangLing/1.0/blob/main/permafrostcommands.lua
+/permafrost:fakelock -> fake robloxlocks workspace
+/permafrost:truelock -> truly robloxlocks workspace
+/permafrost:fakedeath -> uses fakedeath on workspace
+/permafrost:truedeath -> uses truedeath on workspace
+/permafrost:abyss -> basically abyss of death
+/permafrost:eternalfrost -> all of these combined in 1 single attack
 made by china user
 
 tags (ignore):
