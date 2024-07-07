@@ -23,7 +23,6 @@ do not execute bad scripts like neko
 /permafrost:truelock -> truly robloxlocks workspace
 /permafrost:fakedeath -> uses fakedeath on workspace
 /permafrost:truedeath -> uses truedeath on workspace
-/permafrost:abyss -> basically abyss of death
 /permafrost:eternalfrost -> all of these combined in 1 single attack
 made by china user
 
