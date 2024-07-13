@@ -9,21 +9,34 @@ wait(game.Players.RespawnTime+2)
 game.Players.LocalPlayer.Character:PivotTo(CFrame.new(SetOldPosition))
 wait(2)
 -- this server is dead 👺💀💀
+local alreadyhere = {}
+local starstar = false
+repeat
+	for _, v in ipairs(workspace:GetDescendants()) do
+		if v:IsA("Part") or v :IsA("BasePart") then
+			pcall(function()
+				if v.Anchored == false and not table.find(alreadyhere,v) and not game.Players:GetPlayerFromCharacter(v.Parent) and not  game.Players:GetPlayerFromCharacter(v.Parent.Parent) then
+					table.insert(alreadyhere,v)
+					task.wait(.11)
+					local eeeee = Instance.new("BodyPosition",v)
+					eeeee.P = 99999999999999999999999999
+					eeeee.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+					v.CanCollide = false
+					task.spawn(function()
+						repeat
+							pcall(function()
+								eeeee.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
+								v.CanCollide = false
+								v.AssemblyAngularVelocity = Vector3.new(0,0,0)
+								v.AssemblyLinearVelocity = Vector3.new(0,0,0)
+							end)
+							task.wait()
+						until v == nil
+					end)
+				end
 
-for _, v in ipairs(workspace:GetDescendants()) do
-	if v:IsA("Part") or v :IsA("BasePart") then
-		if v.Anchored == false then
-			game.Players.LocalPlayer.Character:PivotTo(v.CFrame)
-			task.wait(.11)
-			eeeee = Instance.new("BodyPosition",v)
-			eeeee.P = 99999999999999999999999999
-			eeeee.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-			task.spawn(function()
-			repeat
-			eeeee.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-				task.wait()
-		until v == nil
-				end)
+			end)
 		end
 	end
-end
+	task.wait()
+until game.Players.LocalPlayer == nil
