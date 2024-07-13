@@ -13,6 +13,8 @@ wait(2)
 for _, v in ipairs(workspace:GetDescendants()) do
 	if v:IsA("Part") or v :IsA("BasePart") then
 		if v.Anchored == false then
+			game.Players.LocalPlayer.Character:PivotTo(v.CFrame)
+			task.wait(.11)
 			eeeee = Instance.new("BodyPosition",v)
 			eeeee.P = 99999999999999999999999999
 			eeeee.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
