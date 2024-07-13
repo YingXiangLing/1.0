@@ -17,7 +17,6 @@ repeat
 			pcall(function()
 				if v.Anchored == false and not table.find(alreadyhere,v) and not game.Players:GetPlayerFromCharacter(v.Parent) and not  game.Players:GetPlayerFromCharacter(v.Parent.Parent) then
 					table.insert(alreadyhere,v)
-					task.wait(.11)
 					local eeeee = Instance.new("BodyPosition",v)
 					eeeee.P = 99999999999999999999999999
 					eeeee.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
