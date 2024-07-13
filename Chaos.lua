@@ -1,7 +1,7 @@
 wait(0.3)
 
 game.Players.LocalPlayer.MaximumSimulationRadius = 1000
-game.Players.LocalPlayer.SimulationRadius = 1000
+game.Players.LocalPlayer.SimulationRadius = 15
 local SetOldPosition 
 SetOldPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
 game.Players.LocalPlayer.Character.Humanoid.Health = 0
