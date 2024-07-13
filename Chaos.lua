@@ -18,10 +18,12 @@ for _, v in ipairs(workspace:GetDescendants()) do
 			eeeee = Instance.new("BodyPosition",v)
 			eeeee.P = 99999999999999999999999999
 			eeeee.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-			eeeee.Position = SetOldPosition
-
-			v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-
+			task.spawn(function()
+			repeat
+			eeeee.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+				task.wait()
+		until v == nil
+				end)
 		end
 	end
 end
