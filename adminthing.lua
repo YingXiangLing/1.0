@@ -1,4 +1,4 @@
-if game:IsLoaded() == false then
+if rawequal(game:IsLoaded(),false) then
 	game.Loaded:Wait()
 end
 wait(0.5)
@@ -22,7 +22,7 @@ function execute(n,...)
 	end
 end
 function notify(t,n,i)
-	if rawequal(i,nil) == true then
+	if rawequal(i,nil) then
 		game:GetService("StarterGui"):SetCore("SendNotification",{
 			Text = t,
 			Title = n,
@@ -38,6 +38,8 @@ function notify(t,n,i)
 	end
 end
 local alreadyblackhole = false
+local hiddenfling = false
+local Noclip = nil
 cmd.add("goto","Teleports you to another player's location.",function(name)
 
 	if rawequal(workspace:FindFirstChild(name),nil) ~= true then
@@ -46,7 +48,7 @@ cmd.add("goto","Teleports you to another player's location.",function(name)
 	end
 end)
 cmd.add("blackhole","Picks up every part near you.",function()
-	if alreadyblackhole == false then
+	if rawequal(alreadyblackhole,false) then
 		alreadyblackhole = true
 		notify("blackhole activated!11","Blackhole Handler","10198213112")
 		pcall(function()
@@ -101,13 +103,13 @@ cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" a
 					pc:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
 				end
 			end)
-		until reload == false
+		until rawequal(reload,false)
 	end)
 	task.spawn(function()
 		repeat
 			task.wait(0.13)
 			pcall(function()
-				if reload == true then
+				if rawequal(reload,true) then
 					Older=pc:FindFirstChildOfClass("Humanoid").Health
 				end
 			end)
@@ -237,20 +239,20 @@ cmd.add("fling","Flings your target lol.",function(name)
 end)
 cmd.add("ui","Gives you ultra instinct lmao, you might get hit if you use false, it will stop combos by teleporting away though. But true just runs away from anyone near you",function(dclo)
 
-	if dclo ~= nil and rawequal(dclo:lower(),"true") == true then
-		notify("Now dodging attacks, MasteredUI: true","UltraInstinct Handler",7713850578)
+	if dclo ~= nil and rawequal(dclo:lower(),"true") then
+		notify("Now dodging attacks, MasteredUI: true","UltraInstinct Handler","7713850578")
 		repeat
 			task.wait()
 			for _, v in ipairs(game.Players:GetPlayers()) do
 				if v ~= p then
-					if (pc:GetPivot().Position-v.Character:GetPivot().Position).Magnitude <= 50 and v.Team ~= p.Team or (pc:GetPivot().Position-v.Character:GetPivot().Position).Magnitude <= 50 and v.Team == nil then
+					if (pc:GetPivot().Position-v.Character:GetPivot().Position).Magnitude <= 50 and v.Team ~= p.Team or (pc:GetPivot().Position-v.Character:GetPivot().Position).Magnitude <= 50 and rawequal(v.Team,nil) then
 						pc:PivotTo(pc:GetPivot()*CFrame.new(math.random(-13,23),0,math.random(-13,23)))
 					end
 				end
 			end
 		until pc:FindFirstChildOfClass("Humanoid").Health <= 0
 	elseif rawequal(dclo,nil) or rawequal(dclo:lower(),"false") then
-		notify("Now dodging attacks, MasteredUI: false","UltraInstinct Handler",9819687855)
+		notify("Now dodging attacks, MasteredUI: false","UltraInstinct Handler","9819687855")
 		local Older;Older=pc:FindFirstChildOfClass("Humanoid").Health
 		task.spawn(function()
 			repeat
@@ -268,6 +270,173 @@ cmd.add("ui","Gives you ultra instinct lmao, you might get hit if you use false,
 		end)
 	end
 end)
+cmd.add("unairwalk","Turns off airwalk.", function()
+	for i, v in pairs(workspace:GetChildren()) do
+		if tostring(v) == "Airwalk" then
+			v:Destroy()
+		end
+	end
+	notify("Disabled airwalk!","Airwalk Handler","16218447187")
+end)
+cmd.add("airwalk","Turns on airwalk.",function()
+	task.spawn(function()
+		local function AirWalk()
+
+			local AirWPart = Instance.new("Part", workspace)
+			local crtl = true
+			local Mouse = game.Players.LocalPlayer:GetMouse()
+			AirWPart.Size = Vector3.new(7, 2, 3)
+			AirWPart.CFrame = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, -4, 0)
+			AirWPart.Transparency = 1
+			AirWPart.Anchored = true
+			AirWPart.Name = "Airwalk"
+			for i = 1, math.huge do
+				AirWPart.CFrame = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, -4, 0)
+				wait (.1)
+			end
+		end
+		notify("Enabled airwalk!","Airwalk Handler","16218447187")
+		AirWalk()
+	end)
+end)
+cmd.add("toolfling","Makes one of your tools fling a player to oblivion on touch.",function()
+	task.spawn(function()
+		local Tool = game.Players.LocalPlayer.Backpack:FindFirstChildWhichIsA("Tool")
+		if not Tool then
+			repeat
+				task.wait()
+				Tool = game.Players.LocalPlayer.Backpack:FindFirstChildWhichIsA("Tool")
+			until Tool
+		end
+		Tool.Handle.Massless = true
+		task.spawn(function()
+			repeat
+				task.wait()
+				pcall(function()
+					if hiddenfling == false then
+						local ovel = pc:FindFirstChild("HumanoidRootPart").Velocity
+						Tool.Handle.AssemblyLinearVelocity = Vector3.new(99999,9999,999999)
+						game:GetService("RunService").RenderStepped:Wait()
+						pc:FindFirstChild("HumanoidRootPart").Velocity = ovel
+						ovel = pc:FindFirstChild("HumanoidRootPart").Velocity
+					end
+				end)
+			until Tool == nil
+		end)
+		notify("Successfully activated toolfling on "..Tool.Name.."!","Toolfling Handler","12917287778")
+	end)
+end)
+cmd.add("unwalkfling","Disables walkfling.",function()
+	notify("Disabled walkfling!","Walkfling Handler","12260174010")
+	pcall(function()
+		hiddenfling = false
+	end)
+end)
+cmd.add("walkfling","Enables walkfling, credits to nameless admin's walkfling.",function()
+	if game:GetService("ReplicatedStorage"):FindFirstChild("juisdfj0i32i0eidsuf0iok") then
+		hiddenfling = true
+		notify("Enabled walkfling!","Walkfling Handler","12260174010")
+	else
+		notify("Enabled walkfling!","Walkfling Handler","12260174010")
+		hiddenfling = true
+		local detection = Instance.new("Decal")
+		detection.Name = "juisdfj0i32i0eidsuf0iok"
+		detection.Parent = game:GetService("ReplicatedStorage")
+		local function fling()
+			local hrp, c, vel, movel = nil, nil, nil, 0.1
+			while true do
+				game:GetService("RunService").Heartbeat:Wait()
+				if hiddenfling then
+					local lp = game.Players.LocalPlayer
+					while hiddenfling and not (c and c.Parent and hrp and hrp.Parent) do
+						game:GetService("RunService").Heartbeat:Wait()
+						c = lp.Character
+						hrp = c:FindFirstChild("HumanoidRootPart") or c:FindFirstChild("Torso") or c:FindFirstChild("UpperTorso")
+					end
+					if hiddenfling then
+						vel = hrp.Velocity
+						hrp.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+						game:GetService("RunService").RenderStepped:Wait()
+						if c and c.Parent and hrp and hrp.Parent then
+							hrp.Velocity = vel
+						end
+						game:GetService("RunService").Stepped:Wait()
+						if c and c.Parent and hrp and hrp.Parent then
+							hrp.Velocity = vel + Vector3.new(0, movel, 0)
+							movel = movel * -1
+						end
+					end
+				end
+			end
+		end
+
+		fling()
+	end
+end)
+cmd.add("invis","Makes your character invisible (YOU CAN STILL USE TOOLS)",function()
+	task.spawn(function()
+		local player = game.Players.LocalPlayer
+		local position     = player.Character.HumanoidRootPart.Position
+		wait(0.1)
+		player.Character:MoveTo(position + Vector3.new(0, 1000000, 0))
+		wait(0.1)
+		local humanoidrootpart = player.Character.HumanoidRootPart:clone()
+		wait(0.1)
+		player.Character.HumanoidRootPart:Destroy()
+		humanoidrootpart.Parent = player.Character
+		player.Character:MoveTo(position)
+	end)
+end)
+cmd.add("ownerid","Changes your userid to the owner's userid (CLIENT)",function()
+	task.spawn(function()
+		if game.CreatorType == Enum.CreatorType.User then
+			game.Players.LocalPlayer.UserId = game.CreatorId
+		end
+	end)
+	task.spawn(function()
+		if game.CreatorType == Enum.CreatorType.Group then
+			game.Players.LocalPlayer.UserId = game:GetService("GroupService"):GetGroupInfoAsync(game.CreatorId).Owner.Id
+		end
+	end)
+	task.wait(0.2)
+	notify("UserId Set to "..game.Players.LocalPlayer.UserId..".","OwnerId Handler","12621969404")
+end)
+cmd.add("speed","Changes your walkspeed to the specified number, use this with noanti to maximize its potential.",function(num)
+	pc:FindFirstChildOfClass("Humanoid").WalkSpeed = num
+	notify("Successfully set walkspeed to "..num.."!","Speed Handler","17821867294")
+end)
+cmd.add("noanti","Attempts to destroy every anticheat instance, this might break the game.",function()
+	local Instances = 0
+	for _, v in ipairs(game:GetDescendants()) do
+		if v:IsA("LuaSourceContainer") then
+			if tostring(v.Name):lower():match("anti") or tostring(v.Name):lower():match("noch") or tostring(v.Name):lower():match("air") or tostring(v.Name):lower():match("cheat") or tostring(v.Name):lower():match("fly") or tostring(v.Name):lower():match("fling") or tostring(v.Name):lower():match("teleport") then
+				if v ~= script then
+					Instances += 1
+					v:Destroy()
+				end
+			end
+		end
+	end
+	task.wait()
+	notify("Removed "..Instances.." anticheat scripts.","NoAnti Handler","12976103126")
+end)
+cmd.add("clip", "Stops the noclip command.", function()
+	Noclip:Disconnect()
+	Noclip = nil
+	pc:FindFirstChildOfClass("Humanoid").Parent = game.ReplicatedStorage
+	game.ReplicatedStorage:FindFirstChild("Humanoid").Parent = pc
+	notify("Disabled noclip!","Noclip Handler","13501428865")
+end)
+cmd.add("noclip","Makes you able to phase trough walls",function()
+	if rawequal(Noclip,nil) then notify("Activated noclip!","Noclip Handler","13501428865") else notify("You are already using noclip!","Noclip Handler","15387802901") return end
+	Noclip = game:GetService("RunService").Stepped:Connect(function()
+		for i, v in pairs(pc:GetDescendants()) do
+			if v:IsA("BasePart") then
+				v.CanCollide = false
+			end
+		end
+	end)
+end)
 task.wait()
 local Main = Instance.new("ScreenGui",p.PlayerGui)
 local Imgl = Instance.new("ImageButton",Main)
@@ -279,7 +448,7 @@ Imgl:TweenSize(UDim2.new(0.068, 0,0.12, 0),"InOut","Sine",1)
 Imgl.Position = UDim2.new(0.023, 0,0.869, 0)
 local TBox = nil
 Imgl.MouseButton1Down:Connect(function()
-	if TBox == nil then
+	if rawequal(TBox,nil) then
 		TBox = Instance.new("TextBox",Main)
 		TBox.ZIndex = 100000
 		TBox.PlaceholderText = "Command here"
