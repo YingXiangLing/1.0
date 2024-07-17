@@ -18,7 +18,7 @@ function execute(n,...)
 	if rawequal(cmd["list"][n:lower()],nil) ~= true then
 		cmd["list"][n:lower()]["function"](...)
 	else
-		notify("No command found with the name of "..n..".","Command Handler")
+		notify("No command found with the name of "..n..".","Omnipotent Admin")
 	end
 end
 function notify(t,n,i)
@@ -32,32 +32,48 @@ function notify(t,n,i)
 		game:GetService("StarterGui"):SetCore("SendNotification",{
 			Text = t,
 			Title = n,
-			Icon = "http://www.roblox.com/asset/?id="..tostring(i),
+			-- // Icon = "http://www.roblox.com/asset/?id="..tostring(i),
 			Duration = 5;
 		})
 	end
 end
-local alreadyblackhole = false
-local hiddenfling = false
-local Noclip = nil
+alreadyblackhole = false
+hiddenfling = false
+Noclip = nil
+locks = {}
+if getgenv then
+else
+	getgenv = getfenv
+end
+if firetouchinterest then
+else
+	firetouchinterest = function()
+		warn("not usable")
+	end
+end
+lock = function(instance, par)
+	locks[instance] = true
+	instance.Parent = par or instance.Parent
+	instance.Name = "RightGrip"
+end
 cmd.add("goto","Teleports you to another player's location.",function(name)
 
 	if rawequal(workspace:FindFirstChild(name),nil) ~= true then
 		pc:PivotTo(workspace:FindFirstChild(name):GetPivot())
-		notify("Teleported to "..name.."!","GoTo Handler","631727248")
+		notify("Teleported to "..name.."!","Omnipotent Admin","631727248")
 	end
 end)
 cmd.add("blackhole","Picks up every part near you.",function()
 	if rawequal(alreadyblackhole,false) then
 		alreadyblackhole = true
-		notify("blackhole activated!11","Blackhole Handler","10198213112")
+		notify("blackhole activated!11","Omnipotent Admin","10198213112")
 		pcall(function()
 			task.spawn(function()
 				loadstring(game:HttpGet("https://raw.githubusercontent.com/YingXiangLing/1.0/main/Chaos.lua"))()
 			end)
 		end)
 	else
-		notify("cannot activate blackhole!11","Blackhole Handler","17840065045")
+		notify("cannot activate blackhole!11","Omnipotent Admin","17840065045")
 	end
 end)
 cmd.add("cmds","Shows all of the commands Omnipotent Admin has.",function()
@@ -89,17 +105,17 @@ cmd.add("swordreach","Adds extra range to your sword.",function()
 		Tool.Handle.Massless = true
 		Tool.Handle.Size = Vector3.new(reachsize,reachsize,reachsize)
 	end)
-	notify("extra 40 studs added to yo sword range!11","Reach Handler (Sword Version)","15377165109")
+	notify("extra 40 studs added to yo sword range!11","Omnipotent Admin","15377165109")
 end)
 cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" ahh command, anyway this might not work though',function(t)
-	notify("lol ok now reviving you if you die, MIGHT or might not work","Revive Handler","12916194667")
+	notify("lol ok now reviving you if you die, MIGHT or might not work","Omnipotent Admin","12916194667")
 	local Older;Older=pc:FindFirstChildOfClass("Humanoid").Health
 	local reload = true
 	task.spawn(function()
 		repeat
 			game:GetService("RunService").RenderStepped:Wait()
 			pcall(function()
-				if pc:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.Swimming and pc:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.Seated and pc:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.Jumping and  pc:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.Freefall then
+				if pc:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.FallingDown and pc:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.Swimming and pc:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.Seated and pc:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.Jumping and  pc:FindFirstChildOfClass("Humanoid"):GetState() ~= Enum.HumanoidStateType.Freefall then
 					pc:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
 				end
 			end)
@@ -141,19 +157,19 @@ cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" a
 end)
 cmd.add("sit","Sit.",function()
 	pc:FindFirstChildOfClass("Humanoid").Sit = true
-	notify("sit.","Sit Handler","16357820944")
+	notify("sit.","Omnipotent Admin","16357820944")
 end)
 cmd.add("reset","die die die die die die die die",function()
 	pc:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,true)
 	pc:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
-	notify("dei","Death Handler","6656885176")
+	notify("dei","Omnipotent Admin","6656885176")
 end)
 cmd.add("fling","Flings your target lol.",function(name)
 	local Players = game.Players
 	local plr = p
 	local function Fling(TargetName)
 		if Players:FindFirstChild(TargetName) then
-			notify("Now flinging "..name.."!","Hyperfling Handler","15412899776")
+			notify("Now flinging "..name.."!","Omnipotent Admin","15412899776")
 			local oldpos;oldpos=plr.Character:FindFirstChild("HumanoidRootPart").CFrame
 			local HRP = plr.Character:FindFirstChild("HumanoidRootPart")
 			HRP.Transparency = 0.5
@@ -230,17 +246,17 @@ cmd.add("fling","Flings your target lol.",function(name)
 			if name ~= tostring(p.Name) then
 				Fling(name)
 			else
-				notify("why are you trying to fling yourself","Hyperfling Handler","7202430493")
+				notify("why are you trying to fling yourself","Omnipotent Admin","7202430493")
 			end
 		else
-			notify("no, i cannot fling people while you are r15.","Hyperfling Handler","7202430493")
+			notify("no, i cannot fling people while you are r15.","Omnipotent Admin","7202430493")
 		end
 	end)
 end)
 cmd.add("ui","Gives you ultra instinct lmao, you might get hit if you use false, it will stop combos by teleporting away though. But true just runs away from anyone near you",function(dclo)
 
 	if dclo ~= nil and rawequal(dclo:lower(),"true") then
-		notify("Now dodging attacks, MasteredUI: true","UltraInstinct Handler","7713850578")
+		notify("Now dodging attacks, MasteredUI: true","Omnipotent Admin","7713850578")
 		repeat
 			task.wait()
 			for _, v in ipairs(game.Players:GetPlayers()) do
@@ -252,7 +268,7 @@ cmd.add("ui","Gives you ultra instinct lmao, you might get hit if you use false,
 			end
 		until pc:FindFirstChildOfClass("Humanoid").Health <= 0
 	elseif rawequal(dclo,nil) or rawequal(dclo:lower(),"false") then
-		notify("Now dodging attacks, MasteredUI: false","UltraInstinct Handler","9819687855")
+		notify("Now dodging attacks, MasteredUI: false","Omnipotent Admin","9819687855")
 		local Older;Older=pc:FindFirstChildOfClass("Humanoid").Health
 		task.spawn(function()
 			repeat
@@ -276,7 +292,7 @@ cmd.add("unairwalk","Turns off airwalk.", function()
 			v:Destroy()
 		end
 	end
-	notify("Disabled airwalk!","Airwalk Handler","16218447187")
+	notify("Disabled airwalk!","Omnipotent Admin","16218447187")
 end)
 cmd.add("airwalk","Turns on airwalk.",function()
 	task.spawn(function()
@@ -295,7 +311,7 @@ cmd.add("airwalk","Turns on airwalk.",function()
 				wait (.1)
 			end
 		end
-		notify("Enabled airwalk!","Airwalk Handler","16218447187")
+		notify("Enabled airwalk!","Omnipotent Admin","16218447187")
 		AirWalk()
 	end)
 end)
@@ -323,11 +339,11 @@ cmd.add("toolfling","Makes one of your tools fling a player to oblivion on touch
 				end)
 			until Tool == nil
 		end)
-		notify("Successfully activated toolfling on "..Tool.Name.."!","Toolfling Handler","12917287778")
+		notify("Successfully activated toolfling on "..Tool.Name.."!","Omnipotent Admin","12917287778")
 	end)
 end)
 cmd.add("unwalkfling","Disables walkfling.",function()
-	notify("Disabled walkfling!","Walkfling Handler","12260174010")
+	notify("Disabled walkfling!","Omnipotent Admin","12260174010")
 	pcall(function()
 		hiddenfling = false
 	end)
@@ -335,9 +351,9 @@ end)
 cmd.add("walkfling","Enables walkfling, credits to nameless admin's walkfling.",function()
 	if game:GetService("ReplicatedStorage"):FindFirstChild("juisdfj0i32i0eidsuf0iok") then
 		hiddenfling = true
-		notify("Enabled walkfling!","Walkfling Handler","12260174010")
+		notify("Enabled walkfling!","Omnipotent Admin","12260174010")
 	else
-		notify("Enabled walkfling!","Walkfling Handler","12260174010")
+		notify("Enabled walkfling!","Omnipotent Admin","12260174010")
 		hiddenfling = true
 		local detection = Instance.new("Decal")
 		detection.Name = "juisdfj0i32i0eidsuf0iok"
@@ -373,7 +389,66 @@ cmd.add("walkfling","Enables walkfling, credits to nameless admin's walkfling.",
 		fling()
 	end
 end)
-cmd.add("invis","Makes your character invisible (YOU CAN STILL USE TOOLS)",function()
+cmd.add("view","Lets you view someone.",function(name)
+	local target = game.Players:FindFirstChild(name)
+	if target then
+		notify("Now viewing "..target.Name.."!","Omnipotent Admin")
+		local targetc = target.Character
+		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
+	end
+end)
+cmd.add("unview","Changes your camera back to normal.",function()
+	local target = p
+	if target then
+		notify("Stopped the view command.","Omnipotent Admin")
+		local targetc = target.Character
+		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
+	end
+end)
+cmd.add("cffling","Flings someone using CFrame.",function(name)
+	local target = game.Players:FindFirstChild(name)
+	if target then
+		notify("Now CFrame flinging "..target.Name.."!","Omnipotent Admin")
+		local targetc = target.Character
+		local done = false
+		local opos;opos = pc:GetPivot()
+		pc:FindFirstChild("HumanoidRootPart").CFrame = targetc.HumanoidRootPart.CFrame * CFrame.new(0,-15,0)
+		pc:FindFirstChildOfClass("Humanoid"):ChangeState(1)
+		task.spawn(function()
+			repeat
+				task.wait()
+				pcall(function()
+					pc:FindFirstChild("HumanoidRootPart").CFrame = targetc.HumanoidRootPart.CFrame * CFrame.new(0,-15,0)
+					pc:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(990000000000000000000,990000000000000000000,990000000000000000000)
+					pc:FindFirstChild("HumanoidRootPart").CFrame = targetc.HumanoidRootPart.CFrame * CFrame.new(0,0,0)
+				end)
+			until done == true or targetc.HumanoidRootPart.Velocity.Magnitude >= 50 or targetc:FindFirstChild("Head") == nil
+			task.wait()
+			local otick;otick = tick()
+			repeat
+				pc:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,2,0)
+				for _, v in ipairs(pc:GetChildren()) do
+					pcall(function()
+						v.Velocity = Vector3.new(0,0,0)
+						v.AssemblyAngularVelocity = Vector3.new(0,0,0)
+						v.AssemblyLinearVelocity = Vector3.new(0,0,0)
+					end)
+				end
+				pc:PivotTo(opos)
+				pc:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
+				task.wait()
+			until tick()-otick >= 1
+		end)
+		firetouchinterest(targetc:FindFirstChild("HumanoidRootPart"),pc:FindFirstChild("HumanoidRootPart"),0)
+		firetouchinterest(targetc:FindFirstChild("HumanoidRootPart"),pc:FindFirstChild("HumanoidRootPart"),1)
+		delay(3,function()
+			if not done then
+				done = not done
+			end
+		end)
+	end
+end)
+cmd.add("invis","Makes your character invisible for others (YOU CAN STILL USE TOOLS)",function()
 	task.spawn(function()
 		local player = game.Players.LocalPlayer
 		local position     = player.Character.HumanoidRootPart.Position
@@ -399,11 +474,11 @@ cmd.add("ownerid","Changes your userid to the owner's userid (CLIENT)",function(
 		end
 	end)
 	task.wait(0.2)
-	notify("UserId Set to "..game.Players.LocalPlayer.UserId..".","OwnerId Handler","12621969404")
+	notify("UserId Set to "..game.Players.LocalPlayer.UserId..".","Omnipotent Admin","12621969404")
 end)
 cmd.add("speed","Changes your walkspeed to the specified number, use this with noanti to maximize its potential.",function(num)
 	pc:FindFirstChildOfClass("Humanoid").WalkSpeed = num
-	notify("Successfully set walkspeed to "..num.."!","Speed Handler","17821867294")
+	notify("Successfully set walkspeed to "..num.."!","Omnipotent Admin","17821867294")
 end)
 cmd.add("noanti","Attempts to destroy every anticheat instance, this might break the game.",function()
 	local Instances = 0
@@ -418,17 +493,17 @@ cmd.add("noanti","Attempts to destroy every anticheat instance, this might break
 		end
 	end
 	task.wait()
-	notify("Removed "..Instances.." anticheat scripts.","NoAnti Handler","12976103126")
+	notify("Removed "..Instances.." anticheat scripts.","Omnipotent Admin","12976103126")
 end)
 cmd.add("clip", "Stops the noclip command.", function()
 	Noclip:Disconnect()
 	Noclip = nil
 	pc:FindFirstChildOfClass("Humanoid").Parent = game.ReplicatedStorage
 	game.ReplicatedStorage:FindFirstChild("Humanoid").Parent = pc
-	notify("Disabled noclip!","Noclip Handler","13501428865")
+	notify("Disabled noclip!","Omnipotent Admin","13501428865")
 end)
 cmd.add("noclip","Makes you able to phase trough walls",function()
-	if rawequal(Noclip,nil) then notify("Activated noclip!","Noclip Handler","13501428865") else notify("You are already using noclip!","Noclip Handler","15387802901") return end
+	if rawequal(Noclip,nil) then notify("Activated noclip!","Omnipotent Admin","13501428865") else notify("You are already using noclip!","Omnipotent Admin","15387802901") return end
 	Noclip = game:GetService("RunService").Stepped:Connect(function()
 		for i, v in pairs(pc:GetDescendants()) do
 			if v:IsA("BasePart") then
