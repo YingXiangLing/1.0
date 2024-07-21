@@ -155,6 +155,7 @@ cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" a
 		end
 	end)
 end)
+cmd.add("print","Prints text in the console.",print)
 cmd.add("sit","Sit.",function()
 	pc:FindFirstChildOfClass("Humanoid").Sit = true
 	notify("sit.","Omnipotent Admin","16357820944")
