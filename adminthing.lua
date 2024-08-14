@@ -86,20 +86,6 @@ cmd.add("cmds","Shows all of the commands Omnipotent Admin has.",function()
 	end)
 	print("Commands: "..finishedlist)
 end)
-cmd.add("teleportua","Teleports unanchored parts to [player].",function(plr)
-		if game.Players:FindFirstChild(plr) then
-notify("Teleporting unanchored parts to "..plr..".","Omnipotent Admin")
-		end
-    for _, v in ipairs(workspace:GetDescendants()) do
-		if v:IsA("Part") or v:IsA("MeshPart") or v :IsA("BasePart") then
-			if v.Anchored == false and (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude <= game.Players.LocalPlayer.SimulationRadius then
-				if game.Players:FindFirstChild(plr) then
-				    v.Position = game.Players:FindFirstChild(plr).Character.HumanoidRootPart.Position
-				end
-			end
-	     end
-	end
-end)
 cmd.add("swordreach","Adds extra range to your sword.",function()
 	pcall(function()
 		local reachsize =  40
