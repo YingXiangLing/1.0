@@ -88,7 +88,7 @@ cmd.add("cmds","Shows all of the commands Omnipotent Admin has.",function()
 end)
 cmd.add("teleportua","Teleports unanchored parts to [player].",function(plr)
 		if game.Players:FindFirstChild(plr) then
-notify("Teleporting unanchored parts to "..plr...".","Omnipotent Admin")
+notify("Teleporting unanchored parts to "..plr..".","Omnipotent Admin")
 		end
     for _, v in ipairs(workspace:GetDescendants()) do
 		if v:IsA("Part") or v:IsA("MeshPart") or v :IsA("BasePart") then
