@@ -94,7 +94,7 @@ notify("Teleporting unanchored parts to "..plr..".","Omnipotent Admin")
 		if v:IsA("Part") or v:IsA("MeshPart") or v :IsA("BasePart") then
 			if v.Anchored == false and (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude <= game.Players.LocalPlayer.SimulationRadius then
 				if game.Players:FindFirstChild(plr) then
-				    v.Position = game.Players:FindFirstChild(plr).Character.Torso.Position
+				    v.Position = game.Players:FindFirstChild(plr).Character.HumanoidRootPart.Position
 				end
 			end
 	     end
