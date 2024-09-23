@@ -65,9 +65,7 @@ local function PartFling(target)
 	end)
 	pcall(game.Destroy,weld)
 end
-game:GetService("UserInputService").InputBegan:Connect(function(i,g)
-	if g == true then return end
-	if i.KeyCode ~= Enum.KeyCode.G then return end
+game:GetService("Players").LocalPlayer:GetMouse().Button1Up:Connect(function()
 	if game:GetService("Players").LocalPlayer:GetMouse().Target.Parent:FindFirstChildOfClass("Humanoid") then
 		PartFling(game:GetService("Players"):GetPlayerFromCharacter(game:GetService("Players").LocalPlayer:GetMouse().Target.Parent))
 	elseif game:GetService("Players").LocalPlayer:GetMouse().Target.Parent.Parent:FindFirstChildOfClass("Humanoid") then
