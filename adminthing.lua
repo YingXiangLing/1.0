@@ -2,6 +2,13 @@ if rawequal(game:IsLoaded(),false) then
 	game.Loaded:Wait()
 end
 wait(0.5)
+local oldcharpos;oldcharpos=game:GetService("Players").LocalPlayer.Character:GetPivot()
+game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+game:GetService("Players").LocalPlayer.Character:BreakJoints()
+wait(game:GetService("Players").RespawnTime+0.5)
+game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+game:GetService("Players").LocalPlayer.Character:PivotTo(oldcharpos)
+wait(0.1)
 local p = game.Players.LocalPlayer
 local pc = p.Character
 p.CharacterAdded:Connect(function(c)
