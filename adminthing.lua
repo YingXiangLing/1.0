@@ -162,6 +162,72 @@ cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" a
 		end
 	end)
 end)
+cmd.add("partfling","Flings someone using parts, far more undetectable and works in collisions off.",function(target)
+		local function PartFling(target)
+	local function NetworkCheck(Part)
+		return Part.ReceiveAge == 0
+	end
+	local function getclosestpart()
+		local bestpart
+		local biggestmagnitude 
+		for _, v in ipairs(workspace:GetDescendants()) do
+			if v:IsA("BasePart") or v:IsA("Part") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
+				if v.Anchored == false and not v.Parent:FindFirstChildOfClass("Humanoid") and not v.Parent.Parent:FindFirstChildOfClass("Humanoid") and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+					if biggestmagnitude == nil or biggestmagnitude ~= nil and (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude < biggestmagnitude then
+						biggestmagnitude = (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude
+						bestpart = v
+					end
+				end
+			end
+		end
+		return bestpart
+	end
+	local Part = getclosestpart()
+	if Part == nil then return end
+	Part.Archivable = true
+	local PClone = Part:Clone()
+	PClone.Parent = workspace
+	PClone.Anchored = true
+	local oldtr=Part.Transparency
+	Part.Transparency = 1
+	PClone.CanCollide = false
+	PClone.Transparency = 0
+	Instance.new("Highlight",PClone).OutlineTransparency = 1
+	local oldcf=game:GetService("Players").LocalPlayer.Character:GetPivot()
+	repeat
+		game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+		game:GetService("Players").LocalPlayer.Character:PivotTo(Part.CFrame)
+		game:GetService("RunService").RenderStepped:Wait()
+	until NetworkCheck(Part) == true
+	game:GetService("Players").LocalPlayer.Character:PivotTo(oldcf)
+	game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
+	Part.Transparency = oldtr
+	pcall(game.Destroy,PClone)
+	Part.Velocity = Vector3.new(0,5000,0)
+	local weld = Instance.new("Weld",Part)
+	weld.Part0 = Part
+	weld.Part1 = target.Character.HumanoidRootPart
+	local conexttion
+	local oldpos=Part.Position
+	conexttion = game:GetService('RunService').Heartbeat:Connect(function()
+		if NetworkCheck(Part) ~= true or weld.Part1.Velocity.Magnitude >= 100 then
+			conexttion:Disconnect()
+			pcall(function()
+				Part.Position = oldpos
+				Part.Velocity = Vector3.zero
+			end)
+		else
+			game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+			Part.Velocity = Vector3.new(0,500*5,0)
+			Part.CFrame = weld.Part1.CFrame
+		end
+	end)
+	pcall(game.Destroy,weld)
+end
+		if target and game.Players[target] then
+		PartFling(game.Players[target])
+		end
+end)
 cmd.add("print","Prints text in the console.",print)
 cmd.add("sit","Sit.",function()
 	pc:FindFirstChildOfClass("Humanoid").Sit = true
