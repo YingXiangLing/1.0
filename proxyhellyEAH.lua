@@ -25,6 +25,12 @@ task.spawn(function()
 		if proxy.Parent ~= workspace then
 			proxy.Parent = workspace
 		end
+		pcall(function()
+		proxy:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+		proxy:FindFirstChildOfClass("Humanoid").PlatformStand = false
+		proxy:FindFirstChildOfClass("Humanoid").Sit = false
+		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+		end)
 		for _, v in ipairs(proxy:GetDescendants()) do
 			pcall(function()
 				if v.Velocity.Magnitude >= 250 then
