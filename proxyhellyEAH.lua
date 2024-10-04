@@ -15,7 +15,7 @@ proxy.Parent = workspace
 local stop = false
 task.spawn(function()
 	 game:GetService("RunService").RenderStepped:Connect(function()
-		if stop == true then continue end
+		if stop == true then return end
 		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,false)
 		game:GetService("Players").LocalPlayer.Character = proxy
 		char:PivotTo(proxy:GetPivot())
