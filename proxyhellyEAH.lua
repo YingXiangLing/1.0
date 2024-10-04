@@ -30,6 +30,9 @@ task.spawn(function()
 		proxy:FindFirstChildOfClass("Humanoid").PlatformStand = false
 		proxy:FindFirstChildOfClass("Humanoid").Sit = false
 		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+		if proxy:FindFirstChildOfClass("Humanoid"):GetState() == "Physics" then
+		   proxy:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
+		end
 		end)
 		for _, v in ipairs(proxy:GetDescendants()) do
 			pcall(function()
