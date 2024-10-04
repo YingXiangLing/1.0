@@ -14,7 +14,7 @@ owner.Character = proxy
 proxy.Parent = workspace
 local stop = false
 task.spawn(function()
-	while game:GetService("RunService").Heartbeat:Wait() do
+	 game:GetService("RunService").RenderStepped:Connect(function()
 		if stop == true then continue end
 		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,false)
 		game:GetService("Players").LocalPlayer.Character = proxy
@@ -53,7 +53,7 @@ task.spawn(function()
 				v.CanCollide = false
 			end)
 		end
-	end
+	end)
 end)
 for _, v in ipairs(char:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
 	v:Stop()
