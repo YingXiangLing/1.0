@@ -29,7 +29,7 @@ repeat
 							pcall(function()
 								eeeee.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
 								if NetworkCheck(v) == true then
-								v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
+								v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0)
 								end
 								v.CanCollide = false
 								v.AssemblyAngularVelocity = Vector3.new(0,0,0)
