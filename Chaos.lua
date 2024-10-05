@@ -23,17 +23,9 @@ repeat
 					local eeeee = Instance.new("BodyPosition",v)
 					eeeee.P = math.huge
 					eeeee.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
-						local anchored = false
 					v.CanCollide = false
-						for I,V in pairs(v:GetConnectedParts(true)) do
-	                            if V.Anchored then
-		               anchored = true
-		                      break
-	                         end
-                               end
 					task.spawn(function()
 						repeat
-							if anchored == true then v = nil  end
 							pcall(function()
 								eeeee.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
 								v.CanCollide = false
@@ -43,8 +35,6 @@ repeat
 							task.wait()
 						until v == nil
 					end)
-					else
-					table.insert(alreadyhere,v)
 				end
 
 			end)
