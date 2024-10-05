@@ -9,6 +9,9 @@ wait(game.Players.RespawnTime+2)
 game.Players.LocalPlayer.Character:PivotTo(CFrame.new(SetOldPosition))
 wait(2)
 -- this server is dead 👺💀💀
+	local function NetworkCheck(Part)
+		return Part.ReceiveAge == 0
+	end
 local alreadyhere = {}
 local starstar = false
 repeat
@@ -25,7 +28,9 @@ repeat
 						repeat
 							pcall(function()
 								eeeee.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
+								if NetworkCheck(v) == true then
 								v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
+								end
 								v.CanCollide = false
 								v.AssemblyAngularVelocity = Vector3.new(0,0,0)
 								v.AssemblyLinearVelocity = Vector3.new(0,0,0)
