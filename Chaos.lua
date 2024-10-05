@@ -36,9 +36,6 @@ repeat
 							if anchored == true then v = nil  end
 							pcall(function()
 								eeeee.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
-								if NetworkCheck(v) == true and  v.Anchored == false  then
-								v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0)
-								end
 								v.CanCollide = false
 								v.AssemblyAngularVelocity = Vector3.new(0,0,0)
 								v.AssemblyLinearVelocity = Vector3.new(0,0,0)
