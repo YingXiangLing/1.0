@@ -18,13 +18,14 @@ repeat
 				if v.Anchored == false and not table.find(alreadyhere,v) and not game.Players:GetPlayerFromCharacter(v.Parent) and not  game.Players:GetPlayerFromCharacter(v.Parent.Parent) then
 					table.insert(alreadyhere,v)
 					local eeeee = Instance.new("BodyPosition",v)
-					eeeee.P = 99999999999999999999999999
+					eeeee.P = math.huge
 					eeeee.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
 					v.CanCollide = false
 					task.spawn(function()
 						repeat
 							pcall(function()
 								eeeee.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
+								v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
 								v.CanCollide = false
 								v.AssemblyAngularVelocity = Vector3.new(0,0,0)
 								v.AssemblyLinearVelocity = Vector3.new(0,0,0)
