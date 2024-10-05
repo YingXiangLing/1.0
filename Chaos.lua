@@ -28,7 +28,7 @@ repeat
 						repeat
 							pcall(function()
 								eeeee.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0).Position
-								if NetworkCheck(v) == true then
+								if NetworkCheck(v) == true and  v.Anchored == false  then
 								v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,0)
 								end
 								v.CanCollide = false
@@ -38,6 +38,8 @@ repeat
 							task.wait()
 						until v == nil
 					end)
+					else
+					table.insert(alreadyhere,v)
 				end
 
 			end)
