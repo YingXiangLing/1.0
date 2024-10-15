@@ -13,9 +13,27 @@ local oldposes = {}
 owner.Character = proxy
 proxy.Parent = workspace
 local stop = false
+local billboardHealth
+local function displayHealth()
+	pcall(function()
+		pcall(game.Destroy,billboardHealth)
+		billboardHealth = Instance.new("BillboardGui",proxy:FindFirstChild("Head"))::BillboardGui
+		billboardHealth.StudsOffsetWorldSpace = Vector3.new(0,3.2,0)
+		billboardHealth.Size = UDim2.new(6,0,1.7,0)
+		local txb = Instance.new("TextLabel",billboardHealth)
+		txb.BackgroundTransparency = 1
+		txb.TextColor3 = Color3.new(1,1,1)
+		txb.TextScaled = true
+		txb.Size = UDim2.new(1,0,1,0)
+		if pcall(function()txb.Text = "ProxyHealth: "..char:FindFirstChildOfClass("Humanoid").Health;end) ~= true then
+			txb.Text = "ProxyHealth: 0 (Reviving...)"
+		end
+	end)
+end
 task.spawn(function()
-	 game:GetService("RunService").Heartbeat:Connect(function()
+	game:GetService("RunService").Heartbeat:Connect(function()
 		if stop == true then return end
+		displayHealth()
 		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,false)
 		game:GetService("Players").LocalPlayer.Character = proxy
 		char:PivotTo(proxy:GetPivot())
@@ -26,13 +44,13 @@ task.spawn(function()
 			proxy.Parent = workspace
 		end
 		pcall(function()
-		proxy:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
-		proxy:FindFirstChildOfClass("Humanoid").PlatformStand = false
-		proxy:FindFirstChildOfClass("Humanoid").Sit = false
-		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Physics,false)
-		if proxy:FindFirstChildOfClass("Humanoid"):GetState() == Enum.HumanoidStateType.Physics then
-		   proxy:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
-		end
+			proxy:FindFirstChildOfClass("Humanoid").WalkSpeed = 16
+			proxy:FindFirstChildOfClass("Humanoid").PlatformStand = false
+			proxy:FindFirstChildOfClass("Humanoid").Sit = false
+			proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+			if proxy:FindFirstChildOfClass("Humanoid"):GetState() == Enum.HumanoidStateType.Physics then
+				proxy:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
+			end
 		end)
 		for _, v in ipairs(proxy:GetDescendants()) do
 			pcall(function()
