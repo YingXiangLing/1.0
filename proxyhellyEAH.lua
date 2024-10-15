@@ -13,16 +13,15 @@ local oldposes = {}
 owner.Character = proxy
 proxy.Parent = workspace
 local stop = false
-local billboardHealth
 local function displayHealth()
-	pcall(function()
+	print(pcall(function()
 		if char:FindFirstChild("Head") and char:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals") then
 			char:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals"):Destroy()
 		end
 		if proxy:FindFirstChild("Head") and proxy:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals") then
 			proxy:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals"):Destroy()
 		end
-		billboardHealth = Instance.new("BillboardGui",proxy:FindFirstChild("Head"))
+		local billboardHealth = Instance.new("BillboardGui",proxy:FindFirstChild("Head"))
 		billboardHealth.Name = "HealthProxyCharEquals"
 		billboardHealth.StudsOffsetWorldSpace = Vector3.new(0,3.2,0)
 		billboardHealth.Size = UDim2.new(6,0,1.7,0)
@@ -35,7 +34,7 @@ local function displayHealth()
 			txb.Text = "ProxyHealth: 0 (Reviving...)"
 		end
 		game:GetService("Debris"):AddItem(billboardHealth,0.01)
-	end)
+	end))
 end
 task.spawn(function()
 	game:GetService("RunService").Heartbeat:Connect(function()
