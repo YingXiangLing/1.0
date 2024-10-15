@@ -14,7 +14,7 @@ owner.Character = proxy
 proxy.Parent = workspace
 local stop = false
 local function displayHealth()
-	print(pcall(function()
+	pcall(function()
 		if char:FindFirstChild("Head") and char:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals") then
 			char:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals"):Destroy()
 		end
@@ -34,7 +34,7 @@ local function displayHealth()
 			txb.Text = "ProxyHealth: 0 (Reviving...)"
 		end
 		game:GetService("Debris"):AddItem(billboardHealth,0.01)
-	end))
+	end)
 end
 task.spawn(function()
 	game:GetService("RunService").Heartbeat:Connect(function()
