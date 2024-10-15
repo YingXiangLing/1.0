@@ -16,8 +16,14 @@ local stop = false
 local billboardHealth
 local function displayHealth()
 	pcall(function()
-		pcall(game.Destroy,billboardHealth)
-		billboardHealth = Instance.new("BillboardGui",proxy:FindFirstChild("Head"))::BillboardGui
+		if char:FindFirstChild("Head") and char:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals") then
+			char:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals"):Destroy()
+		end
+		if proxy:FindFirstChild("Head") and proxy:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals") then
+			proxy:FindFirstChild("Head"):FindFirstChild("HealthProxyCharEquals"):Destroy()
+		end
+		billboardHealth = Instance.new("BillboardGui",proxy:FindFirstChild("Head"))
+		billboardHealth.Name = "HealthProxyCharEquals"
 		billboardHealth.StudsOffsetWorldSpace = Vector3.new(0,3.2,0)
 		billboardHealth.Size = UDim2.new(6,0,1.7,0)
 		local txb = Instance.new("TextLabel",billboardHealth)
@@ -28,11 +34,13 @@ local function displayHealth()
 		if pcall(function()txb.Text = "ProxyHealth: "..char:FindFirstChildOfClass("Humanoid").Health;end) ~= true then
 			txb.Text = "ProxyHealth: 0 (Reviving...)"
 		end
+		game:GetService("Debris"):AddItem(billboardHealth,0.01)
 	end)
 end
 task.spawn(function()
 	game:GetService("RunService").Heartbeat:Connect(function()
 		if stop == true then return end
+		pcall(game.Destroy,billboardHealth)
 		displayHealth()
 		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,false)
 		game:GetService("Players").LocalPlayer.Character = proxy
