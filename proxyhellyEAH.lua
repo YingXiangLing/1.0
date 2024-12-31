@@ -36,7 +36,7 @@ local function displayHealth()
 		game:GetService("Debris"):AddItem(billboardHealth,0.01)
 	end)
 end
-for _, v in ipairs(char.Humanoid:GetPlayingAnimationTracks()) do
+for _, v in ipairs(char:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
 	v:Stop()
 end
 task.spawn(function()
@@ -44,6 +44,9 @@ task.spawn(function()
 		if stop == true then return end
 		pcall(game.Destroy,billboardHealth)
 		displayHealth()
+		for _, v in ipairs(char:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
+		v:Stop()
+		end
 		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,false)
 		game:GetService("Players").LocalPlayer.Character = proxy
 		char:PivotTo(proxy:GetPivot())
