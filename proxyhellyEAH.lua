@@ -36,6 +36,9 @@ local function displayHealth()
 		game:GetService("Debris"):AddItem(billboardHealth,0.01)
 	end)
 end
+for _, v in ipairs(char.Humanoid:GetPlayingAnimationTracks()) do
+	v:Stop()
+end
 task.spawn(function()
 	game:GetService("RunService").Heartbeat:Connect(function()
 		if stop == true then return end
