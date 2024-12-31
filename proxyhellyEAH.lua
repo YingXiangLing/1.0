@@ -44,9 +44,6 @@ task.spawn(function()
 		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,false)
 		game:GetService("Players").LocalPlayer.Character = proxy
 		char:PivotTo(proxy:GetPivot())
-		for _, v in ipairs(char:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
-			v:Stop()
-		end
 		if proxy.Parent ~= workspace then
 			proxy.Parent = workspace
 		end
@@ -89,9 +86,6 @@ task.spawn(function()
 		end
 	end)
 end)
-for _, v in ipairs(char:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
-	v:Stop()
-end
 game:GetService("Players").LocalPlayer.Character = proxy
 char:FindFirstChildOfClass("Humanoid").Died:Once(function()
 	stop = true
