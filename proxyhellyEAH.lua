@@ -5,6 +5,9 @@ else
 	wait(1)
 end
 local char;char = game:GetService("Players").LocalPlayer.Character
+for _, v in ipairs(char:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
+	v:Stop()
+end
 local owner = game:GetService("Players").LocalPlayer
 local animtables = {}
 char.Archivable = true
@@ -41,8 +44,8 @@ task.spawn(function()
 		if stop == true then return end
 		pcall(game.Destroy,billboardHealth)
 		displayHealth()
-		for _, v in ipairs(char.Humanoid:GetPlayingAnimationTracks()) do
-		v:Stop()
+		for _, v in ipairs(char:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
+			v:Stop()
 		end
 		proxy:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,false)
 		game:GetService("Players").LocalPlayer.Character = proxy
