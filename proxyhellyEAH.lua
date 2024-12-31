@@ -83,7 +83,7 @@ task.spawn(function()
 		for _, v in ipairs(char:GetDescendants()) do
 			pcall(function()
 				v.Velocity = Vector3.new(5000,5000,5000)
-				v.Transparency = 1
+				v.Transparency = 0.6
 				v.CanCollide = false
 			end)
 		end
