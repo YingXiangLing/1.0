@@ -174,8 +174,17 @@ cmd.add("partfling","Flings someone using parts, far more undetectable and works
 			if v:IsA("BasePart") or v:IsA("Part") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
 				if v.Anchored == false and not v.Parent:FindFirstChildOfClass("Humanoid") and not v.Parent.Parent:FindFirstChildOfClass("Humanoid") and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
 					if biggestmagnitude == nil or biggestmagnitude ~= nil and (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude < biggestmagnitude then
+						local anchored = false
+						for I,VE in pairs(v:GetConnectedParts(true)) do
+							if VE.Anchored then
+							anchored = true
+							break
+						    end
+						end	
+						if anchored == false then
 						biggestmagnitude = (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude
 						bestpart = v
+						end
 					end
 				end
 			end
