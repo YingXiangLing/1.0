@@ -589,7 +589,7 @@ cmd.add("noclip","Makes you able to phase trough walls",function()
 end)
 task.wait()
 local Main = Instance.new("ScreenGui",p.PlayerGui)
-local Imgl = Instance.new("LabelButton",Main)
+local Imgl = Instance.new("TextButton",Main)
 Main.ResetOnSpawn = false
 Imgl.ZIndex = 99999
 Imgl.Text = "Omni-Admin"
