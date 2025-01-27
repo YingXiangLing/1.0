@@ -595,7 +595,7 @@ Imgl.ZIndex = 99999
 Imgl.Text = "Omni-Admin"
 Imgl.BackgroundColor3=Color3.new(1,1,1)
 Imgl.TextColor3=Color3.new(0.5,0,0)
-Imgl.TextSized = true
+Imgl.SizedText = true
 Imgl.Size = UDim2.new(0,0.01,0,0.01)
 Imgl:TweenSize(UDim2.new(0.068, 0,0.12, 0),"InOut","Sine",1)
 Imgl.Position = UDim2.new(0.023, 0,0.869, 0)
