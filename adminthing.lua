@@ -186,29 +186,15 @@ cmd.add("partfling","Flings someone using parts, far more undetectable and works
 	end
 	local Part = getclosestpart()
 	if Part == nil then return end
-	Part.Archivable = true
-	local PClone = Part:Clone()
-	PClone.Parent = workspace
-	PClone.Anchored = true
-	local oldtr=Part.Transparency
-	Part.Transparency = 1
-	PClone.CanCollide = false
-	PClone.Transparency = 0
-	Instance.new("Highlight",PClone).OutlineTransparency = 1
 	local oldcf=game:GetService("Players").LocalPlayer.Character:GetPivot()
 	repeat
-		game:GetService("Players").LocalPlayer.SimulationRadius = 1000
 		game:GetService("Players").LocalPlayer.Character:PivotTo(Part.CFrame)
 		game:GetService("RunService").RenderStepped:Wait()
 	until NetworkCheck(Part) == true
 	game:GetService("Players").LocalPlayer.Character:PivotTo(oldcf)
 	game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
-	Part.Transparency = oldtr
-	pcall(game.Destroy,PClone)
 	Part.Velocity = Vector3.new(0,5000,0)
-	local weld = Instance.new("Weld",Part)
-	weld.Part0 = Part
-	weld.Part1 = target.Character.HumanoidRootPart
+	local weld = {Part1 = target.Character.HumanoidRootPart,Part0 = Part}
 	local conexttion
 	local oldpos=Part.Position
 	conexttion = game:GetService('RunService').Heartbeat:Connect(function()
@@ -224,7 +210,6 @@ cmd.add("partfling","Flings someone using parts, far more undetectable and works
 			Part.CFrame = weld.Part1.CFrame
 		end
 	end)
-	pcall(game.Destroy,weld)
 end
 		if target and game.Players[target] then
 		PartFling(game.Players[target])
