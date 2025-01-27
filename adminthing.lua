@@ -21,6 +21,20 @@ cmd = {
 	list = {}
 
 }
+ getPlr = function(Name)
+	 if Name:lower() == "random" then
+		 return Players:GetPlayers()[math.random(#Players:GetPlayers())]
+	 else
+		 Name = Name:lower():gsub("%s", "")
+		 for _, x in next, Players:GetPlayers() do
+			 if x.Name:lower():match(Name) then
+				 return x
+			 elseif x.DisplayName:lower():match("^" .. Name) then
+				 return x
+			 end
+		 end
+	 end
+ end
 function execute(n,...)
 	if rawequal(cmd["list"][n:lower()],nil) ~= true then
 		cmd["list"][n:lower()]["function"](...)
@@ -66,7 +80,7 @@ end
 cmd.add("goto","Teleports you to another player's location.",function(name)
 
 	if rawequal(workspace:FindFirstChild(name),nil) ~= true then
-		pc:PivotTo(workspace:FindFirstChild(name):GetPivot())
+		pc:PivotTo(getPlr(name).Character:GetPivot())
 		notify("Teleported to "..name.."!","Omnipotent Admin","631727248")
 	end
 end)
@@ -212,7 +226,7 @@ cmd.add("partfling","Flings someone using parts, far more undetectable and works
 	end)
 end
 		if target and game.Players[target] then
-		PartFling(game.Players[target])
+		PartFling(getPlr(name))
 		end
 end)
 cmd.add("print","Prints text in the console.",print)
@@ -305,7 +319,7 @@ cmd.add("fling","Flings your target lol.",function(name)
 	pcall(function()
 		if pc:FindFirstChild("Torso") then
 			if name ~= tostring(p.Name) then
-				Fling(name)
+				Fling(getPlr(name).Name)
 			else
 				notify("why are you trying to fling yourself","Omnipotent Admin","7202430493")
 			end
@@ -451,7 +465,7 @@ cmd.add("walkfling","Enables walkfling, credits to nameless admin's walkfling.",
 	end
 end)
 cmd.add("view","Lets you view someone.",function(name)
-	local target = game.Players:FindFirstChild(name)
+	local target = getPlr(name)
 	if target then
 		notify("Now viewing "..target.Name.."!","Omnipotent Admin")
 		local targetc = target.Character
@@ -467,7 +481,7 @@ cmd.add("unview","Changes your camera back to normal.",function()
 	end
 end)
 cmd.add("cffling","Flings someone using CFrame.",function(name)
-	local target = game.Players:FindFirstChild(name)
+	local target = getPlr(name).Character
 	if target then
 		notify("Now CFrame flinging "..target.Name.."!","Omnipotent Admin")
 		local targetc = target.Character
@@ -575,10 +589,13 @@ cmd.add("noclip","Makes you able to phase trough walls",function()
 end)
 task.wait()
 local Main = Instance.new("ScreenGui",p.PlayerGui)
-local Imgl = Instance.new("ImageButton",Main)
+local Imgl = Instance.new("LabelButton",Main)
 Main.ResetOnSpawn = false
 Imgl.ZIndex = 99999
-Imgl.Image = "http://www.roblox.com/asset/?id=18514484572"
+Imgl.Text = "Omni-Admin"
+Imgl.BackgroundColor3=Color3.new(1,1,1)
+Imgl.TextColor3=Color3.new(0.5,0,0)
+Imgl.TextSized = true
 Imgl.Size = UDim2.new(0,0.01,0,0.01)
 Imgl:TweenSize(UDim2.new(0.068, 0,0.12, 0),"InOut","Sine",1)
 Imgl.Position = UDim2.new(0.023, 0,0.869, 0)
