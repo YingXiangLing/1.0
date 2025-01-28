@@ -80,7 +80,7 @@ lock = function(instance, par)
 end
 cmd.add("goto","Teleports you to another player's location.",function(name)
 
-	if rawequal(workspace:FindFirstChild(name),nil) ~= true then
+	if getPlr(name) then
 		pc:PivotTo(getPlr(name).Character:GetPivot())
 		notify("Teleported to "..name.."!","TERMINAL","631727248")
 	end
@@ -226,8 +226,8 @@ cmd.add("partfling","Flings someone using parts, far more undetectable and works
 		end
 	end)
 end
-		if target and game.Players[target] then
-		PartFling(getPlr(name))
+		if getPlr(target) then
+		PartFling(getPlr(target))
 		end
 end)
 cmd.add("print","Prints text in the console.",print)
