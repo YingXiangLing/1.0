@@ -177,8 +177,9 @@ cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" a
 		end
 	end)
 end)
-cmd.add("partfling","Flings someone using parts, far more undetectable and works in collisions off.",function(target)
+cmd.add("partfling","Flings someone using parts, far more undetectable and works in collisions off.",function(name)
 		local function PartFling(target)
+	if target then
 	local function NetworkCheck(Part)
 		return Part.ReceiveAge == 0
 	end
@@ -225,10 +226,9 @@ cmd.add("partfling","Flings someone using parts, far more undetectable and works
 			Part.CFrame = weld.Part1.CFrame
 		end
 	end)
+			end
 end
-		if getPlr(target) then
-		PartFling(getPlr(target))
-		end
+		PartFling(getPlr(name))
 end)
 cmd.add("print","Prints text in the console.",print)
 cmd.add("sit","Sit.",function()
