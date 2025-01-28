@@ -567,7 +567,7 @@ local speedofthevfly = 10
 local FLYING = false
 function sFLY(vfly)
 	local p = game.Players.LocalPlayer
-	 cmdm = plr:GetMouse()
+	 local cmdm = plr:GetMouse()
 	 FLYING = false
 	 speedofthefly = 10
 	 speedofthevfly = 10
@@ -687,7 +687,7 @@ function sFLY(vfly)
 		 end
 end)
  
-cmd.add({"unfly"}, {"unfly", "Disable flight"}, function()
+cmd.add("unfly","Stops flying.", function()
  
 		 
 		 
