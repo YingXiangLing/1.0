@@ -22,6 +22,7 @@ cmd = {
 
 }
  getPlr = function(Name)
+	local Players = game.Players
 	 if Name:lower() == "random" then
 		 return Players:GetPlayers()[math.random(#Players:GetPlayers())]
 	 else
