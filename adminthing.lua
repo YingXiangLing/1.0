@@ -482,7 +482,7 @@ cmd.add("unview","Changes your camera back to normal.",function()
 	end
 end)
 cmd.add("cffling","Flings someone using CFrame.",function(name)
-	local target = getPlr(name).Character
+	local target = getPlr(name)
 	if target then
 		notify("Now CFrame flinging "..target.Name.."!","TERMINAL")
 		local targetc = target.Character
