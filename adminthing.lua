@@ -630,7 +630,7 @@ Imgl.MouseButton1Down:Connect(function()
 					cmd["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
 					else
 					local ge = safestring(g:split(" ")[1]) or "null"
-					notify("No command has been found with the name of '"..ge.."'."))
+					notify("No command has been found with the name of '"..ge.."'.")
 					end
 				end
 			end)
