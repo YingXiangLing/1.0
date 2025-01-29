@@ -22,7 +22,7 @@ local function safestring(g)
 end
 cmd = {
 	add = function(n,g,t)
-		table.insert(cmd[list],{["function"] = t,["description"]=g,["name"]=n})
+		table.insert(cmd["list"],{["function"] = t,["description"]=g,["name"]=n})
 	end,
 	list = {}
 
