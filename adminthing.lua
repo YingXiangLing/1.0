@@ -1,3 +1,4 @@
+
 if rawequal(game:IsLoaded(),false) then
 	game.Loaded:Wait()
 end
@@ -15,9 +16,11 @@ p.CharacterAdded:Connect(function(c)
 	pc = c
 end)
 local function safestring(g)
-	local EX,N=pcall(tostring(g))
+	local EX,N=pcall(function()
+		tostring(g)
+	end)
 	if EX == true then
-	    return tostring(g)
+		return tostring(g)
 	end
 end
 cmd = {
@@ -27,21 +30,21 @@ cmd = {
 	list = {}
 
 }
- getPlr = function(Name)
+getPlr = function(Name)
 	local Players = game.Players
-	 if Name:lower() == "random" then
-		 return Players:GetPlayers()[math.random(#Players:GetPlayers())]
-	 else
-		 Name = Name:lower():gsub("%s", "")
-		 for _, x in next, Players:GetPlayers() do
-			 if x.Name:lower():match(Name) then
-				 return x
-			 elseif x.DisplayName:lower():match("^" .. Name) then
-				 return x
-			 end
-		 end
-	 end
- end
+	if Name:lower() == "random" then
+		return Players:GetPlayers()[math.random(#Players:GetPlayers())]
+	else
+		Name = Name:lower():gsub("%s", "")
+		for _, x in next, Players:GetPlayers() do
+			if x.Name:lower():match(Name) then
+				return x
+			elseif x.DisplayName:lower():match("^" .. Name) then
+				return x
+			end
+		end
+	end
+end
 function execute(n,...)
 	if rawequal(cmd["list"][n:lower()],nil) ~= true then
 		cmd["list"][n:lower()]["function"](...)
@@ -60,12 +63,10 @@ function notify(t,n,i)
 		game:GetService("StarterGui"):SetCore("SendNotification",{
 			Text = t,
 			Title = n,
-			-- // Icon = "http://www.roblox.com/asset/?id="..tostring(i),
 			Duration = 5;
 		})
 	end
 end
-alreadyblackhole = false
 hiddenfling = false
 Noclip = nil
 locks = {}
@@ -90,40 +91,45 @@ cmd.add({"to","goto"},"Teleports you to another player's location.",function(nam
 		pc:PivotTo(getPlr(name).Character:GetPivot())
 	end
 end)
-cmd.add({"blackhole","bh"},"Picks up every part near you.",function()
-	if rawequal(alreadyblackhole,false) then
-		alreadyblackhole = true
-		pcall(function()
-			task.spawn(function()
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/YingXiangLing/1.0/main/Chaos.lua"))()
-			end)
-		end)
-	end
-end)
 cmd.add({"run","src","source","exe","execute"},"Runs the selected code.",function(code)
-loadstring(code)()
+	loadstring(code)()
 end)
-cmd.add({"commands","cmds"},"Shows all of the commands TERMINAL has.",function()
-	notify("Say /console in chat or press F9 to see commands.","TERMINAL","18514484572")
-	local finishedlist = ""
-	task.spawn(function()
-		for _, v in pairs(cmd.list) do
-			finishedlist ..= "\n Name: '"..v.name.."' Description: '"..v.description.."'"
+cmd.add({"commands","cmds","help"},"Shows all of the commands TERMINAL has.",function()
+	notify("Press F9 or say '/console' to see the commands. (SCROLL DOWN IF NEEDED)","TERMINAL")
+	pcall(function()
+		for i,x in next, cmd["list"] do
+			local aliases = {}
+			for m, v in pairs(x["name"]) do
+				if m == 1 then continue end
+				if m ~= #x["name"] then
+					table.insert(aliases,v..", ")
+				else
+					table.insert(aliases,v..".")
+				end
+			end
+			if #aliases > 0 then
+				local string = ""
+				for _, v in ipairs(aliases) do
+					string ..= v
+				end
+				print(x["name"][1]..": Aliases: "..string.." | Description: "..x["description"])
+			else
+				print(x["name"][1]..": Aliases: none | Description: "..x["description"])
+			end
 		end
 	end)
-	print("Commands: "..finishedlist)
 end)
 cmd.add({"wallwalk","spiderman","ww"},"makes you walk on walls",function()
- loadstring(game:HttpGet("https://pastebin.com/raw/s4FjP97j"))()
+	loadstring(game:HttpGet("https://pastebin.com/raw/s4FjP97j"))()
 end)
 cmd.add({"httpspy","hspy"},"Executes http spy.", function()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/HttpSpy'))()
- end)
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/HttpSpy'))()
+end)
 cmd.add({"remotespy","rspy"},"Executes remote spy.",function()
-loadstring(game:HttpGet("https://github.com/exxtremestuffs/SimpleSpySource/raw/master/SimpleSpy.lua"))()
+	loadstring(game:HttpGet("https://github.com/exxtremestuffs/SimpleSpySource/raw/master/SimpleSpy.lua"))()
 end)
 cmd.add({"gravity"},"Sets workspace gravity value to [number].",function(gravity)
-workspace.Gravity = gravity
+	workspace.Gravity = gravity
 end)
 cmd.add({"swordreach","reach"},"Adds extra range to your sword.",function()
 	pcall(function()
@@ -192,60 +198,60 @@ cmd.add({"revive"},'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!"
 	end)
 end)
 cmd.add({"partfling","pf","partf"},"Flings someone using parts, far more undetectable and works in collisions off.",function(name)
-		local function PartFling(target)
-	if target then
-	local function NetworkCheck(Part)
-		return Part.ReceiveAge == 0
-	end
-	local function getclosestpart()
-		local bestpart
-		local biggestmagnitude 
-		for _, v in ipairs(workspace:GetDescendants()) do
-			if v:IsA("BasePart") or v:IsA("Part") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
-				if v.Anchored == false and not v.Parent:FindFirstChildOfClass("Humanoid") and not v.Parent.Parent:FindFirstChildOfClass("Humanoid") and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
-					if biggestmagnitude == nil or biggestmagnitude ~= nil and (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude < biggestmagnitude then
-						if #v:GetConnectedParts() < 2 then
-						biggestmagnitude = (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude
-						bestpart = v
+	local function PartFling(target)
+		if target then
+			local function NetworkCheck(Part)
+				return Part.ReceiveAge == 0
+			end
+			local function getclosestpart()
+				local bestpart
+				local biggestmagnitude 
+				for _, v in ipairs(workspace:GetDescendants()) do
+					if v:IsA("BasePart") or v:IsA("Part") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
+						if v.Anchored == false and not v.Parent:FindFirstChildOfClass("Humanoid") and not v.Parent.Parent:FindFirstChildOfClass("Humanoid") and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+							if biggestmagnitude == nil or biggestmagnitude ~= nil and (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude < biggestmagnitude then
+								if #v:GetConnectedParts() < 2 then
+									biggestmagnitude = (game.Players.LocalPlayer.Character.Head.Position-v.Position).Magnitude
+									bestpart = v
+								end
+							end
 						end
 					end
 				end
+				return bestpart
 			end
-		end
-		return bestpart
-	end
-	local Part = getclosestpart()
-	if Part == nil then return end
-	local oldcf=game:GetService("Players").LocalPlayer.Character:GetPivot()
-	repeat
-		game:GetService("Players").LocalPlayer.Character:PivotTo(Part.CFrame)
-		game:GetService("RunService").RenderStepped:Wait()
-	until NetworkCheck(Part) == true
-	game:GetService("Players").LocalPlayer.Character:PivotTo(oldcf)
-	game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
-	Part.Velocity = Vector3.new(0,5000,0)
-	local weld = {Part1 = target.Character.HumanoidRootPart,Part0 = Part}
-	local conexttion
-	local oldpos=Part.Position
-	conexttion = game:GetService('RunService').Heartbeat:Connect(function()
-		if NetworkCheck(Part) ~= true or weld.Part1.Velocity.Magnitude >= 100 then
-			conexttion:Disconnect()
-			pcall(function()
-				Part.Position = oldpos
-				Part.Velocity = Vector3.zero
+			local Part = getclosestpart()
+			if Part == nil then return end
+			local oldcf=game:GetService("Players").LocalPlayer.Character:GetPivot()
+			repeat
+				game:GetService("Players").LocalPlayer.Character:PivotTo(Part.CFrame)
+				game:GetService("RunService").RenderStepped:Wait()
+			until NetworkCheck(Part) == true
+			game:GetService("Players").LocalPlayer.Character:PivotTo(oldcf)
+			game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
+			Part.Velocity = Vector3.new(0,5000,0)
+			local weld = {Part1 = target.Character.HumanoidRootPart,Part0 = Part}
+			local conexttion
+			local oldpos=Part.Position
+			conexttion = game:GetService('RunService').Heartbeat:Connect(function()
+				if NetworkCheck(Part) ~= true or weld.Part1.Velocity.Magnitude >= 100 then
+					conexttion:Disconnect()
+					pcall(function()
+						Part.Position = oldpos
+						Part.Velocity = Vector3.zero
+					end)
+				else
+					game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+					Part.Velocity = Vector3.new(0,500*5,0)
+					Part.CFrame = weld.Part1.CFrame
+				end
 			end)
-		else
-			game:GetService("Players").LocalPlayer.SimulationRadius = 1000
-			Part.Velocity = Vector3.new(0,500*5,0)
-			Part.CFrame = weld.Part1.CFrame
 		end
-	end)
-			end
-end
-		PartFling(getPlr(name))
+	end
+	PartFling(getPlr(name))
 end)
 cmd.add({"print"},"Prints text in the console.",print)
-cmd.add({"sit","Sit."},function()
+cmd.add({"sit"},"Sit.",function()
 	pc:FindFirstChildOfClass("Humanoid").Sit = true
 end)
 cmd.add({"reset","die"},"die die die die die die die die",function()
@@ -335,7 +341,7 @@ cmd.add({"fling","hf","hyperf"},"Flings your target lol.",function(name)
 			else
 			end
 		else
-			notify("R15 does not work on HYPERFLING.","TERMINAL","7202430493")
+			notify("R15 does not work on HYPERFLING.","TERMINAL")
 		end
 	end)
 end)
@@ -399,11 +405,14 @@ cmd.add({"airwalk","airw"},"Turns on airwalk.",function()
 end)
 cmd.add({"toolfling","toolf"},"Makes one of your tools fling a player to oblivion on touch.",function()
 	task.spawn(function()
-		local Tool = game.Players.LocalPlayer.Backpack:FindFirstChildWhichIsA("Tool")
+		local Tool = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool")
+		if not Tool then
+			notify("Please equip a tool.","TERMINAL")
+		end
 		if not Tool then
 			repeat
 				task.wait()
-				Tool = game.Players.LocalPlayer.Backpack:FindFirstChildWhichIsA("Tool")
+				Tool = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool")
 			until Tool
 		end
 		Tool.Handle.Massless = true
@@ -421,7 +430,7 @@ cmd.add({"toolfling","toolf"},"Makes one of your tools fling a player to oblivio
 				end)
 			until Tool == nil
 		end)
-		notify("Successfully activated toolfling on "..Tool.Name.."!","TERMINAL","12917287778")
+		notify("Successfully activated toolfling on "..Tool.Name.."!","TERMINAL")
 	end)
 end)
 cmd.add({"unwalkfling","unwalkf"},"Disables walkfling.",function()
@@ -475,14 +484,14 @@ cmd.add({"view"},"Lets you view someone.",function(name)
 		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
 	end
 end)
-cmd.add({"unv","unview"},"Changes your camera back to normal.",function()
+cmd.add({"unview"},"Changes your camera back to normal.",function()
 	local target = p
 	if target then
 		local targetc = target.Character
 		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
 	end
 end)
-cmd.add({"cfling","cframefling","cframef","cffling"},"Flings someone using CFrame.",function(name)
+cmd.add({"cffling","cframefling","cframef"},"Flings someone using CFrame.",function(name)
 	local target = getPlr(name)
 	if target then
 		local targetc = target.Character
@@ -524,7 +533,7 @@ cmd.add({"cfling","cframefling","cframef","cffling"},"Flings someone using CFram
 		end)
 	end
 end)
-cmd.add({"invisible","invis"},"Makes your character invisible for others (YOU CAN STILL USE TOOLS)",function()
+cmd.add({"invisible","invis"},"Makes your character invisible for others (YOU CAN STILL USE TOOLS).",function()
 	task.spawn(function()
 		local player = game.Players.LocalPlayer
 		local position     = player.Character.HumanoidRootPart.Position
@@ -538,7 +547,7 @@ cmd.add({"invisible","invis"},"Makes your character invisible for others (YOU CA
 		player.Character:MoveTo(position)
 	end)
 end)
-cmd.add({"oid","creatorid","ownerid"},"Changes your userid to the owner's userid (CLIENT)",function()
+cmd.add({"creatorid","ownerid","oid"},"Changes your userid to the owner's userid (CLIENT).",function()
 	task.spawn(function()
 		if game.CreatorType == Enum.CreatorType.User then
 			game.Players.LocalPlayer.UserId = game.CreatorId
@@ -550,9 +559,9 @@ cmd.add({"oid","creatorid","ownerid"},"Changes your userid to the owner's userid
 		end
 	end)
 	task.wait(0.2)
-	notify("UserId Set to "..game.Players.LocalPlayer.UserId..".","TERMINAL","12621969404")
+	notify("UserId Set to "..game.Players.LocalPlayer.UserId..".","TERMINAL")
 end)
-cmd.add({"ws","walkspeed","speed"},"Changes your walkspeed to the specified number, use this with noanti to maximize its potential.",function(num)
+cmd.add({"walkspeed","speed","ws"},"Changes your walkspeed to the specified number, use this with noanti to maximize its potential.",function(num)
 	pc:FindFirstChildOfClass("Humanoid").WalkSpeed = num
 end)
 cmd.add({"noanti"},"Attempts to destroy every anticheat instance, this might break the game.",function()
@@ -574,7 +583,7 @@ cmd.add({"clip"}, "Stops the noclip command.", function()
 	pc:FindFirstChildOfClass("Humanoid").Parent = game.ReplicatedStorage
 	game.ReplicatedStorage:FindFirstChild("Humanoid").Parent = pc
 end)
-cmd.add({"noclip"},"Makes you able to phase trough walls",function()
+cmd.add({"noclip"},"Makes you able to phase through walls.",function()
 	Noclip = game:GetService("RunService").Stepped:Connect(function()
 		for i, v in pairs(pc:GetDescendants()) do
 			if v:IsA("BasePart") then
@@ -612,25 +621,29 @@ Imgl.MouseButton1Down:Connect(function()
 		h.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 		h = nil
 		TBox.FocusLost:Connect(function()
-			local g = TBox.Text
 			pcall(function()
-				if cmd.list[g:split(" ")[1]] then
+				local g = TBox.Text
+				local cmde = nil
+				for _, v in pairs(cmd["list"]) do
+					if table.find(v.name,g:split(" ")[1]) then
+						cmde = v
+					end
+				end
+				if cmde then
 					local sound = Instance.new("Sound",workspace)
 					sound.SoundId = "rbxassetid://3450794184"
 					sound.Volume = 1
 					sound:Play()
 					notify("Executed command!","Command Loader")
-					local cmd = nil
-					for _, v in pairs(cmd.list) do
-					if table.find(v.name,g:split(" ")[1]) then
-					cmd = v
+					cmde["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
+				else
+					local ge = safestring(g:split(" ")[1])
+					if not ge then
+						ge = "null"
 					end
-					end
-					if cmd then
-					cmd["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
+					if ge == "" then
 					else
-					local ge = safestring(g:split(" ")[1]) or "null"
-					notify("No command has been found with the name of '"..ge.."'.")
+						notify("No command has been found with the name of '"..ge.."'.","Command Loader")
 					end
 				end
 			end)
@@ -650,4 +663,4 @@ h.Thickness = 2
 h.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 h = nil
 Instance.new("UICorner",Imgl).CornerRadius = UDim.new(0, 8)
-notify("TERMINAL has loaded!","TERMINAL Loader","16124991389")
+notify("TERMINAL has loaded!","TERMINAL Loader")
