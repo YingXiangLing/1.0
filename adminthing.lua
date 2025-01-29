@@ -14,9 +14,15 @@ local pc = p.Character
 p.CharacterAdded:Connect(function(c)
 	pc = c
 end)
+local function safestring(g)
+	local EX,N=pcall(tostring(g))
+	if EX == true then
+	    return tostring(g)
+	end
+end
 cmd = {
 	add = function(n,g,t)
-		cmd["list"][n] = {["function"] = t,["description"]=g,["name"]=n}
+		table.insert(cmd[list],{["function"] = t,["description"]=g,["name"]=n})
 	end,
 	list = {}
 
@@ -78,13 +84,13 @@ lock = function(instance, par)
 	instance.Parent = par or instance.Parent
 	instance.Name = "RightGrip"
 end
-cmd.add("goto","Teleports you to another player's location.",function(name)
+cmd.add({"to","goto"},"Teleports you to another player's location.",function(name)
 
 	if getPlr(name) then
 		pc:PivotTo(getPlr(name).Character:GetPivot())
 	end
 end)
-cmd.add("blackhole","Picks up every part near you.",function()
+cmd.add({"blackhole","bh"},"Picks up every part near you.",function()
 	if rawequal(alreadyblackhole,false) then
 		alreadyblackhole = true
 		pcall(function()
@@ -94,10 +100,10 @@ cmd.add("blackhole","Picks up every part near you.",function()
 		end)
 	end
 end)
-cmd.add("source","Runs the selected code.",function(code)
+cmd.add({"run","src","source","exe","execute"},"Runs the selected code.",function(code)
 loadstring(code)()
 end)
-cmd.add("cmds","Shows all of the commands TERMINAL has.",function()
+cmd.add({"commands","cmds"},"Shows all of the commands TERMINAL has.",function()
 	notify("Say /console in chat or press F9 to see commands.","TERMINAL","18514484572")
 	local finishedlist = ""
 	task.spawn(function()
@@ -107,19 +113,19 @@ cmd.add("cmds","Shows all of the commands TERMINAL has.",function()
 	end)
 	print("Commands: "..finishedlist)
 end)
-cmd.add("wallwalk","makes you walk on walls",function()
+cmd.add({"wallwalk","spiderman","ww"},"makes you walk on walls",function()
  loadstring(game:HttpGet("https://pastebin.com/raw/s4FjP97j"))()
 end)
-cmd.add("httpspy","Executes http spy.", function()
+cmd.add({"httpspy","hspy"},"Executes http spy.", function()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/HttpSpy'))()
  end)
-cmd.add("remotespy","Executes remote spy.",function()
+cmd.add({"remotespy","rspy"},"Executes remote spy.",function()
 loadstring(game:HttpGet("https://github.com/exxtremestuffs/SimpleSpySource/raw/master/SimpleSpy.lua"))()
 end)
-cmd.add("gravity","Sets workspace gravity value to [number].",function(gravity)
+cmd.add({"gravity"},"Sets workspace gravity value to [number].",function(gravity)
 workspace.Gravity = gravity
 end)
-cmd.add("swordreach","Adds extra range to your sword.",function()
+cmd.add({"swordreach","reach"},"Adds extra range to your sword.",function()
 	pcall(function()
 		local reachsize =  40
 		local Tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") or p.Backpack:FindFirstChildOfClass("Tool")
@@ -139,7 +145,7 @@ cmd.add("swordreach","Adds extra range to your sword.",function()
 		Tool.Handle.Size = Vector3.new(reachsize,reachsize,reachsize)
 	end)
 end)
-cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" ahh command, anyway this might not work though',function(t)
+cmd.add({"revive"},'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" ahh command, anyway this might not work though',function(t)
 	local Older;Older=pc:FindFirstChildOfClass("Humanoid").Health
 	local reload = true
 	task.spawn(function()
@@ -185,7 +191,7 @@ cmd.add("revive",'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" a
 		end
 	end)
 end)
-cmd.add("partfling","Flings someone using parts, far more undetectable and works in collisions off.",function(name)
+cmd.add({"partfling","pf","partf"},"Flings someone using parts, far more undetectable and works in collisions off.",function(name)
 		local function PartFling(target)
 	if target then
 	local function NetworkCheck(Part)
@@ -238,15 +244,15 @@ cmd.add("partfling","Flings someone using parts, far more undetectable and works
 end
 		PartFling(getPlr(name))
 end)
-cmd.add("print","Prints text in the console.",print)
-cmd.add("sit","Sit.",function()
+cmd.add({"print"},"Prints text in the console.",print)
+cmd.add({"sit","Sit."},function()
 	pc:FindFirstChildOfClass("Humanoid").Sit = true
 end)
-cmd.add("reset","die die die die die die die die",function()
+cmd.add({"reset","die"},"die die die die die die die die",function()
 	pc:FindFirstChildOfClass("Humanoid"):SetStateEnabled(Enum.HumanoidStateType.Dead,true)
 	pc:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
 end)
-cmd.add("fling","Flings your target lol.",function(name)
+cmd.add({"fling","hf","hyperf"},"Flings your target lol.",function(name)
 	local Players = game.Players
 	local plr = p
 	local function Fling(TargetName)
@@ -333,7 +339,7 @@ cmd.add("fling","Flings your target lol.",function(name)
 		end
 	end)
 end)
-cmd.add("ui","Gives you ultra instinct lmao, you might get hit if you use false, it will stop combos by teleporting away though. But true just runs away from anyone near you",function(dclo)
+cmd.add({"damagetp","dmgtp"},"Teleports away when you get damaged, true for it to avoid players.",function(dclo)
 
 	if dclo ~= nil and rawequal(dclo:lower(),"true") then
 		repeat
@@ -364,14 +370,14 @@ cmd.add("ui","Gives you ultra instinct lmao, you might get hit if you use false,
 		end)
 	end
 end)
-cmd.add("unairwalk","Turns off airwalk.", function()
+cmd.add({"unairwalk","unairw"},"Turns off airwalk.", function()
 	for i, v in pairs(workspace:GetChildren()) do
 		if tostring(v) == "Airwalk" then
 			v:Destroy()
 		end
 	end
 end)
-cmd.add("airwalk","Turns on airwalk.",function()
+cmd.add({"airwalk","airw"},"Turns on airwalk.",function()
 	task.spawn(function()
 		local function AirWalk()
 
@@ -391,7 +397,7 @@ cmd.add("airwalk","Turns on airwalk.",function()
 		AirWalk()
 	end)
 end)
-cmd.add("toolfling","Makes one of your tools fling a player to oblivion on touch.",function()
+cmd.add({"toolfling","toolf"},"Makes one of your tools fling a player to oblivion on touch.",function()
 	task.spawn(function()
 		local Tool = game.Players.LocalPlayer.Backpack:FindFirstChildWhichIsA("Tool")
 		if not Tool then
@@ -418,12 +424,12 @@ cmd.add("toolfling","Makes one of your tools fling a player to oblivion on touch
 		notify("Successfully activated toolfling on "..Tool.Name.."!","TERMINAL","12917287778")
 	end)
 end)
-cmd.add("unwalkfling","Disables walkfling.",function()
+cmd.add({"unwalkfling","unwalkf"},"Disables walkfling.",function()
 	pcall(function()
 		hiddenfling = false
 	end)
 end)
-cmd.add("walkfling","Enables walkfling, credits to nameless admin's walkfling.",function()
+cmd.add({"walkfling","walkf"},"Enables walkfling, credits to nameless admin's walkfling.",function()
 	if game:GetService("ReplicatedStorage"):FindFirstChild("juisdfj0i32i0eidsuf0iok") then
 		hiddenfling = true
 	else
@@ -462,21 +468,21 @@ cmd.add("walkfling","Enables walkfling, credits to nameless admin's walkfling.",
 		fling()
 	end
 end)
-cmd.add("view","Lets you view someone.",function(name)
+cmd.add({"view"},"Lets you view someone.",function(name)
 	local target = getPlr(name)
 	if target then
 		local targetc = target.Character
 		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
 	end
 end)
-cmd.add("unview","Changes your camera back to normal.",function()
+cmd.add({"unv","unview"},"Changes your camera back to normal.",function()
 	local target = p
 	if target then
 		local targetc = target.Character
 		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
 	end
 end)
-cmd.add("cffling","Flings someone using CFrame.",function(name)
+cmd.add({"cfling","cframefling","cframef","cffling"},"Flings someone using CFrame.",function(name)
 	local target = getPlr(name)
 	if target then
 		local targetc = target.Character
@@ -518,7 +524,7 @@ cmd.add("cffling","Flings someone using CFrame.",function(name)
 		end)
 	end
 end)
-cmd.add("invis","Makes your character invisible for others (YOU CAN STILL USE TOOLS)",function()
+cmd.add({"invisible","invis"},"Makes your character invisible for others (YOU CAN STILL USE TOOLS)",function()
 	task.spawn(function()
 		local player = game.Players.LocalPlayer
 		local position     = player.Character.HumanoidRootPart.Position
@@ -532,7 +538,7 @@ cmd.add("invis","Makes your character invisible for others (YOU CAN STILL USE TO
 		player.Character:MoveTo(position)
 	end)
 end)
-cmd.add("ownerid","Changes your userid to the owner's userid (CLIENT)",function()
+cmd.add({"oid","creatorid","ownerid"},"Changes your userid to the owner's userid (CLIENT)",function()
 	task.spawn(function()
 		if game.CreatorType == Enum.CreatorType.User then
 			game.Players.LocalPlayer.UserId = game.CreatorId
@@ -546,10 +552,10 @@ cmd.add("ownerid","Changes your userid to the owner's userid (CLIENT)",function(
 	task.wait(0.2)
 	notify("UserId Set to "..game.Players.LocalPlayer.UserId..".","TERMINAL","12621969404")
 end)
-cmd.add("speed","Changes your walkspeed to the specified number, use this with noanti to maximize its potential.",function(num)
+cmd.add({"ws","walkspeed","speed"},"Changes your walkspeed to the specified number, use this with noanti to maximize its potential.",function(num)
 	pc:FindFirstChildOfClass("Humanoid").WalkSpeed = num
 end)
-cmd.add("noanti","Attempts to destroy every anticheat instance, this might break the game.",function()
+cmd.add({"noanti"},"Attempts to destroy every anticheat instance, this might break the game.",function()
 	local Instances = 0
 	for _, v in ipairs(game:GetDescendants()) do
 		if v:IsA("LuaSourceContainer") then
@@ -562,13 +568,13 @@ cmd.add("noanti","Attempts to destroy every anticheat instance, this might break
 		end
 	end
 end)
-cmd.add("clip", "Stops the noclip command.", function()
+cmd.add({"clip"}, "Stops the noclip command.", function()
 	Noclip:Disconnect()
 	Noclip = nil
 	pc:FindFirstChildOfClass("Humanoid").Parent = game.ReplicatedStorage
 	game.ReplicatedStorage:FindFirstChild("Humanoid").Parent = pc
 end)
-cmd.add("noclip","Makes you able to phase trough walls",function()
+cmd.add({"noclip"},"Makes you able to phase trough walls",function()
 	Noclip = game:GetService("RunService").Stepped:Connect(function()
 		for i, v in pairs(pc:GetDescendants()) do
 			if v:IsA("BasePart") then
@@ -614,7 +620,18 @@ Imgl.MouseButton1Down:Connect(function()
 					sound.Volume = 1
 					sound:Play()
 					notify("Executed command!","Command Loader")
-					cmd.list[g:split(" ")[1]]["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
+					local cmd = nil
+					for _, v in pairs(cmd.list) do
+					if table.find(v.name,g:split(" ")[1]) then
+					cmd = v
+					end
+					end
+					if cmd then
+					cmd["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
+					else
+					local ge = safestring(g:split(" ")[1]) or "null"
+					notify("No command has been found with the name of '"..ge.."'."))
+					end
 				end
 			end)
 		end)
