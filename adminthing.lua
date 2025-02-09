@@ -193,7 +193,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 				bv.Name = "OkEAA"
 			end
 			pcall(function()
-				bv.P = Vector3.new(math.huge,math.huge,math.huge)
+				bv.P = math.huge
 				bv.Position = game:GetService("Players").LocalPlayer.Character:GetPivot()*CFrame.new(math.random(-15,15),math.random(-15,15),math.random(-15,15)).Position
 			end)
 		else
