@@ -186,14 +186,27 @@ game:GetService("RunService").Heartbeat:Connect(function()
 	for _, v in ipairs(Parts) do
 		if v:IsDescendantOf(game) then
 			v.CanCollide = false
-			v.Massless = true
+			local TargetDensity = 0.1
+local FRICTION = 0.5
+local ELASTICITY = 1
+local FRICTION_WEIGHT = 0.3
+local ELASTICITY_WEIGHT = 1
+local BP = v -- Change this to the right body part (You could do this for all body parts individually if you'd like)
+local DesiredMass = 0.1 -- Change this to the final mass you want the part to be
+BP.Massless = false
+BP.CustomPhysicalProperties = PhysicalProperties.new(TargetDensity, FRICTION, ELASTICITY, FRICTION_WEIGHT, ELASTICITY_WEIGHT)
+local Volume = BP.Mass / BP.CustomPhysicalProperties.Density
+local OTargetDensity = Volume*(DesiredMass)
+local Modifier =  DesiredMass/(Volume*OTargetDensity) -- This will adjust the offput of the mass to make it the DesiredMass
+local TargetDensity = Volume*(DesiredMass * Modifier)
+local physProperties = PhysicalProperties.new(TargetDensity, FRICTION, ELASTICITY, FRICTION_WEIGHT, ELASTICITY_WEIGHT)
+BP.CustomPhysicalProperties = physProperties
 			local bv = v:FindFirstChild("OkEAA")
 			if not v:FindFirstChild("OkEAA") then
 				bv = Instance.new("BodyPosition",v)
 				bv.Name = "OkEAA"
 			end
 			pcall(function()
-				bv.P = math.huge
 				bv.Position = game:GetService("Players").LocalPlayer.Character:GetPivot()*CFrame.new(math.random(-15,15),math.random(-15,15),math.random(-15,15)).Position
 			end)
 		else
