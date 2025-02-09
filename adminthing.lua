@@ -289,10 +289,12 @@ cmd.add({"partfling","pf","partf"},"Flings someone using parts, far more undetec
 			local Part = getclosestpart()
 			if Part == nil then return end
 			local oldcf=game:GetService("Players").LocalPlayer.Character:GetPivot()
+			if NetworkCheck(Part) == false then
 			repeat
 				game:GetService("Players").LocalPlayer.Character:PivotTo(Part.CFrame)
 				game:GetService("RunService").RenderStepped:Wait()
 			until NetworkCheck(Part) == true
+				end
 			game:GetService("Players").LocalPlayer.Character:PivotTo(oldcf)
 			game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
 			Part.Velocity = Vector3.new(0,5000,0)
