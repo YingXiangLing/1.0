@@ -151,6 +151,58 @@ cmd.add({"swordreach","reach"},"Adds extra range to your sword.",function()
 		Tool.Handle.Size = Vector3.new(reachsize,reachsize,reachsize)
 	end)
 end)
+cmd.add({"partaura","paura","parta"},"Makes parts orbit your character.",function()
+		task.spawn(function()
+print("Localized Instance")
+local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
+local success = false
+pcall(function()
+	game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+	game:GetService("Players").LocalPlayer.Character:BreakJoints()
+	success = true
+end)
+task.wait(0.01)
+if success == true then
+	task.wait(game:GetService("Players").RespawnTime+0.2)
+	game:GetService("Players").LocalPlayer.Character:PivotTo(old)
+end
+task.wait(0.2)
+local Parts = {}
+for _, v in ipairs(workspace:GetDescendants()) do
+	if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+		if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+			table.insert(Parts,v)
+		end
+	end
+end
+workspace.DescendantAdded:Connect(function(v)
+	if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+		if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+			table.insert(Parts,v)
+		end
+	end
+end)
+game:GetService("RunService").Heartbeat:Connect(function()
+	for _, v in ipairs(Parts) do
+		if v:IsDescendantOf(game) then
+			v.CanCollide = false
+			v.Massless = true
+			local bv = v:FindFirstChild("OkEAA")
+			if not v:FindFirstChild("OkEAA") then
+				bv = Instance.new("BodyPosition",v)
+				bv.Name = "OkEAA"
+			end
+			pcall(function()
+				bv.Position = game:GetService("Players").LocalPlayer.Character:GetPivot()*CFrame.new(math.random(-15,15),math.random(-15,15),math.random(-15,15)).Position
+			end)
+		else
+			table.remove(Parts,v)
+			continue
+		end
+	end
+end)
+			end)
+end)
 cmd.add({"revive"},'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" ahh command, anyway this might not work though',function(t)
 	local Older;Older=pc:FindFirstChildOfClass("Humanoid").Health
 	local reload = true
