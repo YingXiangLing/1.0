@@ -661,7 +661,7 @@ cmd.add({"noclip"},"Makes you able to phase through walls.",function()
 	end)
 end)
 task.wait()
-local Main = Instance.new("ScreenGui",p.PlayerGui)
+local Main = Instance.new("ScreenGui",game:GetService("CoreGui"))
 local Imgl = Instance.new("TextButton",Main)
 Main.ResetOnSpawn = false
 Imgl.ZIndex = 99999
