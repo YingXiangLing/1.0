@@ -210,7 +210,7 @@ BP.CustomPhysicalProperties = physProperties
 				bv.Position = game:GetService("Players").LocalPlayer.Character:GetPivot()*CFrame.new(math.random(-15,15),math.random(-15,15),math.random(-15,15)).Position
 			end)
 		else
-			table.remove(Parts,v)
+			table.remove(Parts,table.find(Parts,v))
 			continue
 		end
 	end
