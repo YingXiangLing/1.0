@@ -119,6 +119,82 @@ cmd.add({"commands","cmds","help"},"Shows all of the commands TERMINAL has.",fun
 		end
 	end)
 end)
+cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around you to fling players (CAN BE ALSO GIVEN TO OTHER PLAYERS)",function(ex)
+		local function flingaura(target)
+	local RunService = game:GetService("RunService")
+
+	local character = target.Character
+	local HRP = character:WaitForChild("HumanoidRootPart")
+	local CYCLE_DURATION = 3
+	local DISTANCE = 5
+	if target ~= game.Players.LocalPlayer then
+		DISTANCE = 18
+	end
+
+	local i = 0
+	task.spawn(function()
+		print("Localized Instance")
+		local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
+		local success = false
+		pcall(function()
+			game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+			game:GetService("Players").LocalPlayer.Character:BreakJoints()
+			success = true
+		end)
+		task.wait(0.01)
+		if success == true then
+			task.wait(game:GetService("Players").RespawnTime+0.2)
+			game:GetService("Players").LocalPlayer.Character:PivotTo(old)
+		end
+		task.wait(0.2)
+		local Parts = {}
+		for _, v in ipairs(workspace:GetDescendants()) do
+			if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+				if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+					if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+					else
+						table.insert(Parts,v)
+					end
+				end
+			end
+		end
+		workspace.DescendantAdded:Connect(function(v)
+			if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+				if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+					if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+					else
+						table.insert(Parts,v)
+					end
+				end
+			end
+		end)
+		task.wait(1)
+		game:GetService("RunService").Heartbeat:Connect(function(dt)
+			for _, v in ipairs(Parts) do
+				if v:IsDescendantOf(game) then
+					if v.ReceiveAge == 0 and v.Anchored ~= true then else return end
+					v.CanCollide = false
+					v.Velocity = Vector3.new(0,500000000000,0)
+					i = (i + dt/CYCLE_DURATION) % 1
+					local alpha = 2 * math.pi * i
+
+					v.CFrame = CFrame.Angles(0, alpha, 0)
+						* CFrame.new(0, 0, DISTANCE+v.Size.Magnitude)
+						+ HRP.Position
+				else
+					table.remove(Parts,table.find(Parts,v))
+					continue
+				end
+			end
+		end)
+	end)
+end
+		pcall(function()
+	if getPlr(tostring(ex)) then
+					flingaura(getPlr(tostring(ex)))
+		end
+			end)
+end)
 cmd.add({"wallwalk","spiderman","ww"},"makes you walk on walls",function()
 	loadstring(game:HttpGet("https://pastebin.com/raw/s4FjP97j"))()
 end)
