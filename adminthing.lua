@@ -4,11 +4,15 @@ if rawequal(game:IsLoaded(),false) then
 end
 wait(0.5)
 local oldcharpos;oldcharpos=game:GetService("Players").LocalPlayer.Character:GetPivot()
-game:GetService("Players").LocalPlayer.SimulationRadius = 1000
-game:GetService("Players").LocalPlayer.Character:BreakJoints()
+pcall(function()
+	game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+	game:GetService("Players").LocalPlayer.Character:BreakJoints()
+end)
 wait(game:GetService("Players").RespawnTime+0.5)
-game:GetService("Players").LocalPlayer.SimulationRadius = 1000
-game:GetService("Players").LocalPlayer.Character:PivotTo(oldcharpos)
+pcall(function()
+	game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+	game:GetService("Players").LocalPlayer.Character:PivotTo(oldcharpos)
+end)
 wait(0.1)
 local p = game.Players.LocalPlayer
 local pc = p.Character
@@ -119,81 +123,200 @@ cmd.add({"commands","cmds","help"},"Shows all of the commands TERMINAL has.",fun
 		end
 	end)
 end)
-cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around you to fling players (CAN BE ALSO GIVEN TO OTHER PLAYERS)",function(ex)
-		local function flingaura(target)
-	local RunService = game:GetService("RunService")
-
-	local character = target.Character
-	local HRP = character:WaitForChild("HumanoidRootPart")
-	local CYCLE_DURATION = 3
-	local DISTANCE = 5
-	if target ~= game.Players.LocalPlayer then
-		DISTANCE = 18
+local partjails = {}
+cmd.add({"unpartjail","unjail","unpjail"},"Unjails someone.",function(_x)
+	local target = getPlr(_x)
+	if target then
+		for ie, v in pairs(partjails) do
+			if v.uid == target.UserId then
+				table.remove(partjails,ie)
+				table.insert(partjails,{uid=target.UserId,connection=false})
+			end
+		end
 	end
+end)
+cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts.",function(_x)
+	local target = getPlr(_x)
+	if target then
+		local function flingaura(target)
+			local RunService = game:GetService("RunService")
 
-	local i = 0
-	task.spawn(function()
-		print("Localized Instance")
-		local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
-		local success = false
-		pcall(function()
-			game:GetService("Players").LocalPlayer.SimulationRadius = 1000
-			game:GetService("Players").LocalPlayer.Character:BreakJoints()
-			success = true
-		end)
-		task.wait(0.01)
-		if success == true then
-			task.wait(game:GetService("Players").RespawnTime+0.2)
-			game:GetService("Players").LocalPlayer.Character:PivotTo(old)
-		end
-		task.wait(0.2)
-		local Parts = {}
-		for _, v in ipairs(workspace:GetDescendants()) do
-			if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
-				if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
-					if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
-					else
-						table.insert(Parts,v)
-					end
-				end
-			end
-		end
-		workspace.DescendantAdded:Connect(function(v)
-			if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
-				if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
-					if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
-					else
-						table.insert(Parts,v)
-					end
-				end
-			end
-		end)
-		task.wait(1)
-		game:GetService("RunService").Heartbeat:Connect(function(dt)
-			for _, v in ipairs(Parts) do
-				if v:IsDescendantOf(game) then
-					if v.ReceiveAge == 0 and v.Anchored ~= true then else return end
-					v.CanCollide = false
-					v.Velocity = Vector3.new(0,500000000000,0)
-					i = (i + dt/CYCLE_DURATION) % 1
-					local alpha = 2 * math.pi * i
-
-					v.CFrame = CFrame.Angles(0, alpha, 0)
-						* CFrame.new(0, 0, DISTANCE+v.Size.Magnitude)
-						+ HRP.Position
-				else
-					table.remove(Parts,table.find(Parts,v))
-					continue
-				end
-			end
-		end)
-	end)
-end
-		pcall(function()
-	if getPlr(tostring(ex)) then
-					flingaura(getPlr(tostring(ex)))
-		end
+			local character = target.Character
+			local HRP = character:WaitForChild("HumanoidRootPart")
+			target.CharacterAppearanceLoaded:Connect(function()
+				character = target.Character
+				HRP = character:WaitForChild("HumanoidRootPart")
 			end)
+			local CYCLE_DURATION = 3
+			local DISTANCE = 8
+
+			local i = 0
+			task.spawn(function()
+				print("Localized Instance")
+				local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
+				local success = false
+				pcall(function()
+					game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+					game:GetService("Players").LocalPlayer.Character:BreakJoints()
+					success = true
+				end)
+				task.wait(0.01)
+				if success == true then
+					task.wait(game:GetService("Players").RespawnTime+0.2)
+					game:GetService("Players").LocalPlayer.Character:PivotTo(old)
+				end
+				task.wait(0.2)
+				local Parts = {}
+				for _, v in ipairs(workspace:GetDescendants()) do
+					if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+						if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+							if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+							else
+								table.insert(Parts,v)
+							end
+						end
+					end
+				end
+				workspace.DescendantAdded:Connect(function(v)
+					if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+						if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+							if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+							else
+								table.insert(Parts,v)
+							end
+						end
+					end
+				end)
+				task.wait(1)
+				local alreadychecked = false
+				local connectionheart = game:GetService("RunService").Heartbeat:Connect(function(dt)
+					for _, v in ipairs(Parts) do
+						if v:IsDescendantOf(game) then
+							local s,l = pcall(function()
+								if not HRP:IsDescendantOf(workspace) and not target:IsDescendantOf(game) then error("Player Left") end
+								if v.ReceiveAge == 0 and v.Anchored ~= true then else return end
+								v.CanCollide = false
+								v.Velocity = Vector3.new(0,500000000000,0)
+								i = (i + dt/CYCLE_DURATION) % 1
+								local alpha = 2 * math.pi * i
+								if HRP:IsDescendantOf(workspace) then
+									v.CFrame = CFrame.Angles(0, alpha, 0)
+										* CFrame.new(0, 0, DISTANCE+v.Size.Magnitude)
+										+ HRP.Position
+								end
+							end)
+							if not s then
+								local found
+								if not alreadychecked then
+									for ie, v in pairs(partjails) do
+										if v.uid == target.UserId then
+											table.remove(partjails,ie)
+											table.insert(partjails,{uid=target.UserId,connection=false})
+										end
+									end
+									alreadychecked = true
+								end
+								table.remove(Parts,table.find(Parts,v))
+								continue
+							end
+						else
+							table.remove(Parts,table.find(Parts,v))
+							continue
+						end
+					end
+				end)
+				table.insert(partjails,{uid=target.UserId,connection=true})
+				task.spawn(function()
+					while task.wait(1.5) do
+						for ie, v in pairs(partjails) do
+							if v.uid == target.UserId and v.connection == false then
+								print("Test run")
+								connectionheart:Disconnect()
+								table.remove(partjails,ie)
+								break
+							end
+						end
+					end
+				end)
+			end)
+		end
+		flingaura(target)
+	end
+end)
+cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around you to fling players (CAN BE ALSO GIVEN TO OTHER PLAYERS)",function(ex)
+	local function flingaura(target)
+		local RunService = game:GetService("RunService")
+
+
+		local character = target.Character
+		local HRP = character:WaitForChild("HumanoidRootPart")
+		local CYCLE_DURATION = 3
+		local DISTANCE = 5
+		DISTANCE = 18
+
+		local i = 0
+		task.spawn(function()
+			print("Localized Instance")
+			local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
+			local success = false
+			pcall(function()
+				game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+				game:GetService("Players").LocalPlayer.Character:BreakJoints()
+				success = true
+			end)
+			task.wait(0.01)
+			if success == true then
+				task.wait(game:GetService("Players").RespawnTime+0.2)
+				game:GetService("Players").LocalPlayer.Character:PivotTo(old)
+			end
+			task.wait(0.2)
+			local Parts = {}
+			for _, v in ipairs(workspace:GetDescendants()) do
+				if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+					if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+						if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+						else
+							table.insert(Parts,v)
+						end
+					end
+				end
+			end
+			workspace.DescendantAdded:Connect(function(v)
+				if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+					if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+						if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+						else
+							table.insert(Parts,v)
+						end
+					end
+				end
+			end)
+			task.wait(1)
+			game:GetService("RunService").Heartbeat:Connect(function(dt)
+				for _, v in ipairs(Parts) do
+					if v:IsDescendantOf(game) then
+						if v.ReceiveAge == 0 and v.Anchored ~= true then else return end
+						v.CanCollide = false
+						v.Velocity = Vector3.new(0,500000000000,0)
+						i = (i + dt/CYCLE_DURATION) % 1
+						local alpha = 2 * math.pi * i
+
+						v.CFrame = CFrame.Angles(0, alpha, 0)
+							* CFrame.new(0, 0, DISTANCE+v.Size.Magnitude)
+							+ HRP.Position
+					else
+						table.remove(Parts,table.find(Parts,v))
+						continue
+					end
+				end
+			end)
+		end)
+	end
+	pcall(function()
+		if getPlr(tostring(ex)) then
+			flingaura(getPlr(tostring(ex)))
+		end
+	end)
 end)
 cmd.add({"wallwalk","spiderman","ww"},"makes you walk on walls",function()
 	loadstring(game:HttpGet("https://pastebin.com/raw/s4FjP97j"))()
@@ -228,70 +351,70 @@ cmd.add({"swordreach","reach"},"Adds extra range to your sword.",function()
 	end)
 end)
 cmd.add({"partaura","paura","parta"},"Makes parts orbit your character.",function()
-		task.spawn(function()
-print("Localized Instance")
-local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
-local success = false
-pcall(function()
-	game:GetService("Players").LocalPlayer.SimulationRadius = 1000
-	game:GetService("Players").LocalPlayer.Character:BreakJoints()
-	success = true
-end)
-task.wait(0.01)
-if success == true then
-	task.wait(game:GetService("Players").RespawnTime+0.2)
-	game:GetService("Players").LocalPlayer.Character:PivotTo(old)
-end
-task.wait(0.2)
-local Parts = {}
-for _, v in ipairs(workspace:GetDescendants()) do
-	if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
-		if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
-			table.insert(Parts,v)
+	task.spawn(function()
+		print("Localized Instance")
+		local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
+		local success = false
+		pcall(function()
+			game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+			game:GetService("Players").LocalPlayer.Character:BreakJoints()
+			success = true
+		end)
+		task.wait(0.01)
+		if success == true then
+			task.wait(game:GetService("Players").RespawnTime+0.2)
+			game:GetService("Players").LocalPlayer.Character:PivotTo(old)
 		end
-	end
-end
-workspace.DescendantAdded:Connect(function(v)
-	if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
-		if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
-			table.insert(Parts,v)
-		end
-	end
-end)
-game:GetService("RunService").Heartbeat:Connect(function()
-	for _, v in ipairs(Parts) do
-		if v:IsDescendantOf(game) then
-			v.CanCollide = false
-			local TargetDensity = 0.1
-local FRICTION = 0.5
-local ELASTICITY = 1
-local FRICTION_WEIGHT = 0.3
-local ELASTICITY_WEIGHT = 1
-local BP = v -- Change this to the right body part (You could do this for all body parts individually if you'd like)
-local DesiredMass = 0.1 -- Change this to the final mass you want the part to be
-BP.Massless = false
-BP.CustomPhysicalProperties = PhysicalProperties.new(TargetDensity, FRICTION, ELASTICITY, FRICTION_WEIGHT, ELASTICITY_WEIGHT)
-local Volume = BP.Mass / BP.CustomPhysicalProperties.Density
-local OTargetDensity = Volume*(DesiredMass)
-local Modifier =  DesiredMass/(Volume*OTargetDensity) -- This will adjust the offput of the mass to make it the DesiredMass
-local TargetDensity = Volume*(DesiredMass * Modifier)
-local physProperties = PhysicalProperties.new(TargetDensity, FRICTION, ELASTICITY, FRICTION_WEIGHT, ELASTICITY_WEIGHT)
-BP.CustomPhysicalProperties = physProperties
-			local bv = v:FindFirstChild("OkEAA")
-			if not v:FindFirstChild("OkEAA") then
-				bv = Instance.new("BodyPosition",v)
-				bv.Name = "OkEAA"
+		task.wait(0.2)
+		local Parts = {}
+		for _, v in ipairs(workspace:GetDescendants()) do
+			if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+				if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+					table.insert(Parts,v)
+				end
 			end
-			pcall(function()
-				bv.Position = game:GetService("Players").LocalPlayer.Character:GetPivot()*CFrame.new(math.random(-15,15),math.random(-15,15),math.random(-15,15)).Position
-			end)
-		else
-			table.remove(Parts,table.find(Parts,v))
-			continue
 		end
-	end
-end)
-			end)
+		workspace.DescendantAdded:Connect(function(v)
+			if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
+				if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+					table.insert(Parts,v)
+				end
+			end
+		end)
+		game:GetService("RunService").Heartbeat:Connect(function()
+			for _, v in ipairs(Parts) do
+				if v:IsDescendantOf(game) then
+					v.CanCollide = false
+					local TargetDensity = 0.1
+					local FRICTION = 0.5
+					local ELASTICITY = 1
+					local FRICTION_WEIGHT = 0.3
+					local ELASTICITY_WEIGHT = 1
+					local BP = v -- Change this to the right body part (You could do this for all body parts individually if you'd like)
+					local DesiredMass = 0.1 -- Change this to the final mass you want the part to be
+					BP.Massless = false
+					BP.CustomPhysicalProperties = PhysicalProperties.new(TargetDensity, FRICTION, ELASTICITY, FRICTION_WEIGHT, ELASTICITY_WEIGHT)
+					local Volume = BP.Mass / BP.CustomPhysicalProperties.Density
+					local OTargetDensity = Volume*(DesiredMass)
+					local Modifier =  DesiredMass/(Volume*OTargetDensity) -- This will adjust the offput of the mass to make it the DesiredMass
+					local TargetDensity = Volume*(DesiredMass * Modifier)
+					local physProperties = PhysicalProperties.new(TargetDensity, FRICTION, ELASTICITY, FRICTION_WEIGHT, ELASTICITY_WEIGHT)
+					BP.CustomPhysicalProperties = physProperties
+					local bv = v:FindFirstChild("OkEAA")
+					if not v:FindFirstChild("OkEAA") then
+						bv = Instance.new("BodyPosition",v)
+						bv.Name = "OkEAA"
+					end
+					pcall(function()
+						bv.Position = game:GetService("Players").LocalPlayer.Character:GetPivot()*CFrame.new(math.random(-15,15),math.random(-15,15),math.random(-15,15)).Position
+					end)
+				else
+					table.remove(Parts,table.find(Parts,v))
+					continue
+				end
+			end
+		end)
+	end)
 end)
 cmd.add({"revive"},'"No... ill never give up. I HAVE THE POWER OF FRIENDSHIP!!!" ahh command, anyway this might not work though',function(t)
 	local Older;Older=pc:FindFirstChildOfClass("Humanoid").Health
@@ -366,11 +489,11 @@ cmd.add({"partfling","pf","partf"},"Flings someone using parts, far more undetec
 			if Part == nil then return end
 			local oldcf=game:GetService("Players").LocalPlayer.Character:GetPivot()
 			if NetworkCheck(Part) == false then
-			repeat
-				game:GetService("Players").LocalPlayer.Character:PivotTo(Part.CFrame)
-				game:GetService("RunService").RenderStepped:Wait()
-			until NetworkCheck(Part) == true
-				end
+				repeat
+					game:GetService("Players").LocalPlayer.Character:PivotTo(Part.CFrame)
+					game:GetService("RunService").RenderStepped:Wait()
+				until NetworkCheck(Part) == true
+			end
 			game:GetService("Players").LocalPlayer.Character:PivotTo(oldcf)
 			game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
 			Part.Velocity = Vector3.new(0,5000,0)
@@ -737,7 +860,7 @@ cmd.add({"noclip"},"Makes you able to phase through walls.",function()
 	end)
 end)
 task.wait()
-local Main = Instance.new("ScreenGui",game:GetService("CoreGui"))
+local Main = Instance.new("ScreenGui",game:GetService("Players").LocalPlayer.PlayerGui)
 local Imgl = Instance.new("TextButton",Main)
 Main.ResetOnSpawn = false
 Imgl.ZIndex = 99999
