@@ -340,7 +340,7 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 
 
 		local character = target.Character
-		local HRP = character:WaitForChild("HumanoidRootPart")
+		local HRP
 		local CYCLE_DURATION = 3
 		local DISTANCE = 5
 		DISTANCE = 18
@@ -359,6 +359,14 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 			if success == true then
 				task.wait(game:GetService("Players").RespawnTime+0.2)
 				game:GetService("Players").LocalPlayer.Character:PivotTo(old)
+				task.wait(1)
+				if target == game:GetService("Players").LocalPlayer then
+					print("hi")
+					character = game:GetService("Players").LocalPlayer.Character
+					HRP = character:WaitForChild("HumanoidRootPart")
+				else
+					HRP = character:WaitForChild("HumanoidRootPart")
+				end
 			end
 			task.wait(0.2)
 			local Parts = {}
