@@ -99,7 +99,52 @@ cmd.add({"run","src","source","exe","execute"},"Runs the selected code.",functio
 	loadstring(code)()
 end)
 cmd.add({"commands","cmds","help"},"Shows all of the commands TERMINAL has.",function()
-	notify("Press F9 or say '/console' to see the commands. (SCROLL DOWN IF NEEDED)","TERMINAL")
+	local gui = Instance.new("ScreenGui",game:GetService("CoreGui"))
+	local frame = Instance.new("Frame",gui)
+	local hb = game:GetService("RunService").Heartbeat:Connect(function()
+		frame.Draggable = true
+	end)
+	frame.Size = UDim2.new(0.171, 0,0.442, 0)
+	frame.ClipsDescendants = true
+	frame.Position = UDim2.new(0.132, 0,0.412, 0)
+	frame.BackgroundColor3 = Color3.fromRGB(43, 43, 43)
+	frame.BackgroundTransparency = 0
+	local uistroke1 = Instance.new("UIStroke",frame)
+	uistroke1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	uistroke1.Color = Color3.fromRGB(143,143,143)
+	uistroke1.LineJoinMode = Enum.LineJoinMode.Round
+	uistroke1.Thickness = 1
+	uistroke1.Transparency = 0
+	local scrollingframe = Instance.new("ScrollingFrame",frame)
+	scrollingframe.ClipsDescendants = true
+	scrollingframe.Active = true
+	scrollingframe.Visible = true
+	scrollingframe.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	scrollingframe.BackgroundTransparency = 1
+	scrollingframe.Size = UDim2.new(1, 0,0.901, 5)
+	scrollingframe.Position = UDim2.new(0, 0,0.08, 0)
+	scrollingframe.CanvasSize = UDim2.new(0, 0,6, 0)
+	local uigridlayout = Instance.new("UIGridLayout",scrollingframe)
+	uigridlayout.CellPadding = UDim2.new(0,5,0,5)
+	uigridlayout.CellSize = UDim2.new(0.9, 0,0.02, 0)
+	local exitbutton = Instance.new("TextButton",frame)
+	exitbutton.MouseButton1Up:Connect(function()
+		hb:Disconnect()
+		frame:Destroy()
+	end)
+	exitbutton.Text = "X"
+	exitbutton.Size = UDim2.new(0.117, 0,0.08, 0)
+	exitbutton.ZIndex = 3
+	exitbutton.Position = UDim2.new(0.883, 0,-0, 0)
+	exitbutton.BackgroundColor3 = Color3.new(255,0,0)
+	exitbutton.TextScaled = true
+	exitbutton.TextStrokeTransparency = 1
+	local uistroke2 = Instance.new("UIStroke",exitbutton)
+	uistroke1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	uistroke1.Color = Color3.fromRGB(143,143,143)
+	uistroke1.LineJoinMode = Enum.LineJoinMode.Round
+	uistroke1.Thickness = 1
+	uistroke1.Transparency = 0
 	pcall(function()
 		for i,x in next, cmd["list"] do
 			local aliases = {}
@@ -116,9 +161,53 @@ cmd.add({"commands","cmds","help"},"Shows all of the commands TERMINAL has.",fun
 				for _, v in ipairs(aliases) do
 					string ..= v
 				end
-				print(x["name"][1]..": Aliases: "..string.." | Description: "..x["description"])
+				task.spawn(function()
+					local k = Instance.new("Frame",scrollingframe)
+					k.Name = x["name"][1]
+					k.BackgroundColor3 = Color3.fromRGB(89, 89, 89)
+					local seemore = Instance.new("TextButton",k)
+					seemore.Size = UDim2.new(0.284, 0,1, 0)
+					seemore.Position = UDim2.new(0.716, 0,0, 0)
+					seemore.Visible = true
+					seemore.BackgroundColor3 = Color3.fromRGB(61,61,61)
+					seemore.TextScaled = true
+					seemore.Text = "See More"
+					seemore.MouseButton1Up:Connect(function()
+						notify("Check your executor's console/developer console by pressing F9, or just check the executor if it has a console","TERMINAL")
+						warn(x["name"][1]..": '"..x['description'].."' | Aliases: "..string)
+					end)
+					local txt = Instance.new("TextLabel",k)
+					txt.Size = UDim2.new(0.716, 0,1, 0)
+					txt.Position = UDim2.new(0, 0,0, 0)
+					txt.BackgroundTransparency = 1
+					txt.TextScaled = 1
+					txt.Text = x["name"][1]
+					task.wait()
+				end)
 			else
-				print(x["name"][1]..": Aliases: none | Description: "..x["description"])
+				task.spawn(function()
+					local k = Instance.new("Frame",scrollingframe)
+					k.Name = x["name"][1]
+					k.BackgroundColor3 = Color3.fromRGB(89, 89, 89)
+					local seemore = Instance.new("TextButton",k)
+					seemore.Size = UDim2.new(0.284, 0,1, 0)
+					seemore.Position = UDim2.new(0.716, 0,0, 0)
+					seemore.Visible = true
+					seemore.BackgroundColor3 = Color3.fromRGB(61,61,61)
+					seemore.TextScaled = true
+					seemore.Text = "See More"
+					seemore.MouseButton1Up:Connect(function()
+						notify("Check your executor's console/developer console by pressing F9, or just check the executor if it has a console","TERMINAL")
+						warn(x["name"][1]..": '"..x['description'].."' | Aliases: none")
+					end)
+					local txt = Instance.new("TextLabel",k)
+					txt.Size = UDim2.new(0.716, 0,1, 0)
+					txt.Position = UDim2.new(0, 0,0, 0)
+					txt.BackgroundTransparency = 1
+					txt.TextScaled = 1
+					txt.Text = x["name"][1]
+					task.wait()
+				end)
 			end
 		end
 	end)
@@ -139,6 +228,7 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 	local target = getPlr(_x)
 	if target then
 		local function flingaura(target)
+			notify("Currently fetching all parts, this might reset your character.","TERMINAL")
 			local RunService = game:GetService("RunService")
 
 			local character = target.Character
@@ -245,6 +335,7 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 end)
 cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around you to fling players (CAN BE ALSO GIVEN TO OTHER PLAYERS)",function(ex)
 	local function flingaura(target)
+		notify("Currently fetching all parts, this might reset your character.","TERMINAL")
 		local RunService = game:GetService("RunService")
 
 
