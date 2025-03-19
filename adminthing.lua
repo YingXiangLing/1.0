@@ -849,7 +849,7 @@ cmd.add({"instakillsword","instks","instaks"},"Changes the damage value of the s
 		Tool.Handle.Touched:Connect(function(v)
 
 			if v.Name == "HumanoidRootPart"and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name=="Left Arm" and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name=="Right Arm" and v.Parent:FindFirstChildOfClass("Humanoid") or  v.Name == "Torso" and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name == "Head" and v.Parent:FindFirstChildOfClass("Humanoid") then
-				for i=1,101 do 
+				for i=1,5 do 
 					firetouchinterest(v,Tool.Handle,1)
 					firetouchinterest(v,Tool.Handle,0)
 				end
