@@ -61,7 +61,7 @@ local mfly1
 local mfly2
 
 local unmobilefly = function(speaker)
-	function getRoot(char)
+	local function getRoot(char)
 		local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
 		return rootPart
 	end
@@ -77,7 +77,7 @@ local unmobilefly = function(speaker)
 end
 
 local mobilefly = function(speaker, vfly)
-	function getRoot(char)
+	local function getRoot(char)
 		local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
 		return rootPart
 	end
@@ -151,6 +151,10 @@ local mobilefly = function(speaker, vfly)
 end
 
 function sFLY(vfly)
+	local function getRoot(char)
+		local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+		return rootPart
+	end
 	repeat wait() until Players.LocalPlayer and Players.LocalPlayer.Character and getRoot(Players.LocalPlayer.Character) and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 	repeat wait() until Players.LocalPlayer:GetMouse()
 	if flyKeyDown or flyKeyUp then flyKeyDown:Disconnect() flyKeyUp:Disconnect() end
