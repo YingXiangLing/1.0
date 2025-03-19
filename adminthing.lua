@@ -31,9 +31,218 @@ cmd = {
 	add = function(n,g,t)
 		table.insert(cmd["list"],{["function"] = t,["description"]=g,["name"]=n})
 	end,
+	edit = function(n,alias)
+		for _, v in pairs(cmd["list"]) do
+			if table.find(v.name,n)  then
+				table.insert(v.name,alias:lower())
+			end
+		end
+	end,
 	list = {}
 
 }
+FLYING = false
+QEfly = true
+iyflyspeed = 1
+vehicleflyspeed = 1
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local function randomString()
+	local length = math.random(10,20)
+	local array = {}
+	for i = 1, length do
+		array[i] = string.char(math.random(32, 126))
+	end
+	return table.concat(array)
+end
+local velocityHandlerName = randomString()
+local gyroHandlerName = randomString()
+local mfly1
+local mfly2
+
+local unmobilefly = function(speaker)
+	function getRoot(char)
+		local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+		return rootPart
+	end
+	pcall(function()
+		FLYING = false
+		local root = getRoot(speaker.Character)
+		root:FindFirstChild(velocityHandlerName):Destroy()
+		root:FindFirstChild(gyroHandlerName):Destroy()
+		speaker.Character:FindFirstChildWhichIsA("Humanoid").PlatformStand = false
+		mfly1:Disconnect()
+		mfly2:Disconnect()
+	end)
+end
+
+local mobilefly = function(speaker, vfly)
+	function getRoot(char)
+		local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+		return rootPart
+	end
+	unmobilefly(speaker)
+	FLYING = true
+
+	local root = getRoot(speaker.Character)
+	local camera = workspace.CurrentCamera
+	local v3none = Vector3.new()
+	local v3zero = Vector3.new(0, 0, 0)
+	local v3inf = Vector3.new(9e9, 9e9, 9e9)
+
+	local controlModule = require(speaker.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+	local bv = Instance.new("BodyVelocity")
+	bv.Name = velocityHandlerName
+	bv.Parent = root
+	bv.MaxForce = v3zero
+	bv.Velocity = v3zero
+
+	local bg = Instance.new("BodyGyro")
+	bg.Name = gyroHandlerName
+	bg.Parent = root
+	bg.MaxTorque = v3inf
+	bg.P = 1000
+	bg.D = 50
+
+	mfly1 = speaker.CharacterAdded:Connect(function()
+		local bv = Instance.new("BodyVelocity")
+		bv.Name = velocityHandlerName
+		bv.Parent = root
+		bv.MaxForce = v3zero
+		bv.Velocity = v3zero
+
+		local bg = Instance.new("BodyGyro")
+		bg.Name = gyroHandlerName
+		bg.Parent = root
+		bg.MaxTorque = v3inf
+		bg.P = 1000
+		bg.D = 50
+	end)
+
+	mfly2 = RunService.RenderStepped:Connect(function()
+		root = getRoot(speaker.Character)
+		camera = workspace.CurrentCamera
+		if speaker.Character:FindFirstChildWhichIsA("Humanoid") and root and root:FindFirstChild(velocityHandlerName) and root:FindFirstChild(gyroHandlerName) then
+			local humanoid = speaker.Character:FindFirstChildWhichIsA("Humanoid")
+			local VelocityHandler = root:FindFirstChild(velocityHandlerName)
+			local GyroHandler = root:FindFirstChild(gyroHandlerName)
+
+			VelocityHandler.MaxForce = v3inf
+			GyroHandler.MaxTorque = v3inf
+			if not vfly then humanoid.PlatformStand = true end
+			GyroHandler.CFrame = camera.CoordinateFrame
+			VelocityHandler.Velocity = v3none
+
+			local direction = controlModule:GetMoveVector()
+			if direction.X > 0 then
+				VelocityHandler.Velocity = VelocityHandler.Velocity + camera.CFrame.RightVector * (direction.X * ((vfly and vehicleflyspeed or iyflyspeed) * 50))
+			end
+			if direction.X < 0 then
+				VelocityHandler.Velocity = VelocityHandler.Velocity + camera.CFrame.RightVector * (direction.X * ((vfly and vehicleflyspeed or iyflyspeed) * 50))
+			end
+			if direction.Z > 0 then
+				VelocityHandler.Velocity = VelocityHandler.Velocity - camera.CFrame.LookVector * (direction.Z * ((vfly and vehicleflyspeed or iyflyspeed) * 50))
+			end
+			if direction.Z < 0 then
+				VelocityHandler.Velocity = VelocityHandler.Velocity - camera.CFrame.LookVector * (direction.Z * ((vfly and vehicleflyspeed or iyflyspeed) * 50))
+			end
+		end
+	end)
+end
+
+function sFLY(vfly)
+	repeat wait() until Players.LocalPlayer and Players.LocalPlayer.Character and getRoot(Players.LocalPlayer.Character) and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+	repeat wait() until Players.LocalPlayer:GetMouse()
+	if flyKeyDown or flyKeyUp then flyKeyDown:Disconnect() flyKeyUp:Disconnect() end
+
+	local T = getRoot(Players.LocalPlayer.Character)
+	local CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+	local lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+	local SPEED = 0
+
+	local function FLY()
+		FLYING = true
+		local BG = Instance.new('BodyGyro')
+		local BV = Instance.new('BodyVelocity')
+		BG.P = 9e4
+		BG.Parent = T
+		BV.Parent = T
+		BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+		BG.cframe = T.CFrame
+		BV.velocity = Vector3.new(0, 0, 0)
+		BV.maxForce = Vector3.new(9e9, 9e9, 9e9)
+		task.spawn(function()
+			repeat wait()
+				if not vfly and Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid') then
+					Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = true
+				end
+				if CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0 then
+					SPEED = 50
+				elseif not (CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0) and SPEED ~= 0 then
+					SPEED = 0
+				end
+				if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 or (CONTROL.Q + CONTROL.E) ~= 0 then
+					BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (CONTROL.F + CONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(CONTROL.L + CONTROL.R, (CONTROL.F + CONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+					lCONTROL = {F = CONTROL.F, B = CONTROL.B, L = CONTROL.L, R = CONTROL.R}
+				elseif (CONTROL.L + CONTROL.R) == 0 and (CONTROL.F + CONTROL.B) == 0 and (CONTROL.Q + CONTROL.E) == 0 and SPEED ~= 0 then
+					BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (lCONTROL.F + lCONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(lCONTROL.L + lCONTROL.R, (lCONTROL.F + lCONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+				else
+					BV.velocity = Vector3.new(0, 0, 0)
+				end
+				BG.cframe = workspace.CurrentCamera.CoordinateFrame
+			until not FLYING
+			CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+			lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+			SPEED = 0
+			BG:Destroy()
+			BV:Destroy()
+			if Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid') then
+				Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+			end
+		end)
+	end
+	flyKeyDown = Players.LocalPlayer:GetMouse().KeyDown:Connect(function(KEY)
+		if KEY:lower() == 'w' then
+			CONTROL.F = (vfly and vehicleflyspeed or iyflyspeed)
+		elseif KEY:lower() == 's' then
+			CONTROL.B = - (vfly and vehicleflyspeed or iyflyspeed)
+		elseif KEY:lower() == 'a' then
+			CONTROL.L = - (vfly and vehicleflyspeed or iyflyspeed)
+		elseif KEY:lower() == 'd' then 
+			CONTROL.R = (vfly and vehicleflyspeed or iyflyspeed)
+		elseif QEfly and KEY:lower() == 'e' then
+			CONTROL.Q = (vfly and vehicleflyspeed or iyflyspeed)*2
+		elseif QEfly and KEY:lower() == 'q' then
+			CONTROL.E = -(vfly and vehicleflyspeed or iyflyspeed)*2
+		end
+		pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Track end)
+	end)
+	flyKeyUp = Players.LocalPlayer:GetMouse().KeyUp:Connect(function(KEY)
+		if KEY:lower() == 'w' then
+			CONTROL.F = 0
+		elseif KEY:lower() == 's' then
+			CONTROL.B = 0
+		elseif KEY:lower() == 'a' then
+			CONTROL.L = 0
+		elseif KEY:lower() == 'd' then
+			CONTROL.R = 0
+		elseif KEY:lower() == 'e' then
+			CONTROL.Q = 0
+		elseif KEY:lower() == 'q' then
+			CONTROL.E = 0
+		end
+	end)
+	FLY()
+end
+
+function NOFLY()
+	FLYING = false
+	if flyKeyDown or flyKeyUp then flyKeyDown:Disconnect() flyKeyUp:Disconnect() end
+	if Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid') then
+		Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+	end
+	pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Custom end)
+end
 getPlr = function(Name)
 	local Players = game.Players
 	if Name:lower() == "random" then
@@ -74,14 +283,27 @@ end
 hiddenfling = false
 Noclip = nil
 locks = {}
+if setfpscap then
+else
+	setfpscap = function()
+		warn("not usable | setfpscap ")
+	end
+end
+if setfps then
+else
+	setfps = function()
+		warn("not usable | setfps")
+	end
+end
 if getgenv then
 else
+	warn("not usable | getgenv")
 	getgenv = getfenv
 end
 if firetouchinterest then
 else
 	firetouchinterest = function()
-		warn("not usable")
+		warn("not usable | firetouchinterest")
 	end
 end
 lock = function(instance, par)
@@ -384,6 +606,30 @@ cmd.add({"unantifling","unafling","unantif"},"Disables antifling.",function()
 		antiflinging:Disconnect()
 	end)
 end)
+local doneonce = false
+local accepted = false
+cmd.add({"unaccept"},"Unaccept",function()
+	accepted = false
+	doneonce = false
+end)
+cmd.add({"aliasadd","adda"},"Adds an alias to a command (THIS CANNOT BE UNDONE)",function(cmde,alias)
+	if accepted == false then
+		notify([[Are you sure you want to add this alias? If yes, then run "aliasadd", if not then run unaccept. THIS CANNOT BE UNDONE!]],"TERMINAL")
+		doneonce = {cmde,alias}
+		accepted = true
+	else
+		local s,d = pcall(function()
+			cmd.edit(doneonce[1],doneonce[2])
+		end)
+		if s then
+			accepted = false
+			notify("Successfully added alias '"..doneonce.alias.."' to "..doneonce.cmd.."!","TERMINAL")
+		else
+			accepted = false
+			notify("Error changing aliases, errorcode: "..d,"Terminal")
+		end
+	end
+end)
 cmd.add({"antifling","afling","antif"},"Stops other exploiters from flinging you. (WILL NOT WORK AGAINST PARTFLING)",function()
 	antiflinging = game:GetService("RunService").Heartbeat:Connect(function()
 		local otherplayers = game:GetService("Players"):GetPlayers()
@@ -397,6 +643,14 @@ cmd.add({"antifling","afling","antif"},"Stops other exploiters from flinging you
 				end
 			end)
 		end
+	end)
+end)
+cmd.add({"setfps","sfps","fpsset","fset","fpss"},"Sets the game's current FramePerSecond cap.",function(fps)
+	pcall(function()
+		setfps(fps)
+	end)
+	pcall(function()
+		setfpscap(fps)
 	end)
 end)
 cmd.add({"unantisit","unantis","unasit"},"Enables sitting.",function()
@@ -546,6 +800,79 @@ cmd.add({"remotespy","rspy"},"Executes remote spy.",function()
 end)
 cmd.add({"gravity"},"Sets workspace gravity value to [number].",function(gravity)
 	workspace.Gravity = gravity
+end)
+local fakelag = false
+cmd.add({"unfakelag","undesync"},"Disables fake lag.",function()
+	fakelag = false
+end)
+cmd.add({"fakelag","desync"},"Creates fake lag applied on your character.",function()
+	fakelag = true
+	task.spawn(function()
+		while fakelag do
+			pcall(function()
+				game.Players.LocalPlayer.Character.Torso.Anchored = true
+			end)
+			pcall(function()
+				if game.Players.LocalPlayer.Character:FindFirstChild("UpperTorso") then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+				end
+			end)
+			pcall(function()
+				for _, v:AnimationTrack in ipairs(game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
+					v:AdjustSpeed(v.Speed*1.1)
+				end
+			end)
+			game.Players.LocalPlayer.Character.Humanoid.Jump = true
+			game:GetService("RunService").Heartbeat:Wait()
+			pcall(function()
+				for _, v:AnimationTrack in ipairs(game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
+					v:AdjustSpeed(v.Speed*1.05)
+				end
+			end)
+			pcall(function()
+				game.Players.LocalPlayer.Character.Torso.Anchored = false
+			end)
+			pcall(function()
+				if game.Players.LocalPlayer.Character:FindFirstChild("UpperTorso") then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+				end
+			end)
+			game:GetService("RunService").Heartbeat:Wait()
+		end
+	end)
+end)
+cmd.add({"instakillsword","instks","instaks"},"Changes the damage value of the sword to a billion.",function()
+	pcall(function()
+		local reachsize =  40
+		local Tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") or p.Backpack:FindFirstChildOfClass("Tool")
+		if not Tool then notify("Please equip a tool and run this command.","TERMINAL") end
+		Tool.Handle.Touched:Connect(function(v)
+
+			if v.Name == "HumanoidRootPart"and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name=="Left Arm" and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name=="Right Arm" and v.Parent:FindFirstChildOfClass("Humanoid") or  v.Name == "Torso" and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name == "Head" and v.Parent:FindFirstChildOfClass("Humanoid") then
+				for i=1,101 do 
+					firetouchinterest(v,Tool.Handle,1)
+					firetouchinterest(v,Tool.Handle,0)
+				end
+			end
+		end)
+	end)
+end)
+cmd.add({"firetouchswordreach","ftireach","firetouchr"},"Adds extra range to your sword.",function()
+	pcall(function()
+		local reachsize =  40
+		local Tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") or p.Backpack:FindFirstChildOfClass("Tool")
+		if not Tool then notify("Please equip a tool and run this command.","TERMINAL") end
+		Tool.Activated:Connect(function()
+			for _, v in ipairs(workspace:GetDescendants()) do
+				if v.Name == "HumanoidRootPart" and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name == "Head" and v.Parent:FindFirstChildOfClass("Humanoid") then
+					for i=1,10 do 
+						firetouchinterest(v,Tool.Handle,1)
+						firetouchinterest(v,Tool.Handle,0)
+					end
+				end
+			end
+		end)
+	end)
 end)
 cmd.add({"swordreach","reach"},"Adds extra range to your sword.",function()
 	pcall(function()
@@ -1045,6 +1372,22 @@ cmd.add({"creatorid","ownerid","oid"},"Changes your userid to the owner's userid
 	task.wait(0.2)
 	notify("UserId Set to "..game.Players.LocalPlayer.UserId..".","TERMINAL")
 end)
+local IsOnMobile = table.find({Enum.Platform.IOS, Enum.Platform.Android}, game:GetService("UserInputService"):GetPlatform())
+cmd.add({"unfly"},"Disables flight.",function()
+	if not IsOnMobile then NOFLY() else unmobilefly(Players.LocalPlayer) end
+end)
+cmd.add({"fly"},"Enables flight.",function(flyspeed)
+	if not IsOnMobile then
+		NOFLY()
+		wait()
+		sFLY()
+	else
+		mobilefly(Players.LocalPlayer)
+	end
+	if flyspeed and tonumber(flyspeed) then
+		iyflyspeed = tonumber(flyspeed)
+	end
+end)
 cmd.add({"walkspeed","speed","ws"},"Changes your walkspeed to the specified number, use this with noanti to maximize its potential.",function(num)
 	pc:FindFirstChildOfClass("Humanoid").WalkSpeed = num
 end)
@@ -1109,7 +1452,7 @@ Imgl.MouseButton1Down:Connect(function()
 				local g = TBox.Text
 				local cmde = nil
 				for _, v in pairs(cmd["list"]) do
-					if table.find(v.name,g:split(" ")[1]) then
+					if table.find(v.name,g:split(" ")[1]:lower()) then
 						cmde = v
 					end
 				end
