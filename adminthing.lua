@@ -345,10 +345,10 @@ cmd.add({"commands","cmds","help"},"Shows all of the commands TERMINAL has.",fun
 	scrollingframe.BackgroundTransparency = 1
 	scrollingframe.Size = UDim2.new(1, 0,0.901, 5)
 	scrollingframe.Position = UDim2.new(0, 0,0.08, 0)
-	scrollingframe.CanvasSize = UDim2.new(0, 0,6, 0)
+	scrollingframe.CanvasSize = UDim2.new(0, 0,9, 0)
 	local uigridlayout = Instance.new("UIGridLayout",scrollingframe)
 	uigridlayout.CellPadding = UDim2.new(0,5,0,5)
-	uigridlayout.CellSize = UDim2.new(0.9, 0,0.02, 0)
+	uigridlayout.CellSize = UDim2.new(0.9, 0,0.01, 0)
 	local exitbutton = Instance.new("TextButton",frame)
 	exitbutton.MouseButton1Up:Connect(function()
 		hb:Disconnect()
@@ -823,7 +823,7 @@ cmd.add({"fakelag","desync"},"Creates fake lag applied on your character.",funct
 				end
 			end)
 			game.Players.LocalPlayer.Character.Humanoid.Jump = true
-			game:GetService("RunService").Heartbeat:Wait()
+			task.wait(0.1)
 			pcall(function()
 				for _, v:AnimationTrack in ipairs(game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
 					v:AdjustSpeed(v.Speed*1.05)
@@ -837,7 +837,7 @@ cmd.add({"fakelag","desync"},"Creates fake lag applied on your character.",funct
 					game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
 				end
 			end)
-			game:GetService("RunService").Heartbeat:Wait()
+			task.wait(0.1)
 		end
 	end)
 end)
@@ -1372,7 +1372,10 @@ cmd.add({"creatorid","ownerid","oid"},"Changes your userid to the owner's userid
 	task.wait(0.2)
 	notify("UserId Set to "..game.Players.LocalPlayer.UserId..".","TERMINAL")
 end)
-local IsOnMobile = table.find({Enum.Platform.IOS, Enum.Platform.Android}, game:GetService("UserInputService"):GetPlatform())
+local IsOnMobile = false
+pcall(function()
+	IsOnMobile = table.find({Enum.Platform.IOS, Enum.Platform.Android}, game:GetService("UserInputService"):GetPlatform())
+end)
 cmd.add({"unfly"},"Disables flight.",function()
 	if not IsOnMobile then NOFLY() else unmobilefly(Players.LocalPlayer) end
 end)
