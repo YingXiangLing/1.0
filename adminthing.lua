@@ -841,33 +841,23 @@ cmd.add({"fakelag","desync"},"Creates fake lag applied on your character.",funct
 		end
 	end)
 end)
-cmd.add({"instakillsword","instks","instaks"},"Changes the damage value of the sword to a billion.",function()
+cmd.add({"firetouchswordreach","ftireach","firetouchr"},"Adds extra range to your sword.",function(reach)
 	pcall(function()
 		local reachsize =  40
-		local Tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") or p.Backpack:FindFirstChildOfClass("Tool")
-		if not Tool then notify("Please equip a tool and run this command.","TERMINAL") end
-		Tool.Handle.Touched:Connect(function(v)
-
-			if v.Name == "HumanoidRootPart" then
-				for i=1,5 do 
-					firetouchinterest(v,Tool.Handle,1)
-					firetouchinterest(v,Tool.Handle,0)
-				end
-			end
-		end)
-	end)
-end)
-cmd.add({"firetouchswordreach","ftireach","firetouchr"},"Adds extra range to your sword.",function()
-	pcall(function()
-		local reachsize =  40
+		if tonumber(reach) then
+			reachsize = reach
+		end
 		local Tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") or p.Backpack:FindFirstChildOfClass("Tool")
 		if not Tool then notify("Please equip a tool and run this command.","TERMINAL") end
 		Tool.Activated:Connect(function()
 			for _, v in ipairs(workspace:GetDescendants()) do
 				if v.Name == "HumanoidRootPart" and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name == "Head" and v.Parent:FindFirstChildOfClass("Humanoid") then
-					for i=1,10 do 
-						firetouchinterest(v,Tool.Handle,1)
-						firetouchinterest(v,Tool.Handle,0)
+					if (Tool.Handle.Position-v.Position).Magnitude <= reachsize then
+						for i=1,15 do
+							firetouchinterest(v,Tool.Handle,1)
+							firetouchinterest(v,Tool.Handle,0)
+							task.wait()
+						end
 					end
 				end
 			end
