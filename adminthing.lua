@@ -1,4 +1,3 @@
-
 if rawequal(game:IsLoaded(),false) then
 	game.Loaded:Wait()
 end
@@ -257,22 +256,34 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 				end
 				task.wait(0.2)
 				local Parts = {}
+				local function isplayer(ve)
+					for _, v in ipairs(game:GetService("Players"):GetPlayers()) do
+						if v.Character:IsAncestorOf(ve) then
+							return true
+						end
+					end
+					return false
+				end
 				for _, v in ipairs(workspace:GetDescendants()) do
 					if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
-						if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+						if not v.Anchored and not isplayer(v) and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
 							if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
 							else
-								table.insert(Parts,v)
+								if #v:GetConnectedParts() < 2 then
+									table.insert(Parts,v)
+								end
 							end
 						end
 					end
 				end
 				workspace.DescendantAdded:Connect(function(v)
 					if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
-						if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+						if not v.Anchored and not isplayer(v) and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
 							if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
 							else
-								table.insert(Parts,v)
+								if #v:GetConnectedParts() < 2 then
+									table.insert(Parts,v)
+								end
 							end
 						end
 					end
@@ -333,7 +344,41 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 		flingaura(target)
 	end
 end)
-cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around you to fling players (CAN BE ALSO GIVEN TO OTHER PLAYERS)",function(ex)
+cmd.add({"deleteunanchored","deleteua","delua","delunanchored"},"Deletes every unanchored part across the map.",function()
+	notify("Currently fetching all parts, this might reset your character.","TERMINAL")
+	task.spawn(function()
+		print("Localized Instance")
+		local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
+		local success = false
+		pcall(function()
+			game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+			game:GetService("Players").LocalPlayer.Character:BreakJoints()
+			success = true
+		end)
+		task.wait(0.01)
+		task.wait(game:GetService("Players").RespawnTime+0.5)
+		game:GetService("Players").LocalPlayer.Character:PivotTo(old)
+		task.wait(1)
+		task.wait(0.2)
+		local function playerisv(v)
+			for _, ve in ipairs(game:GetService("Players"):GetPlayers()) do
+				if v:IsDescendantOf(ve.Character) then
+					return true
+				end
+			end
+			return false
+		end
+		for _, v:Part in ipairs(workspace:GetDescendants()) do
+			pcall(function()
+				if v.ReceiveAge == 0 and not v.Anchored and not playerisv(v) and #v:GetConnectedParts() < 2 then
+					v.CFrame = CFrame.new(0,workspace.FallenPartsDestroyHeight+10,0)
+					v.CanCollide = false
+				end
+			end)
+		end
+	end)
+end)
+cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around you to fling players (CAN BE ALSO GIVEN TO OTHER PLAYERS), can also do partwalkfling [plr] true, for torso walkfling",function(ex,torso)
 	local function flingaura(target)
 		notify("Currently fetching all parts, this might reset your character.","TERMINAL")
 		local RunService = game:GetService("RunService")
@@ -357,7 +402,7 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 			end)
 			task.wait(0.01)
 			if success == true then
-				task.wait(game:GetService("Players").RespawnTime+0.2)
+				task.wait(game:GetService("Players").RespawnTime+0.5)
 				game:GetService("Players").LocalPlayer.Character:PivotTo(old)
 				task.wait(1)
 				if target == game:GetService("Players").LocalPlayer then
@@ -370,39 +415,83 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 			end
 			task.wait(0.2)
 			local Parts = {}
+			local function isplayer(ve)
+				for _, v in ipairs(game:GetService("Players"):GetPlayers()) do
+					if v.Character:IsAncestorOf(ve) then
+						return true
+					end
+				end
+				return false
+			end
 			for _, v in ipairs(workspace:GetDescendants()) do
 				if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
-					if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+					if not v.Anchored and not isplayer(v) and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
 						if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
 						else
-							table.insert(Parts,v)
+							if #v:GetConnectedParts() < 2 then
+								table.insert(Parts,v)
+							end
 						end
 					end
 				end
 			end
 			workspace.DescendantAdded:Connect(function(v)
 				if v:IsA("Part") or v:IsA("BasePart") or v:IsA('MeshPart') or v:IsA("UnionOperation") then
-					if not v.Anchored and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
+					if not v.Anchored and not isplayer(v) and not v:IsDescendantOf(game:GetService("Players").LocalPlayer.Character) then
 						if v.Parent ~= workspace and v.Parent:FindFirstChildOfClass("Humanoid") or v.Parent ~= workspace and v.Parent.Parent:FindFirstChildOfClass("Humanoid") then
 						else
-							table.insert(Parts,v)
+							if #v:GetConnectedParts() < 2 then
+								table.insert(Parts,v)
+							end
 						end
 					end
 				end
 			end)
 			task.wait(1)
-			game:GetService("RunService").Heartbeat:Connect(function(dt)
+			local connectionheart
+			connectionheart = game:GetService("RunService").Heartbeat:Connect(function(dt)
 				for _, v in ipairs(Parts) do
 					if v:IsDescendantOf(game) then
-						if v.ReceiveAge == 0 and v.Anchored ~= true then else return end
-						v.CanCollide = false
-						v.Velocity = Vector3.new(0,500000000000,0)
-						i = (i + dt/CYCLE_DURATION) % 1
-						local alpha = 2 * math.pi * i
+						local s,l = pcall(function()
+							if not HRP:IsDescendantOf(workspace) and not target:IsDescendantOf(game) then error("Player Left") end
+							if v.ReceiveAge == 0 and v.Anchored ~= true then else return end
+							v.CanCollide = false
+							v.Velocity = Vector3.new(0,500000000000,0)
+							if tostring(torso):lower()  ~= "true" then
+								i = (i + dt/CYCLE_DURATION) % 1
+								local alpha = 2 * math.pi * i
+								if HRP:IsDescendantOf(workspace) then
+									v.CFrame = CFrame.Angles(0, alpha, 0)
+										* CFrame.new(0, 0, DISTANCE+v.Size.Magnitude)
+										+ HRP.Position
+								else
+									error("No HRP")
+								end
+							else
+								if target == game:GetService("Players").LocalPlayer then
+									if HRP:IsDescendantOf(workspace) then
+										v.CFrame = HRP.CFrame
+									else
+										error("No HRP")
+									end
+								else
+									if HRP:IsDescendantOf(workspace) then
+										game:GetService("Players").LocalPlayer.Character.Humanoid:SetStateEnabled("Seated", false)
+										game:GetService("Players").LocalPlayer.Character.Humanoid.Sit = true
+										v.CFrame = HRP.CFrame*CFrame.new(0,0,-(17+v.Size.Magnitude))
+										game.Players.LocalPlayer.Character:PivotTo(HRP.CFrame*CFrame.new(0,0,-(17+v.Size.Magnitude)))
+									else
+										error("No HRP")
+									end
+								end
+							end
 
-						v.CFrame = CFrame.Angles(0, alpha, 0)
-							* CFrame.new(0, 0, DISTANCE+v.Size.Magnitude)
-							+ HRP.Position
+						end)
+						if not s then
+							connectionheart:Disconnect()
+							table.remove(Parts,table.find(Parts,v))
+							continue
+						end
 					else
 						table.remove(Parts,table.find(Parts,v))
 						continue
