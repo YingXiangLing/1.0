@@ -13,6 +13,7 @@ pcall(function()
 	game:GetService("Players").LocalPlayer.Character:PivotTo(oldcharpos)
 end)
 wait(0.1)
+antiflinging = true
 local p = game.Players.LocalPlayer
 local pc = p.Character
 p.CharacterAdded:Connect(function(c)
@@ -377,6 +378,34 @@ cmd.add({"deleteunanchored","deleteua","delua","delunanchored"},"Deletes every u
 			end)
 		end
 	end)
+end)
+cmd.add({"unantifling","unafling","unantif"},"Disables antifling.",function()
+	pcall(function()
+		antiflinging:Disconnect()
+	end)
+end)
+cmd.add({"antifling","afling","antif"},"Stops other exploiters from flinging you. (WILL NOT WORK AGAINST PARTFLING)",function()
+	antiflinging = game:GetService("RunService").Heartbeat:Connect(function()
+		local otherplayers = game:GetService("Players"):GetPlayers()
+		table.remove(otherplayers,table.find(otherplayers,game:GetService("Players").LocalPlayer))
+		for _, v in ipairs(otherplayers) do
+			pcall(function()
+				for _, ver in ipairs(v.Character:GetChildren()) do
+					pcall(function()
+						ver.Velocity = Vector3.zero
+					end)
+				end
+			end)
+		end
+	end)
+end)
+cmd.add({"unantisit","unantis","unasit"},"Enables sitting.",function()
+	game:GetService("Players").LocalPlayer.Character.Humanoid:SetStateEnabled("Seated", true)
+	game:GetService("Players").LocalPlayer.Character.Humanoid.Sit = false
+end)
+cmd.add({"antisit","antis","asit"},"Disables sitting.",function()
+	game:GetService("Players").LocalPlayer.Character.Humanoid:SetStateEnabled("Seated", false)
+	game:GetService("Players").LocalPlayer.Character.Humanoid.Sit = true
 end)
 cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around you to fling players (CAN BE ALSO GIVEN TO OTHER PLAYERS), can also do partwalkfling [plr] true, for torso walkfling",function(ex,torso)
 	local function flingaura(target)
