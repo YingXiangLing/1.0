@@ -1551,32 +1551,91 @@ Imgl:TweenSize(UDim2.new(0.068, 0,0.12, 0),"InOut","Sine",1)
 Imgl.Position = UDim2.new(0.023, 0,0.869, 0)
 local TBox = nil
 if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
-	game:GetService("TextChatService").SendingMessage:Connect(function(textChatMessage)
-		if table.find(admins,game.Players:FindFirstChild(tostring(textChatMessage.TextSource)).UserId) or game.Players:FindFirstChild(tostring(textChatMessage.TextSource)).UserId == Players.LocalPlayer.UserId then
-			if textChatMessage.Text:sub(1,2):upper() == "T!" then
-				if textChatMessage.Text:len() ~= 2 then
-					pcall(function()
-						local g = textChatMessage.Text
-						local cmde = nil
-						for _, v in pairs(cmd["list"]) do
-							if table.find(v.name,g:split(" ")[1]:lower():split("t!")[2]) then
-								cmde = v
+	game:GetService("TextChatService").OnIncomingMessage = function(textChatMessage)
+		if textChatMessage.Status == Enum.TextChatMessageStatus.Success then
+			if table.find(admins,game.Players:FindFirstChild(tostring(textChatMessage.TextSource)).UserId) or game.Players:FindFirstChild(tostring(textChatMessage.TextSource)).UserId == Players.LocalPlayer.UserId then
+				if textChatMessage.Text:sub(1,2):upper() == "T!" then
+					if textChatMessage.Text:len() ~= 2 then
+						pcall(function()
+							local g = textChatMessage.Text
+							local cmde = nil
+							for _, v in pairs(cmd["list"]) do
+								if table.find(v.name,g:split(" ")[1]:lower():split("t!")[2]) then
+									cmde = v
+								end
 							end
-						end
-						local sound = Instance.new("Sound",workspace)
-						sound.SoundId = "rbxassetid://3450794184"
-						sound.Volume = 1
-						sound:Play()
-						game:GetService("Debris"):AddItem(sound,1.2)
-						notify("Executed command! \n Operator: "..game.Players:FindFirstChild(tostring(textChatMessage.TextSource)).Name,"Chat Command Loader")
-						cmde["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
-					end)
+							local sound = Instance.new("Sound",workspace)
+							sound.SoundId = "rbxassetid://3450794184"
+							sound.Volume = 1
+							sound:Play()
+							game:GetService("Debris"):AddItem(sound,1.2)
+							notify("Executed command! \n Operator: "..game.Players:FindFirstChild(tostring(textChatMessage.TextSource)).Name,"Chat Command Loader")
+							cmde["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
+						end)
+					end
 				end
 			end
 		end
-	end)
+	end
 else
-
+	for _, v in ipairs(game:GetService("Players"):GetPlayers()) do
+		v.Chatted:Connect(function(textChatMessage)
+			if game:GetService("Players"):GetPlayerFromCharacter(v.Character) then
+				local textChatMessage = {Text=textChatMessage,Source=v}
+				if table.find(admins,textChatMessage.Source.UserId) or textChatMessage.Source.UserId == Players.LocalPlayer.UserId then
+					if textChatMessage.Text:sub(1,2):upper() == "T!" then
+						if textChatMessage.Text:len() ~= 2 then
+							pcall(function()
+								local g = textChatMessage.Text
+								local cmde = nil
+								for _, v in pairs(cmd["list"]) do
+									if table.find(v.name,g:split(" ")[1]:lower():split("t!")[2]) then
+										cmde = v
+									end
+								end
+								local sound = Instance.new("Sound",workspace)
+								sound.SoundId = "rbxassetid://3450794184"
+								sound.Volume = 1
+								sound:Play()
+								game:GetService("Debris"):AddItem(sound,1.2)
+								notify("Executed command! \n Operator: "..textChatMessage.Source.Name,"Chat Command Loader")
+								cmde["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
+							end)
+						end
+					end
+				end
+			end
+		end)
+	end
+	game:GetService("Players").PlayerAdded:Connect(function(v)
+		v.Chatted:Connect(function(textChatMessage)
+			if game:GetService("Players"):GetPlayerFromCharacter(v.Character) then
+				local textChatMessage = {Text=textChatMessage,Source=v}
+				if table.find(admins,textChatMessage.Source.UserId) or textChatMessage.Source.UserId == Players.LocalPlayer.UserId then
+					if textChatMessage.Text:sub(1,2):upper() == "T!" then
+						if textChatMessage.Text:len() ~= 2 then
+							pcall(function()
+								local g = textChatMessage.Text
+								local cmde = nil
+								for _, v in pairs(cmd["list"]) do
+									if table.find(v.name,g:split(" ")[1]:lower():split("t!")[2]) then
+										cmde = v
+									end
+								end
+								local sound = Instance.new("Sound",workspace)
+								sound.SoundId = "rbxassetid://3450794184"
+								sound.Volume = 1
+								sound:Play()
+								game:GetService("Debris"):AddItem(sound,1.2)
+								notify("Executed command! \n Operator: "..textChatMessage.Source.Name,"Chat Command Loader")
+								cmde["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
+							end)
+						end
+					end
+				end
+			end
+		end)
+	end)
 end
 Imgl.MouseButton1Down:Connect(function()
 	if rawequal(TBox,nil) then
