@@ -1519,8 +1519,26 @@ cmd.add({"noanti"},"Attempts to destroy every anticheat instance, this might bre
 		end
 	end
 end)
-cmd.add({"follow"},"Follows the selected player.",function(target,studs)
-
+local followe
+cmd.add({"unfollow"},"Stops the follow command.",function()
+	pcall(function()
+		followe:Disconnect()
+	end)
+end)
+cmd.add({"follow"},"Follows the selected player.",function(name,studs)
+	if not studs then
+		studs = 5
+	end
+	if getPlr(name) then
+		pcall(function()
+			followe:Disconnect()
+		end)
+		followe = game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				pc:PivotTo(getPlr(name).Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-studs))
+			end)
+		end)
+	end
 end)
 cmd.add({"clip"}, "Stops the noclip command.", function()
 	Noclip:Disconnect()
