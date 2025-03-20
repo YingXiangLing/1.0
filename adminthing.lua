@@ -836,7 +836,7 @@ cmd.add({"admin"},"Gives another player admin privileges.",function(player)
 			notify("Player has been added to TERMINAL adminlist.","TERMINAL")
 			if game:GetService("TextChatService"):FindFirstChild("TextChannels") then
 				game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/w "..pe.DisplayName.." Your UserID has been added to TERMINAL's adminlist!")
-				task.wait(0.2)
+				task.wait(2)
 				game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Your UserID has been added to TERMINAL's adminlist!")
 			else
 				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Your UserID has been added to TERMINAL's adminlist!",pe.Name)
