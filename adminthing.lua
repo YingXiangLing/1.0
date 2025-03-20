@@ -13,6 +13,9 @@ pcall(function()
 	game:GetService("Players").LocalPlayer.Character:PivotTo(oldcharpos)
 end)
 wait(0.1)
+local admins = {
+	679591350 -- duduuser1
+}
 antiflinging = true
 local p = game.Players.LocalPlayer
 local pc = p.Character
@@ -262,13 +265,13 @@ getPlr = function(Name)
 		end
 	end
 end
-function execute(n,...)
-	if rawequal(cmd["list"][n:lower()],nil) ~= true then
-		cmd["list"][n:lower()]["function"](...)
-	else
-		notify("No command found with the name of "..n..".","TERMINAL")
-	end
-end
+-- function execute(n,...)
+--	if rawequal(cmd["list"][n:lower()],nil) ~= true then
+--		cmd["list"][n:lower()]["function"](...)
+--	else
+--		notify("No command found with the name of "..n..".","TERMINAL")
+--	end
+--end
 function notify(t,n,i)
 	if rawequal(i,nil) then
 		game:GetService("StarterGui"):SetCore("SendNotification",{
@@ -439,6 +442,9 @@ cmd.add({"commands","cmds","help"},"Shows all of the commands TERMINAL has.",fun
 	end)
 end)
 local partjails = {}
+cmd.add({"leave"},"Makes you leave the game forcefully.",function()
+	Players.LocalPlayer:Destroy()
+end)
 cmd.add({"unpartjail","unjail","unpjail"},"Unjails someone.",function(_x)
 	local target = getPlr(_x)
 	if target then
@@ -799,15 +805,78 @@ end)
 cmd.add({"httpspy","hspy"},"Executes http spy.", function()
 	loadstring(game:HttpGet('https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/HttpSpy'))()
 end)
+cmd.add({"unadmin"},"Removes another player's admin privileges.",function(player)
+	if tostring(player) ~= nil then
+		local pe
+		pcall(function()
+			pe = game:GetService("Players"):FindFirstChild(tostring(getPlr(player)))
+		end)
+		if pe then
+			if table.find(admins,pe.UserId) then
+				table.remove(admins,table.find(admins,pe.UserId))
+				notify("Player has been removed from TERMINAL adminlist.","TERMINAL")
+			else
+				notify("Player is not a TERMINAL admin!", "TERMINAL")
+			end
+		else
+			notify("Player is not inside of the server.", "TERMINAL")
+		end
+	else
+		notify("You didn't provide a valid player.", "TERMINAL")	
+	end
+end)
+cmd.add({"admin"},"Gives another player admin privileges.",function(player)
+	if tostring(player) ~= nil then
+		local pe
+		pcall(function()
+			pe = game:GetService("Players"):FindFirstChild(tostring(getPlr(player)))
+		end)
+		if pe and pe ~= Players.LocalPlayer then
+			table.insert(admins,pe.UserId)
+			notify("Player has been added to TERMINAL adminlist.","TERMINAL")
+			if game:GetService("TextChatService"):FindFirstChild("TextChannels") then
+				game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/w "..pe.Name.." Your UserID has been added to TERMINAL's adminlist!")
+			else
+				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Your UserID has been added to TERMINAL's adminlist!",pe.Name)
+			end
+		else
+			notify("Player is not inside of the server.", "TERMINAL")
+		end
+	else
+		notify("You didn't provide a valid player.", "TERMINAL")	
+	end
+end)
 cmd.add({"remotespy","rspy"},"Executes remote spy.",function()
 	loadstring(game:HttpGet("https://github.com/exxtremestuffs/SimpleSpySource/raw/master/SimpleSpy.lua"))()
 end)
 cmd.add({"gravity"},"Sets workspace gravity value to [number].",function(gravity)
-	workspace.Gravity = gravity
+	workspace.Gravity = gravity or 20
 end)
 local fakelag = false
 cmd.add({"unfakelag","undesync"},"Disables fake lag.",function()
 	fakelag = false
+end)
+cmd.add({"nomessages","nomsg","nohints","noh"},"Deletes all of instances.ClassName == 'Hint' or 'Message'",function()
+	for _, v in ipairs(workspace:GetDescendants())  do
+		if v.ClassName == "Message" or v.ClassName == "Hint" then
+			v:Destroy()
+		end
+	end
+end)
+cmd.add({"joinjobid","joinjbid"},"Joins a specific jobid.",function(jbid)
+	if not jbid then notify("You must provide a jobid to use this command!","TERMINAL") return end
+	local s,d = pcall(function()
+		game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,jbid,p)
+	end)
+	if s then
+		notify("Joining server...","TERMINAL")
+	else
+		notify("Error on execution: "..d,"TERMINAL")
+	end
+end)
+cmd.add({"jobid","jbid"},"Displays the server's jobid.",function()
+	local k = Instance.new("Message",workspace)
+	k.Text = game.JobId.."\n Use nomessages to clear this message!"
 end)
 cmd.add({"fakelag","desync"},"Creates fake lag applied on your character.",function()
 	fakelag = true
@@ -1204,6 +1273,13 @@ cmd.add({"damagetp","dmgtp"},"Teleports away when you get damaged, true for it t
 		end)
 	end
 end)
+cmd.add({"commandcount","countcmd","cmdcount","countcommands"},"Counts all of TERMINAL's commands.",function()
+	local c = 0
+	for _, v in pairs(cmd.list) do
+		c+=1
+	end
+	notify("There are "..c.." commands in total.","TERMINAL")
+end)
 cmd.add({"unairwalk","unairw"},"Turns off airwalk.", function()
 	for i, v in pairs(workspace:GetChildren()) do
 		if tostring(v) == "Airwalk" then
@@ -1408,8 +1484,32 @@ cmd.add({"fly"},"Enables flight.",function(flyspeed)
 		iyflyspeed = tonumber(flyspeed)
 	end
 end)
+cmd.add({"dex","explorer"},"Lets you see every instance in the game.",function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+end)
+local loopws
+local oldwsloop = 16
+cmd.add({"unloopwalkspeed","unloopws"},"Disables loopwalkspeed",function()
+	loopws:Disconnect()
+	wait()
+	Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed = oldwsloop
+end)
+cmd.add({"loopwalkspeed","loopws"},"LoopSets your walkspeed to specified number.",function(speed)
+	if not speed then
+		speed = 32
+	end
+	oldwsloop = Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid").WalkSpeed
+	loopws = game:GetService("RunService").Heartbeat:Connect(function()
+		pcall(function()
+			pc:FindFirstChildOfClass("Humanoid").WalkSpeed = speed
+		end)
+	end)
+end)
+cmd.add({"showinventory","showinv"},"Enables inventory.",function()
+	game.StarterGui:SetCoreGuiEnabled(2, true)
+end)
 cmd.add({"walkspeed","speed","ws"},"Changes your walkspeed to the specified number, use this with noanti to maximize its potential.",function(num)
-	pc:FindFirstChildOfClass("Humanoid").WalkSpeed = num
+	pc:FindFirstChildOfClass("Humanoid").WalkSpeed = num or 32
 end)
 cmd.add({"noanti"},"Attempts to destroy every anticheat instance, this might break the game.",function()
 	local Instances = 0
@@ -1423,6 +1523,9 @@ cmd.add({"noanti"},"Attempts to destroy every anticheat instance, this might bre
 			end
 		end
 	end
+end)
+cmd.add({"follow"},"Follows the selected player.",function(target,studs)
+
 end)
 cmd.add({"clip"}, "Stops the noclip command.", function()
 	Noclip:Disconnect()
@@ -1452,6 +1555,34 @@ Imgl.Size = UDim2.new(0,0.01,0,0.01)
 Imgl:TweenSize(UDim2.new(0.068, 0,0.12, 0),"InOut","Sine",1)
 Imgl.Position = UDim2.new(0.023, 0,0.869, 0)
 local TBox = nil
+if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
+	game:GetService("TextChatService").SendingMessage:Connect(function(textChatMessage)
+		if table.find(admins,game.Players:FindFirstChild(tostring(textChatMessage.TextSource)).UserId) or game.Players:FindFirstChild(tostring(textChatMessage.TextSource)).UserId == Players.LocalPlayer.UserId then
+			if textChatMessage.Text:sub(1,2):upper() == "T!" then
+				if textChatMessage.Text:len() ~= 2 then
+					pcall(function()
+						local g = textChatMessage.Text
+						local cmde = nil
+						for _, v in pairs(cmd["list"]) do
+							if table.find(v.name,g:split(" ")[1]:lower():split("t!")[2]) then
+								cmde = v
+							end
+						end
+						local sound = Instance.new("Sound",workspace)
+						sound.SoundId = "rbxassetid://3450794184"
+						sound.Volume = 1
+						sound:Play()
+						game:GetService("Debris"):AddItem(sound,1.2)
+						notify("Executed command! \n Operator: "..game.Players:FindFirstChild(tostring(textChatMessage.TextSource)).Name,"Chat Command Loader")
+						cmde["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
+					end)
+				end
+			end
+		end
+	end)
+else
+
+end
 Imgl.MouseButton1Down:Connect(function()
 	if rawequal(TBox,nil) then
 		TBox = Instance.new("TextBox",Main)
@@ -1481,6 +1612,7 @@ Imgl.MouseButton1Down:Connect(function()
 					sound.SoundId = "rbxassetid://3450794184"
 					sound.Volume = 1
 					sound:Play()
+					game:GetService("Debris"):AddItem(sound,1.2)
 					notify("Executed command!","Command Loader")
 					cmde["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
 				else
@@ -1510,4 +1642,4 @@ h.Thickness = 2
 h.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 h = nil
 Instance.new("UICorner",Imgl).CornerRadius = UDim.new(0, 8)
-notify("TERMINAL has loaded!","TERMINAL Loader")
+notify("TERMINAL has loaded! \n ChatPrefix: t!","TERMINAL Loader")
