@@ -835,9 +835,9 @@ cmd.add({"admin"},"Gives another player admin privileges.",function(player)
 			table.insert(admins,pe.UserId)
 			notify("Player has been added to TERMINAL adminlist.","TERMINAL")
 			if game:GetService("TextChatService"):FindFirstChild("TextChannels") then
-				game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/w "..pe.Name.." Your UserID has been added to TERMINAL's adminlist!")
+				game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/w "..pe.DisplayName.." Your UserID has been added to TERMINAL's adminlist!")
 			else
-				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Your UserID has been added to TERMINAL's adminlist!",pe.Name)
+				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Your UserID has been added to TERMINAL's adminlist!",pe.DisplayName)
 			end
 		else
 			notify("Player is not inside of the server.", "TERMINAL")
@@ -1524,23 +1524,8 @@ cmd.add({"noanti"},"Attempts to destroy every anticheat instance, this might bre
 		end
 	end
 end)
-local followe = nil
-cmd.add({"unfollow"},"Stops the follow command.",function()
-	pcall(function()
-		followe:Disconnect()
-	end)
-end)
-cmd.add({"follow"},"Follows the selected player.",function(name,studs)
-	if not studs then
-		studs = 5
-	end
-	if getPlr(name) then
-		followe = game:GetService('RunService').Heartbeat:Connect(function()
-			pcall(function()
-				pc:PivotTo(getPlr(name).Character.HumanoidRootPart.CFrame*CFrame.new(0,0,studs))
-			end)
-		end)
-	end
+cmd.add({"follow"},"Follows the selected player.",function(target,studs)
+
 end)
 cmd.add({"clip"}, "Stops the noclip command.", function()
 	Noclip:Disconnect()
