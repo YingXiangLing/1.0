@@ -835,11 +835,9 @@ cmd.add({"admin"},"Gives another player admin privileges.",function(player)
 			table.insert(admins,pe.UserId)
 			notify("Player has been added to TERMINAL adminlist.","TERMINAL")
 			if game:GetService("TextChatService"):FindFirstChild("TextChannels") then
-				game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/w "..pe.DisplayName.." Your UserID has been added to TERMINAL's adminlist!")
-				task.wait(2)
-				game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Your UserID has been added to TERMINAL's adminlist!")
+				game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/w "..pe.DisplayName.." User has received TERMINAL Whitelist.")
 			else
-				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("Your UserID has been added to TERMINAL's adminlist!",pe.Name)
+				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("User has received TERMINAL Whitelist.",pe.Name)
 			end
 		else
 			notify("Player is not inside of the server.", "TERMINAL")
