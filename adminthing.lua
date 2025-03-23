@@ -325,7 +325,7 @@ cmd.add({"to","goto"},"Teleports you to another player's location.",function(nam
 		pc:PivotTo(getPlr(name).Character:GetPivot())
 	end
 end)
-cmd.add("unloopfling","unloopf","Removes the blacklist upon a player spawning.",function()
+cmd.add({"unloopfling","unloopf"},"Removes the blacklist upon a player spawning.",function()
 	pcall(function()
 		loopfling:Disconnect()
 	end)
