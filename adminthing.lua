@@ -17,6 +17,7 @@ local admins = {
 	679591350 -- duduuser1
 }
 antiflinging = true
+loopfling = nil
 local p = game.Players.LocalPlayer
 local pc = p.Character
 p.CharacterAdded:Connect(function(c)
@@ -323,6 +324,120 @@ cmd.add({"to","goto"},"Teleports you to another player's location.",function(nam
 	if getPlr(name) then
 		pc:PivotTo(getPlr(name).Character:GetPivot())
 	end
+end)
+cmd.add("unloopfling","unloopf","Removes the blacklist upon a player spawning.",function()
+	pcall(function()
+		loopfling:Disconnect()
+	end)
+end)
+cmd.add({"loopfling","loopf"},"Blacklists a player from spawning via flinging. (WILL ONLY WORK ON ONE PERSON AT A TIME)",function(name)
+	local Players = game.Players
+	local plr = p
+	local function Fling(TargetName)
+		if Players:FindFirstChild(TargetName) then
+			local oldpos;oldpos=plr.Character:FindFirstChild("HumanoidRootPart").CFrame
+			local HRP = plr.Character:FindFirstChild("HumanoidRootPart")
+			HRP.Transparency = 0.5
+			HRP.BrickColor = BrickColor.new("Persimmon")
+			HRP:FindFirstChildOfClass("Motor6D").Enabled = false
+			local Target = Players:FindFirstChild(TargetName).Character
+			workspace.CurrentCamera.CameraSubject = Target:FindFirstChild("Head")
+			HRP.CFrame = Target:GetPivot()
+			plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Physics)
+			local otick;otick=tick()
+			local MODEL = Instance.new("Model",workspace)
+			Instance.new("Humanoid",MODEL).Name = "1"
+			repeat
+				HRP.Parent = MODEL
+				HRP.Position = Target.HumanoidRootPart.Position+(Target:FindFirstChildOfClass("Humanoid").MoveDirection*11)
+				for _, v in ipairs(plr.Character:GetChildren()) do
+					pcall(function()
+						HRP.Velocity = Vector3.new(99999,99999,99999)
+						HRP.AssemblyAngularVelocity= Vector3.new(99999,99999,99999)
+					end)
+				end
+				HRP.Velocity = Vector3.new(99999,99999,99999)
+				HRP.AssemblyAngularVelocity= Vector3.new(99999,99999,99999)
+				task.wait()
+			until Target:FindFirstChild("HumanoidRootPart").Velocity.Magnitude >= 99 or tick()-otick >= 3
+			MODEL:FindFirstChild("1"):Destroy()
+			task.wait(.1)
+			workspace.CurrentCamera.CameraSubject = plr.Character:FindFirstChild("Head")
+			HRP.Parent = plr.Character
+			MODEL:Destroy()
+			HRP.Velocity = Vector3.new(0,0,0)
+			HRP.Velocity = Vector3.new(0,0,0)
+			HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
+			HRP.AssemblyLinearVelocity= Vector3.new(0,0,0)
+			for _, v in ipairs(plr.Character:GetChildren()) do
+				pcall(function()
+					HRP.Velocity = Vector3.new(0,0,0)
+					HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
+				end)
+			end
+			task.wait(.1)
+			HRP.Velocity = Vector3.new(0,0,0)
+			HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
+			HRP.AssemblyLinearVelocity= Vector3.new(0,0,0)
+			HRP:FindFirstChildOfClass("Motor6D").Enabled = true
+			otick=tick()
+			HRP.Velocity = Vector3.new(0,0,0)
+			HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
+			HRP.AssemblyLinearVelocity= Vector3.new(0,0,0)
+			for _, v in ipairs(plr.Character:GetChildren()) do
+				pcall(function()
+					HRP.Velocity = Vector3.new(0,0,0)
+					HRP.AssemblyAngularVelocity= Vector3.new(0,0,0)
+				end)
+			end
+			for _, v in ipairs(plr.Character:GetChildren()) do
+				pcall(function()
+					v.Velocity = Vector3.new(0,0,0)
+					v.AssemblyAngularVelocity= Vector3.new(0,0,0)
+				end)
+			end
+			local ootick;ootick=tick()
+			plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
+			HRP.Transparency = 1
+			plr.Character:FindFirstChild("Head").Anchored = false
+			repeat
+				workspace:BulkMoveTo({HRP},{oldpos})
+				task.wait()
+			until tick()-ootick >= 0.3
+		end
+	end
+	pcall(function()
+		if pc:FindFirstChild("Torso") then
+			if name ~= tostring(p.Name) then
+				local plrname = game.Players[getPlr(name)]
+				game.Players.PlayerRemoving:Connect(function(p)
+					if p.UserId == plrname then
+						loopfling:Disconnect()
+					end
+				end)
+				pcall(function()
+					loopfling:Disconnect()
+				end)
+				loopfling = game.Players[getPlr(name)].CharacterAppearanceLoaded:Connect(function()
+					task.spawn(function()
+						game.Players[getPlr(name)].Character:WaitForChild("Torso",game.Players.RespawnTime+2)
+						task.delay(0.4,function()
+							if game.Players.LocalPlayer.Character:WaitForChild("Torso",game.Players.RespawnTime+2) then
+								pcall(function()
+									Fling(getPlr(name).Name)
+								end)
+							else
+								loopfling:Disconnect()
+							end
+						end)
+					end)
+				end)
+			else
+			end
+		else
+			notify("R15 does not work on HYPERFLING.","TERMINAL")
+		end
+	end)
 end)
 cmd.add({"run","src","source","exe","execute"},"Runs the selected code.",function(code)
 	loadstring(code)()
