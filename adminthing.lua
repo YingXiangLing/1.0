@@ -318,6 +318,61 @@ lock = function(instance, par)
 	instance.Parent = par or instance.Parent
 	instance.Name = "RightGrip"
 end
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local TweenService = game:GetService("TweenService")
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://68433924"
+local animationTrack:AnimationTrack = humanoid:LoadAnimation(animation)
+
+local isPlaying = false
+local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
+local weightValue = Instance.new("NumberValue")
+weightValue.Value = 0
+
+weightValue.Changed:Connect(function(newValue)
+	animationTrack:AdjustWeight(newValue)
+end)
+cmd.add({"uninhead","unihead"},"Disables the inhead animation.",function()
+	local function start()
+		--if not isPlaying then
+		--	animationTrack:Play()
+		--	animationTrack:AdjustSpeed(0)
+		--	isPlaying = true
+		--	local tween = TweenService:Create(weightValue, tweenInfo, {Value = 1})
+		--	tween:Play()
+		--else
+			local tween = TweenService:Create(weightValue, tweenInfo, {Value = 0})
+			tween:Play()
+			tween.Completed:Connect(function()
+				animationTrack:Stop()
+			end)
+			isPlaying = false
+	--	end
+	end
+	start()
+end)
+cmd.add({"inhead","ihead"},"Animates your head so that it's inside your body.",function()
+	local function start()
+		--if not isPlaying then
+			animationTrack:Play()
+			animationTrack:AdjustSpeed(0)
+			isPlaying = true
+			local tween = TweenService:Create(weightValue, tweenInfo, {Value = 1})
+			tween:Play()
+			--else
+			--	local tween = TweenService:Create(weightValue, tweenInfo, {Value = 0})
+			--	tween:Play()
+			--	tween.Completed:Connect(function()
+			--		animationTrack:Stop()
+			--	end)
+			--	isPlaying = false
+			-- end
+		--end
+	end
+	start()
+end)
 cmd.add({"to","goto"},"Teleports you to another player's location.",function(name)
 
 	if getPlr(name) then
