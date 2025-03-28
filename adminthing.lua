@@ -1445,7 +1445,7 @@ cmd.add({"unview"},"Changes your camera back to normal.",function()
 		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
 	end
 end)
-cmd.add({"cffling","cframefling","cframef"},"Flings someone using CFrame.",function(name)
+cmd.add({"cframefling","cffling","cframef"},"Flings someone using CFrame.",function(name)
 	local target = getPlr(name)
 	if target then
 		local targetc = target.Character
