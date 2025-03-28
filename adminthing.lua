@@ -1288,7 +1288,7 @@ cmd.add({"fling","hf","hyperf"},"Flings your target lol.",function(name)
 			else
 			end
 		else
-			notify("R15 does not work on HYPERFLING.","TERMINAL")
+			notify("R15 does not work on HYPERFLING, instead try cframefling.","TERMINAL")
 		end
 	end)
 end)
