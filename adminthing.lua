@@ -1470,10 +1470,12 @@ cmd.add({"cframefling","cffling","cframef"},"Flings someone using CFrame.",funct
 			repeat
 				game:GetService("RunService").Heartbeat:Wait()
 				pcall(function()
+					local HRP = pc:FindFirstChild("HumanoidRootPart")
+					local Target = targetc
 					pc:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,9999,0)
-					pc:FindFirstChild("HumanoidRootPart").CFrame = targetc.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
+					HRP.Position = Target.HumanoidRootPart.Position+(Target:FindFirstChildOfClass("Humanoid").MoveDirection*11)
 					game:GetService("RunService").Heartbeat:Wait()
-					pc:FindFirstChild("HumanoidRootPart").CFrame = targetc.HumanoidRootPart.CFrame * CFrame.new(0,0,-5)
+					HRP.Position = Target.HumanoidRootPart.Position+(Target:FindFirstChildOfClass("Humanoid").MoveDirection* -11)
 				end)
 			until done == true or targetc.HumanoidRootPart.Velocity.Magnitude >= 50 or targetc:FindFirstChild("Head") == nil
 			task.wait()
