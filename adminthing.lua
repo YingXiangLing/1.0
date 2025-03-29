@@ -353,6 +353,9 @@ cmd.add({"uninhead","unihead"},"Disables the inhead animation.",function()
 	end
 	start()
 end)
+cmd.add({"flingchar","flingc"},"self explanatory (you cant stop this command)",function()
+loadstring(game:HttpGet([[https://github.com/YingXiangLing/1.0/blob/main/proxyhellyEAH.lua]]))()
+end)
 cmd.add({"inhead","ihead"},"Animates your head so that it's inside your body.",function()
 	local function start()
 		--if not isPlaying then
