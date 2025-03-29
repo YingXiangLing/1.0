@@ -343,32 +343,32 @@ cmd.add({"uninhead","unihead"},"Disables the inhead animation.",function()
 		--	local tween = TweenService:Create(weightValue, tweenInfo, {Value = 1})
 		--	tween:Play()
 		--else
-			local tween = TweenService:Create(weightValue, tweenInfo, {Value = 0})
-			tween:Play()
-			tween.Completed:Connect(function()
-				animationTrack:Stop()
-			end)
-			isPlaying = false
-	--	end
+		local tween = TweenService:Create(weightValue, tweenInfo, {Value = 0})
+		tween:Play()
+		tween.Completed:Connect(function()
+			animationTrack:Stop()
+		end)
+		isPlaying = false
+		--	end
 	end
 	start()
 end)
 cmd.add({"inhead","ihead"},"Animates your head so that it's inside your body.",function()
 	local function start()
 		--if not isPlaying then
-			animationTrack:Play()
-			animationTrack:AdjustSpeed(0)
-			isPlaying = true
-			local tween = TweenService:Create(weightValue, tweenInfo, {Value = 1})
-			tween:Play()
-			--else
-			--	local tween = TweenService:Create(weightValue, tweenInfo, {Value = 0})
-			--	tween:Play()
-			--	tween.Completed:Connect(function()
-			--		animationTrack:Stop()
-			--	end)
-			--	isPlaying = false
-			-- end
+		animationTrack:Play()
+		animationTrack:AdjustSpeed(0)
+		isPlaying = true
+		local tween = TweenService:Create(weightValue, tweenInfo, {Value = 1})
+		tween:Play()
+		--else
+		--	local tween = TweenService:Create(weightValue, tweenInfo, {Value = 0})
+		--	tween:Play()
+		--	tween.Completed:Connect(function()
+		--		animationTrack:Stop()
+		--	end)
+		--	isPlaying = false
+		-- end
 		--end
 	end
 	start()
@@ -916,7 +916,7 @@ end)
 cmd.add({"joinjobid","joinjbid"},"Joins a specific jobid.",function(jbid)
 	if not jbid then notify("You must provide a jobid to use this command!","TERMINAL") return end
 	local s,d = pcall(function()
-		game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,jbid,p)
+		game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,jbid,Players.LocalPlayer)
 	end)
 	if s then
 		notify("Joining server...","TERMINAL")
@@ -1580,6 +1580,9 @@ cmd.add({"unfollow"},"Stops the follow command.",function()
 	pcall(function()
 		followe:Disconnect()
 	end)
+end)
+cmd.add({"rejoin","rj"},"Rejoins the server if terminal is broken.",function()
+	game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,Players.LocalPlayer)
 end)
 cmd.add({"follow"},"Follows the selected player.",function(name,studs)
 	if not studs then
