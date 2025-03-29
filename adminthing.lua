@@ -1473,9 +1473,17 @@ cmd.add({"cframefling","cffling","cframef"},"Flings someone using CFrame.",funct
 					local HRP = pc:FindFirstChild("HumanoidRootPart")
 					local Target = targetc
 					pc:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,9999,0)
-					HRP.Position = Target.HumanoidRootPart.Position+(Target:FindFirstChildOfClass("Humanoid").MoveDirection*11)
+					if pc:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R15 then
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,5)
+					else
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,1,5)
+					end
 					game:GetService("RunService").Heartbeat:Wait()
-					HRP.Position = Target.HumanoidRootPart.Position+(Target:FindFirstChildOfClass("Humanoid").MoveDirection* -11)
+					if pc:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R15 then
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,-5)
+					else
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,1,-5)
+					end
 				end)
 			until done == true or targetc.HumanoidRootPart.Velocity.Magnitude >= 50 or targetc:FindFirstChild("Head") == nil
 			task.wait()
