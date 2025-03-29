@@ -14,7 +14,7 @@ pcall(function()
 end)
 wait(0.1)
 local admins = {
-	679591350 -- duduuser1
+
 }
 antiflinging = true
 local p = game.Players.LocalPlayer
