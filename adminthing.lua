@@ -255,6 +255,16 @@ getPlr = function(Name)
 	if Name:lower() == "random" then
 		return Players:GetPlayers()[math.random(#Players:GetPlayers())]
 	else
+	if Name:lower() == "@view" then
+			Name = PLayers:GetPlayerFromCharacter(workspace.CurrentCamera.Subject.Parent):gsub("%s", "")
+		for _, x in next, Players:GetPlayers() do
+			if x.Name:lower():match(Name) then
+				return x
+			elseif x.DisplayName:lower():match("^" .. Name) then
+				return x
+			end
+		end
+		else
 		Name = Name:lower():gsub("%s", "")
 		for _, x in next, Players:GetPlayers() do
 			if x.Name:lower():match(Name) then
@@ -263,6 +273,7 @@ getPlr = function(Name)
 				return x
 			end
 		end
+	end
 	end
 end
 -- function execute(n,...)
