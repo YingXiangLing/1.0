@@ -1596,7 +1596,7 @@ cmd.add({"follow"},"Follows the selected player.",function(name,studs)
 					pc:PivotTo(getPlr(name).Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-studs))
 				else
 					pcall(function()
-						pc:PivotTo(getPlr(name).Character.HumanoidRootPart.CFrame*CFrame.new(0,3.2,-studs))
+						pc:PivotTo(getPlr(name).Character.HumanoidRootPart.CFrame*CFrame.new(0,1.2,-studs))
 					end)
 				end
 			end)
