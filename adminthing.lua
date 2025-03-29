@@ -1476,13 +1476,13 @@ cmd.add({"cframefling","cffling","cframef"},"Flings someone using CFrame.",funct
 					if pc:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R15 then
 						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,5)
 					else
-						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,1,5)
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,5)
 					end
 					game:GetService("RunService").Heartbeat:Wait()
 					if pc:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R15 then
 						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,-5)
 					else
-						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,1,-5)
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,-5)
 					end
 				end)
 			until done == true or targetc.HumanoidRootPart.Velocity.Magnitude >= 50 or targetc:FindFirstChild("Head") == nil
@@ -1621,7 +1621,7 @@ cmd.add({"follow"},"Follows the selected player.",function(name,studs)
 					pc:PivotTo(getPlr(name).Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-studs))
 				else
 					pcall(function()
-						pc:PivotTo(getPlr(name).Character.HumanoidRootPart.CFrame*CFrame.new(0,1,-studs))
+						pc:PivotTo(getPlr(name).Character.HumanoidRootPart.CFrame*CFrame.new(0,1.2,-studs))
 					end)
 				end
 			end)
