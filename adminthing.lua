@@ -283,7 +283,7 @@ function notify(t,n,i)
 		game:GetService("StarterGui"):SetCore("SendNotification",{
 			Text = t,
 			Title = n,
-			Duration = 5;
+			Duration = tonumber(i);
 		})
 	end
 end
@@ -457,8 +457,7 @@ cmd.add({"commands","cmds","help"},"Shows all of the commands TERMINAL has.",fun
 					seemore.TextScaled = true
 					seemore.Text = "See More"
 					seemore.MouseButton1Up:Connect(function()
-						notify("Check your executor's console/developer console by pressing F9, or just check the executor if it has a console","TERMINAL")
-						warn(x["name"][1]..": '"..x['description'].."' | Aliases: "..string)
+						notify(x['description'].." \n  Aliases: "..string,x["name"][1],8)
 					end)
 					local txt = Instance.new("TextLabel",k)
 					txt.Size = UDim2.new(0.716, 0,1, 0)
@@ -481,8 +480,7 @@ cmd.add({"commands","cmds","help"},"Shows all of the commands TERMINAL has.",fun
 					seemore.TextScaled = true
 					seemore.Text = "See More"
 					seemore.MouseButton1Up:Connect(function()
-						notify("Check your executor's console/developer console by pressing F9, or just check the executor if it has a console","TERMINAL")
-						warn(x["name"][1]..": '"..x['description'].."' | Aliases: none")
+						notify(x['description'].." \n Aliases: none",x["name"][1],8)
 					end)
 					local txt = Instance.new("TextLabel",k)
 					txt.Size = UDim2.new(0.716, 0,1, 0)
