@@ -255,25 +255,25 @@ getPlr = function(Name)
 	if Name:lower() == "random" then
 		return Players:GetPlayers()[math.random(#Players:GetPlayers())]
 	else
-	if Name:lower() == "@view" then
-			Name = PLayers:GetPlayerFromCharacter(workspace.CurrentCamera.Subject.Parent):gsub("%s", "")
-		for _, x in next, Players:GetPlayers() do
-			if x.Name:lower():match(Name) then
-				return x
-			elseif x.DisplayName:lower():match("^" .. Name) then
-				return x
+		if Name:lower() == "@view" then
+			Name = Players:GetPlayerFromCharacter(workspace.CurrentCamera.CameraSubject.Parent).Name:gsub("%s", "")
+			for _, x in next, Players:GetPlayers() do
+				if x.Name:lower():match(Name) then
+					return x
+				elseif x.DisplayName:lower():match("^" .. Name) then
+					return x
+				end
 			end
-		end
 		else
-		Name = Name:lower():gsub("%s", "")
-		for _, x in next, Players:GetPlayers() do
-			if x.Name:lower():match(Name) then
-				return x
-			elseif x.DisplayName:lower():match("^" .. Name) then
-				return x
+			Name = Name:lower():gsub("%s", "")
+			for _, x in next, Players:GetPlayers() do
+				if x.Name:lower():match(Name) then
+					return x
+				elseif x.DisplayName:lower():match("^" .. Name) then
+					return x
+				end
 			end
 		end
-	end
 	end
 end
 -- function execute(n,...)
@@ -365,7 +365,7 @@ cmd.add({"uninhead","unihead"},"Disables the inhead animation.",function()
 	start()
 end)
 cmd.add({"flingchar","flingc"},"self explanatory (you cant stop this command)",function()
-loadstring(game:HttpGet([[https://github.com/YingXiangLing/1.0/blob/main/proxyhellyEAH.lua]]))()
+	loadstring(game:HttpGet([[https://github.com/YingXiangLing/1.0/blob/main/proxyhellyEAH.lua]]))()
 end)
 cmd.add({"inhead","ihead"},"Animates your head so that it's inside your body.",function()
 	local function start()
