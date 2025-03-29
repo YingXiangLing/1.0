@@ -716,6 +716,7 @@ cmd.add({"antifling","afling","antif"},"Stops other exploiters from flinging you
 				for _, ver in ipairs(v.Character:GetChildren()) do
 					pcall(function()
 						ver.Velocity = Vector3.zero
+						ver.AssemblyAngularVelocity = Vector3.zero
 					end)
 				end
 			end)
