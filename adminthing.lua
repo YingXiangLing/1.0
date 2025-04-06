@@ -27,11 +27,11 @@ else
 end
 local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 local cam = workspace.CurrentCamera
-	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-	game.Players.LocalPlayer.SimulationRadius = 1000
+game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+game.Players.LocalPlayer.SimulationRadius = 1000
 wait(game.Players.RespawnTime + 0.5)
 game.Players.LocalPlayer.SimulationRadius = 1000
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
+game.Players.Character:WaitForChild("HumanoidRootPart").CFrame = h
 workspace.CurrentCamera = cam
 wait(0.1)
 local admins = {
@@ -557,13 +557,13 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 			local i = 0
 			task.spawn(function()
 				local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-local cam = workspace.CurrentCamera
-	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-	game.Players.LocalPlayer.SimulationRadius = 1000
-wait(game.Players.RespawnTime + 0.5)
-game.Players.LocalPlayer.SimulationRadius = 1000
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
-workspace.CurrentCamera = cam
+				local cam = workspace.CurrentCamera
+				game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+				game.Players.LocalPlayer.SimulationRadius = 1000
+				wait(game.Players.RespawnTime + 0.5)
+				game.Players.LocalPlayer.SimulationRadius = 1000
+				game.Players.Character:WaitForChild("HumanoidRootPart").CFrame = h
+				workspace.CurrentCamera = cam
 				task.wait(0.2)
 				local Parts = {}
 				local function isplayer(ve)
@@ -764,13 +764,14 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 		local i = 0
 		task.spawn(function()
 			local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-local cam = workspace.CurrentCamera
-	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-	game.Players.LocalPlayer.SimulationRadius = 1000
-wait(game.Players.RespawnTime + 0.5)
-game.Players.LocalPlayer.SimulationRadius = 1000
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
-workspace.CurrentCamera = cam
+			local cam = workspace.CurrentCamera
+			game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+			game.Players.LocalPlayer.SimulationRadius = 1000
+			wait(game.Players.RespawnTime + 0.5)
+			local HRP = getPlr(ex).Character:WaitForChild("HumanoidRootPart")
+			game.Players.LocalPlayer.SimulationRadius = 1000
+			game.Players.Character:WaitForChild("HumanoidRootPart").CFrame = h
+			workspace.CurrentCamera = cam
 			task.wait(0.2)
 			local Parts = {}
 			local function isplayer(ve)
@@ -1513,14 +1514,15 @@ cmd.add({"visible","uninvis","uninvisible"},"simple",function()
 	if humanoidrootpart2 == nil then
 		notify("You must be in invisible mode already.", "TERMINAL")
 	else
-	local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-local cam = workspace.CurrentCamera
-	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-	game.Players.LocalPlayer.SimulationRadius = 1000
-wait(game.Players.RespawnTime + 0.5)
-game.Players.LocalPlayer.SimulationRadius = 1000
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
-workspace.CurrentCamera = cam
+		humanoidrootpart2 = nil
+		local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+		local cam = workspace.CurrentCamera
+		game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+		game.Players.LocalPlayer.SimulationRadius = 1000
+		wait(game.Players.RespawnTime + 0.5)
+		game.Players.LocalPlayer.SimulationRadius = 1000
+		game.Players.Character:WaitForChild("HumanoidRootPart").CFrame = h
+		workspace.CurrentCamera = cam
 	end
 end)
 cmd.add({"invisible","invis"},"Makes your character invisible for others (YOU CAN STILL USE TOOLS).",function()
