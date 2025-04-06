@@ -792,6 +792,7 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 			else
 				wait(game.Players.RespawnTime+0.5)
 			end
+			HRP = getPlr(ex).Character:FindFirstChild("HumanoidRootPart")
 			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
 			workspace.CurrentCamera = cam
 			task.wait(0.2)
