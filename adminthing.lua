@@ -560,6 +560,7 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 				local cam = workspace.CurrentCamera
 				game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
 				game.Players.LocalPlayer.SimulationRadius = 1000
+				wait(game.Players.RespawnTime + 0.5)
 				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
 				workspace.CurrentCamera = cam
 				task.wait(0.2)
@@ -765,7 +766,7 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 			local cam = workspace.CurrentCamera
 			game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
 			game.Players.LocalPlayer.SimulationRadius = 1000
-			
+			wait(game.Players.RespawnTime + 0.5)
 			HRP = getPlr(ex).Character:FindFirstChild("HumanoidRootPart")
 			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
 			workspace.CurrentCamera = cam
