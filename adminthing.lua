@@ -2,16 +2,54 @@ if rawequal(game:IsLoaded(),false) then
 	game.Loaded:Wait()
 end
 wait(0.5)
-local oldcharpos;oldcharpos=game:GetService("Players").LocalPlayer.Character:GetPivot()
-pcall(function()
-	game:GetService("Players").LocalPlayer.SimulationRadius = 1000
-	game:GetService("Players").LocalPlayer.Character:BreakJoints()
-end)
-wait(game:GetService("Players").RespawnTime+0.5)
-pcall(function()
-	game:GetService("Players").LocalPlayer.SimulationRadius = 1000
-	game:GetService("Players").LocalPlayer.Character:PivotTo(oldcharpos)
-end)
+if replicatesignal then
+else
+	replicatesignal = false
+end
+if setfpscap then
+else
+	setfpscap = function()
+		warn("not usable | setfpscap ")
+	end
+end
+if setfps then
+else
+	setfps = function()
+		warn("not usable | setfps")
+	end
+end
+if getgenv then
+else
+	warn("not usable | getgenv")
+	getgenv = getfenv
+end
+if firetouchinterest then
+else
+	firetouchinterest = function()
+		warn("not usable | firetouchinterest")
+	end
+end
+local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+local cam = workspace.CurrentCamera
+if replicatesignal ~= false then
+	replicatesignal(game.Players.LocalPlayer.ConnectDiedSignalBackend)
+	game.Players.LocalPlayer.SimulationRadius = 1000
+else
+	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+	game.Players.LocalPlayer.SimulationRadius = 1000
+end
+wait(game.Players.RespawnTime + 0.5)
+if  replicatesignal then
+	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+	game.Players.LocalPlayer.SimulationRadius = 1000
+end
+if replicatesignal then
+	wait(0.5)
+	game.Players.LocalPlayer.SimulationRadius = 1000
+end
+game.Players.LocalPlayer.SimulationRadius = 1000
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
+workspace.CurrentCamera = cam
 wait(0.1)
 local admins = {
 
@@ -295,10 +333,6 @@ end
 hiddenfling = false
 Noclip = nil
 locks = {}
-if replicatesignal then
-else
-	replicatesignal = false
-end
 if setfpscap then
 else
 	setfpscap = function()
@@ -539,19 +573,17 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 
 			local i = 0
 			task.spawn(function()
-				print("Localized Instance")
-				local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
-				local success = false
-				pcall(function()
-					game:GetService("Players").LocalPlayer.SimulationRadius = 1000
-					game:GetService("Players").LocalPlayer.Character:BreakJoints()
-					success = true
-				end)
-				task.wait(0.01)
-				if success == true then
-					task.wait(game:GetService("Players").RespawnTime+0.2)
-					game:GetService("Players").LocalPlayer.Character:PivotTo(old)
+				local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+				local cam = workspace.CurrentCamera
+				game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+				game.Players.LocalPlayer.SimulationRadius = 1000
+				if replicatesignal then
+					wait(0.5)
+				else
+					wait(game.Players.RespawnTime+0.5)
 				end
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
+				workspace.CurrentCamera = cam
 				task.wait(0.2)
 				local Parts = {}
 				local function isplayer(ve)
@@ -751,27 +783,17 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 
 		local i = 0
 		task.spawn(function()
-			print("Localized Instance")
-			local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
-			local success = false
-			pcall(function()
-				game:GetService("Players").LocalPlayer.SimulationRadius = 1000
-				game:GetService("Players").LocalPlayer.Character:BreakJoints()
-				success = true
-			end)
-			task.wait(0.01)
-			if success == true then
-				task.wait(game:GetService("Players").RespawnTime+0.5)
-				game:GetService("Players").LocalPlayer.Character:PivotTo(old)
-				task.wait(1)
-				if target == game:GetService("Players").LocalPlayer then
-					print("hi")
-					character = game:GetService("Players").LocalPlayer.Character
-					HRP = character:WaitForChild("HumanoidRootPart")
-				else
-					HRP = character:WaitForChild("HumanoidRootPart")
-				end
+			local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+			local cam = workspace.CurrentCamera
+			game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+			game.Players.LocalPlayer.SimulationRadius = 1000
+			if replicatesignal then
+				wait(0.5)
+			else
+				wait(game.Players.RespawnTime+0.5)
 			end
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
+			workspace.CurrentCamera = cam
 			task.wait(0.2)
 			local Parts = {}
 			local function isplayer(ve)
@@ -1512,27 +1534,19 @@ end)
 local humanoidrootpart2
 cmd.add({"visible","uninvis","uninvisible"},"simple",function()
 	if humanoidrootpart2 == nil then
-		notify("You are already visible!", "TERMINAL")
+		notify("You must be in invisible mode already.", "TERMINAL")
 	else
 		local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 		local cam = workspace.CurrentCamera
-		if replicatesignal ~= false then
-			replicatesignal(game.Players.LocalPlayer.ConnectDiedSignalBackend)
+		game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+		game.Players.LocalPlayer.SimulationRadius = 1000
+		if replicatesignal then
+			wait(0.5)
 		else
-			notify("ReplicateSignal not supported. Attempting "..game.Players.RespawnTime.." seconds respawn.","TERMINAL")
-			game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+			wait(game.Players.RespawnTime+0.5)
 		end
-		task.spawn(function()
-			wait(game.Players.RespawnTime + 0.5)
-			if  replicatesignal then
-				game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-			end
-			if replicatesignal then
-				wait(0.5)
-			end
-			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
-			workspace.CurrentCamera = cam
-		end)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
+		workspace.CurrentCamera = cam
 	end
 end)
 cmd.add({"invisible","invis"},"Makes your character invisible for others (YOU CAN STILL USE TOOLS).",function()
