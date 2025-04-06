@@ -402,6 +402,20 @@ cmd.add({"inhead","ihead"},"Animates your head so that it's inside your body.",f
 	end
 	start()
 end)
+cmd.add({"respawnto","respawngoto","rto"},"Teleports you to another player's location.",function(name)
+
+	if getPlr(name) then
+		humanoidrootpart2 = nil
+		local h = getPlr(name).Character:WaitForChild("HumanoidRootPart").CFrame
+		local cam = workspace.CurrentCamera
+		game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+		game.Players.LocalPlayer.SimulationRadius = 1000
+		wait(game.Players.RespawnTime + 0.5)
+		game.Players.LocalPlayer.SimulationRadius = 1000
+		game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
+		workspace.CurrentCamera = cam
+	end
+end)
 cmd.add({"to","goto"},"Teleports you to another player's location.",function(name)
 
 	if getPlr(name) then
