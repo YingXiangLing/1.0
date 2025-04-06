@@ -31,7 +31,7 @@ game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState
 game.Players.LocalPlayer.SimulationRadius = 1000
 wait(game.Players.RespawnTime + 0.5)
 game.Players.LocalPlayer.SimulationRadius = 1000
-game.Players.Character:WaitForChild("HumanoidRootPart").CFrame = h
+game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
 workspace.CurrentCamera = cam
 wait(0.1)
 local admins = {
@@ -562,7 +562,7 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 				game.Players.LocalPlayer.SimulationRadius = 1000
 				wait(game.Players.RespawnTime + 0.5)
 				game.Players.LocalPlayer.SimulationRadius = 1000
-				game.Players.Character:WaitForChild("HumanoidRootPart").CFrame = h
+				game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
 				workspace.CurrentCamera = cam
 				task.wait(0.2)
 				local Parts = {}
@@ -770,7 +770,7 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 			wait(game.Players.RespawnTime + 0.5)
 			local HRP = getPlr(ex).Character:WaitForChild("HumanoidRootPart")
 			game.Players.LocalPlayer.SimulationRadius = 1000
-			game.Players.Character:WaitForChild("HumanoidRootPart").CFrame = h
+			game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
 			workspace.CurrentCamera = cam
 			task.wait(0.2)
 			local Parts = {}
@@ -1521,7 +1521,7 @@ cmd.add({"visible","uninvis","uninvisible"},"simple",function()
 		game.Players.LocalPlayer.SimulationRadius = 1000
 		wait(game.Players.RespawnTime + 0.5)
 		game.Players.LocalPlayer.SimulationRadius = 1000
-		game.Players.Character:WaitForChild("HumanoidRootPart").CFrame = h
+		game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
 		workspace.CurrentCamera = cam
 	end
 end)
