@@ -2,9 +2,6 @@ if rawequal(game:IsLoaded(),false) then
 	game.Loaded:Wait()
 end
 wait(0.5)
-if replicatesignal then
-replicatesignal = false
-end
 if setfpscap then
 else
 	setfpscap = function()
