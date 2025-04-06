@@ -295,6 +295,10 @@ end
 hiddenfling = false
 Noclip = nil
 locks = {}
+if replicatesignal then
+else
+	replicatesignal = false
+end
 if setfpscap then
 else
 	setfpscap = function()
@@ -1505,6 +1509,32 @@ cmd.add({"cframefling","cffling","cframef"},"Flings someone using CFrame.",funct
 		end)
 	end
 end)
+local humanoidrootpart2
+cmd.add({"visible","uninvis","uninvisible"},"simple",function()
+	if humanoidrootpart2 == nil then
+		notify("You are already visible!", "TERMINAL")
+	else
+		local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+		local cam = workspace.CurrentCamera
+		if replicatesignal ~= false then
+			replicatesignal(game.Players.LocalPlayer.ConnectDiedSignalBackend)
+		else
+			notify("ReplicateSignal not supported. Attempting "..game.Players.RespawnTime.." seconds respawn.","TERMINAL")
+			game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+		end
+		task.spawn(function()
+			wait(game.Players.RespawnTime + 0.5)
+			if  replicatesignal then
+				game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+			end
+			if replicatesignal then
+				wait(0.5)
+			end
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
+			workspace.CurrentCamera = cam
+		end)
+	end
+end)
 cmd.add({"invisible","invis"},"Makes your character invisible for others (YOU CAN STILL USE TOOLS).",function()
 	task.spawn(function()
 		local player = game.Players.LocalPlayer
@@ -1512,11 +1542,14 @@ cmd.add({"invisible","invis"},"Makes your character invisible for others (YOU CA
 		wait(0.1)
 		player.Character:MoveTo(position + Vector3.new(0, 1000000, 0))
 		wait(0.1)
-		local humanoidrootpart = player.Character.HumanoidRootPart:clone()
+		local humanoidrootparttest = player.Character.HumanoidRootPart:clone()
 		wait(0.1)
-		player.Character.HumanoidRootPart:Destroy()
-		humanoidrootpart.Parent = player.Character
-		player.Character:MoveTo(position)
+		humanoidrootpart2 = player.Character.HumanoidRootPart
+		humanoidrootpart2:Destroy()
+		humanoidrootparttest.Parent = player.Character
+		task.delay(0.2,function()
+			player.Character:MoveTo(position)
+		end)
 	end)
 end)
 cmd.add({"creatorid","ownerid","oid"},"Changes your userid to the owner's userid (CLIENT).",function()
