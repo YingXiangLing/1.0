@@ -557,12 +557,13 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 			local i = 0
 			task.spawn(function()
 				local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-				local cam = workspace.CurrentCamera
-				game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-				game.Players.LocalPlayer.SimulationRadius = 1000
-				wait(game.Players.RespawnTime + 0.5)
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
-				workspace.CurrentCamera = cam
+local cam = workspace.CurrentCamera
+	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+	game.Players.LocalPlayer.SimulationRadius = 1000
+wait(game.Players.RespawnTime + 0.5)
+game.Players.LocalPlayer.SimulationRadius = 1000
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
+workspace.CurrentCamera = cam
 				task.wait(0.2)
 				local Parts = {}
 				local function isplayer(ve)
@@ -763,13 +764,13 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 		local i = 0
 		task.spawn(function()
 			local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-			local cam = workspace.CurrentCamera
-			game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-			game.Players.LocalPlayer.SimulationRadius = 1000
-			wait(game.Players.RespawnTime + 0.5)
-			HRP = getPlr(ex).Character:FindFirstChild("HumanoidRootPart")
-			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
-			workspace.CurrentCamera = cam
+local cam = workspace.CurrentCamera
+	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+	game.Players.LocalPlayer.SimulationRadius = 1000
+wait(game.Players.RespawnTime + 0.5)
+game.Players.LocalPlayer.SimulationRadius = 1000
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
+workspace.CurrentCamera = cam
 			task.wait(0.2)
 			local Parts = {}
 			local function isplayer(ve)
