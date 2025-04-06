@@ -3,8 +3,7 @@ if rawequal(game:IsLoaded(),false) then
 end
 wait(0.5)
 if replicatesignal then
-else
-	replicatesignal = false
+replicatesignal = false
 end
 if setfpscap then
 else
@@ -31,22 +30,9 @@ else
 end
 local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 local cam = workspace.CurrentCamera
-if replicatesignal ~= false then
-	replicatesignal(game.Players.LocalPlayer.ConnectDiedSignalBackend)
-	game.Players.LocalPlayer.SimulationRadius = 1000
-else
 	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
 	game.Players.LocalPlayer.SimulationRadius = 1000
-end
 wait(game.Players.RespawnTime + 0.5)
-if  replicatesignal then
-	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-	game.Players.LocalPlayer.SimulationRadius = 1000
-end
-if replicatesignal then
-	wait(0.5)
-	game.Players.LocalPlayer.SimulationRadius = 1000
-end
 game.Players.LocalPlayer.SimulationRadius = 1000
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
 workspace.CurrentCamera = cam
@@ -577,11 +563,6 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 				local cam = workspace.CurrentCamera
 				game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
 				game.Players.LocalPlayer.SimulationRadius = 1000
-				if replicatesignal then
-					wait(0.5)
-				else
-					wait(game.Players.RespawnTime+0.5)
-				end
 				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
 				workspace.CurrentCamera = cam
 				task.wait(0.2)
@@ -787,11 +768,7 @@ cmd.add({"partwalkfling","pwalkfling","partwalkf","pwalkf"},"Spins parts around 
 			local cam = workspace.CurrentCamera
 			game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
 			game.Players.LocalPlayer.SimulationRadius = 1000
-			if replicatesignal then
-				wait(0.5)
-			else
-				wait(game.Players.RespawnTime+0.5)
-			end
+			
 			HRP = getPlr(ex).Character:FindFirstChild("HumanoidRootPart")
 			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
 			workspace.CurrentCamera = cam
@@ -1541,11 +1518,7 @@ cmd.add({"visible","uninvis","uninvisible"},"simple",function()
 		local cam = workspace.CurrentCamera
 		game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
 		game.Players.LocalPlayer.SimulationRadius = 1000
-		if replicatesignal then
-			wait(0.5)
-		else
-			wait(game.Players.RespawnTime+0.5)
-		end
+		
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
 		workspace.CurrentCamera = cam
 	end
