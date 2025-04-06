@@ -402,7 +402,7 @@ cmd.add({"inhead","ihead"},"Animates your head so that it's inside your body.",f
 	end
 	start()
 end)
-cmd.add({"respawnto","respawngoto","rto"},"Teleports you to another player's location.",function(name)
+cmd.add({"respawnto","respawngoto","rto"},"Teleports you to another player's location by respawn, a bit more undetectable.",function(name)
 
 	if getPlr(name) then
 		humanoidrootpart2 = nil
