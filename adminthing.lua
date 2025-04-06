@@ -1513,13 +1513,14 @@ cmd.add({"visible","uninvis","uninvisible"},"simple",function()
 	if humanoidrootpart2 == nil then
 		notify("You must be in invisible mode already.", "TERMINAL")
 	else
-		local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-		local cam = workspace.CurrentCamera
-		game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-		game.Players.LocalPlayer.SimulationRadius = 1000
-		
-		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
-		workspace.CurrentCamera = cam
+	local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+local cam = workspace.CurrentCamera
+	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+	game.Players.LocalPlayer.SimulationRadius = 1000
+wait(game.Players.RespawnTime + 0.5)
+game.Players.LocalPlayer.SimulationRadius = 1000
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = h
+workspace.CurrentCamera = cam
 	end
 end)
 cmd.add({"invisible","invis"},"Makes your character invisible for others (YOU CAN STILL USE TOOLS).",function()
