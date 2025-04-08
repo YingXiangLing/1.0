@@ -402,6 +402,13 @@ task.spawn(function()
 		end)
 	end)
 end)
+cmd.add({"gettools","tools"},"Uses EquipTool to steal tools from others.",function()
+	for _, v in ipairs(workspace:GetDescendants()) do
+		if v:IsA("Tool") or v:IsA("BackpackItem") then
+			game.Players.LocalPlayer.Character.Humanoid:EquipTool(v)
+		end
+	end
+end)
 cmd.add({"clearbans"},"Clears the remoteban table.",function()
 	pcall(function()
 		table.clear(remotebans)
