@@ -34,6 +34,95 @@ game.Players.LocalPlayer.SimulationRadius = 1000
 game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
 workspace.CurrentCamera = cam
 wait(0.1)
+local oldselectionbox = nil
+local gui = nil
+task.spawn(function()
+	game:GetService("RunService").Heartbeat:Connect(function()
+		if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Delete") and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Delete"):FindFirstChild("HarkedyesokgoodTerminal") then
+			pcall(function()
+				if oldselectionbox and oldselectionbox:IsDescendantOf(game) then
+					oldselectionbox.Adornee = game.Players.LocalPlayer:GetMouse().Target
+					oldselectionbox.Parent = oldselectionbox.Adornee
+					if  gui == nil then
+						pcall(game.Destroy,gui)
+						gui = Instance.new("BillboardGui",oldselectionbox.Adornee)::BillboardGui
+						gui.StudsOffsetWorldSpace = Vector3.new(0,3,0)
+						gui.Size = UDim2.new(5,0,2,0)
+						local txtlabel = Instance.new("TextLabel",gui)
+						txtlabel.Visible = true
+						txtlabel.Size = UDim2.new(1,0,1,0)
+						txtlabel.BackgroundTransparency = 1
+						gui.AlwaysOnTop = true
+						txtlabel.TextScaled = true
+						txtlabel.Text = oldselectionbox.Adornee.Name.." ("..oldselectionbox.Adornee.ClassName..")"
+					else
+						
+						gui.Parent = oldselectionbox.Adornee
+						gui.TextLabel.Text = oldselectionbox.Adornee.Name.." ("..oldselectionbox.Adornee.ClassName..")"
+					end
+				else
+					pcall(game.Destroy,oldselectionbox)
+					oldselectionbox = Instance.new("SelectionBox",game.Players.LocalPlayer:GetMouse().Target)
+					oldselectionbox.Adornee = game.Players.LocalPlayer:GetMouse().Target
+					oldselectionbox.Parent = oldselectionbox.Adornee
+					if  gui == nil then
+						pcall(game.Destroy,gui)
+						gui = Instance.new("BillboardGui",oldselectionbox.Adornee)::BillboardGui
+						gui.StudsOffsetWorldSpace = Vector3.new(0,3,0)
+						gui.Size = UDim2.new(5,0,2,0)
+						local txtlabel = Instance.new("TextLabel",gui)
+						txtlabel.Visible = true
+						txtlabel.Size = UDim2.new(1,0,1,0)
+						txtlabel.BackgroundTransparency = 1
+						gui.AlwaysOnTop = true
+						txtlabel.TextScaled = true
+						txtlabel.Text = oldselectionbox.Adornee.Name.." ("..oldselectionbox.Adornee.ClassName..")"
+					else
+						gui.Parent = oldselectionbox.Adornee
+						gui.TextLabel.Text = oldselectionbox.Adornee.Name.." ("..oldselectionbox.Adornee.ClassName..")"
+					end
+				end
+			end)
+		else
+			if oldselectionbox then
+				pcall(game.Destroy,gui)
+				pcall(game.Destroy,oldselectionbox)
+				oldselectionbox = nil
+				gui = nil
+			end
+		end
+	end)
+end)
+function checkremotes()
+	local found = false
+	local remoteexists = {
+		game.ReplicatedFirst,
+		game.ReplicatedStorage,
+		game.Lighting,
+		game.Workspace
+	}
+	task.spawn(function()
+		for _, vservice in ipairs(remoteexists) do
+			for _, v in ipairs(vservice:GetDescendants()) do
+				if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
+					if v.Name:lower():find("delete") or v.Name:lower():find("remove") or v.Name:lower():find("clear") or v.Name:lower():find("clean") or v.Name:lower():find("destroy") or v.Name:lower():find("vehicle") or v.Name:lower():find("car") or v.Name:lower():find("paint") or v.Name:lower():find("despawn") then
+						pcall(function()
+							found = true
+						end)
+						pcall(function()
+							found = true
+						end)
+					else
+						continue
+					end
+				else
+					continue
+				end
+			end
+		end
+	end)
+	return found
+end
 function RemoteDestroy(instance)
 	local remoteexists = {
 		game.ReplicatedFirst,
@@ -48,7 +137,7 @@ function RemoteDestroy(instance)
 		for _, vservice in ipairs(remoteexists) do
 			for _, v in ipairs(vservice:GetDescendants()) do
 				if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
-					if v.Name:lower():find("delete") or v.Name:lower():find("destroy") or v.Name:lower():find("vehicle") or v.Name:lower():find("car") or v.Name:lower():find("paint") or v.Name:lower():find("despawn") then
+					if v.Name:lower():find("delete") or v.Name:lower():find("remove") or v.Name:lower():find("clear") or v.Name:lower():find("clean") or v.Name:lower():find("destroy") or v.Name:lower():find("vehicle") or v.Name:lower():find("car") or v.Name:lower():find("paint") or v.Name:lower():find("despawn") then
 						pcall(function()
 							v:FireServer(instance)
 						end)
@@ -483,6 +572,24 @@ cmd.add({"uninhead","unihead"},"Disables the inhead animation.",function()
 		--	end
 	end
 	start()
+end)
+cmd.add({"remotebtools","rbtools"},"Gives you a serversided delete tool if found!!!!",function()
+	if checkremotes() == true then
+		notify("Remotes found! Btools given!","TERMINAL")
+		local btools = Instance.new("Tool",Players.LocalPlayer.Backpack)
+		btools.Name = "Delete"
+		Instance.new("StringValue",btools).Name = "HarkedyesokgoodTerminal"
+		btools.RequiresHandle = false
+		btools.Activated:Connect(function()
+			if Players.LocalPlayer:GetMouse().Target ~= nil then
+				pcall(function()
+					RemoteDestroy(Players.LocalPlayer:GetMouse().Target)
+				end)
+			end
+		end)
+	else
+		notify("Could not find remotes.","TERMINAL")
+	end
 end)
 cmd.add({"flingchar","flingc"},"self explanatory (you cant stop this command)",function()
 	loadstring(game:HttpGet([[https://raw.githubusercontent.com/YingXiangLing/1.0/refs/heads/main/proxyhellyEAH.lua]]))()
