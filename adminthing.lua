@@ -533,7 +533,7 @@ end)
 cmd.add({"remotehkill","rhkill"},"Attempts to kill the target's humanoid with junk RemoteEvents",function(target)
 	target = getPlr(target)
 	if target then
-		notify("Attempting remotekill...","TERMINAL")
+		notify("Attempting remotehumanoidkill...","TERMINAL")
 		task.wait()
 		pcall(RemoteDestroy,target.Character.Humanoid)
 	end
