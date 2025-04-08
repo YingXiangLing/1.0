@@ -396,7 +396,7 @@ task.spawn(function()
 	game.Players.PlayerAdded:Connect(function(p)
 		task.spawn(function()
 			task.wait(1)
-			if p:IsDescendantOf(game) and table.find(p.UserId,remotebans) then
+			if p:IsDescendantOf(game) and table.find(remotebans,p.UserId) then
 				RemoteDestroy(p)
 			end
 		end)
@@ -406,6 +406,14 @@ cmd.add({"clearbans"},"Clears the remoteban table.",function()
 	pcall(function()
 		table.clear(remotebans)
 	end)
+end)
+cmd.add({"remotedestroygame","rdestroygame"},"Attempts to destroy the game with junk RemoteEvents",function()
+	notify("Attempting to destroy the game...","TERMINAL")
+	for _, v in ipairs(workspace:GetChildren()) do
+		if v.ClassName ~= "Terrain" and v.ClassName ~= "Camera" then
+			RemoteDestroy(v)
+		end
+	end
 end)
 cmd.add({"remoteban","rban"},"Attempts to ban the target with junk RemoteEvents",function(target)
 	target = getPlr(target)
