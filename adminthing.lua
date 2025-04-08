@@ -418,6 +418,22 @@ cmd.add({"remoteban","rban"},"Attempts to ban the target with junk RemoteEvents"
 		table.insert(remotebans,targetname)
 	end
 end)
+cmd.add({"remotehkill","rhkill"},"Attempts to kill the target's humanoid with junk RemoteEvents",function(target)
+	target = getPlr(target)
+	if target then
+		notify("Attempting remotekill...","TERMINAL")
+		task.wait()
+		pcall(RemoteDestroy,target.Character.Humanoid)
+	end
+end)
+cmd.add({"remotekill","rkill"},"Attempts to kill the target with junk RemoteEvents",function(target)
+	target = getPlr(target)
+	if target then
+		notify("Attempting remotekill...","TERMINAL")
+		task.wait()
+		pcall(RemoteDestroy,target.Character.Torso)
+	end
+end)
 cmd.add({"remotekick","rkick"},"Attempts to kick the target with junk RemoteEvents",function(target)
 	target = getPlr(target)
 	if target then
