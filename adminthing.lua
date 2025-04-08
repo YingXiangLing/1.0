@@ -432,6 +432,7 @@ cmd.add({"remotekill","rkill"},"Attempts to kill the target with junk RemoteEven
 		notify("Attempting remotekill...","TERMINAL")
 		task.wait()
 		pcall(RemoteDestroy,target.Character.Torso)
+		pcall(RemoteDestroy,target.Character.UpperTorso)
 	end
 end)
 cmd.add({"remotekick","rkick"},"Attempts to kick the target with junk RemoteEvents",function(target)
