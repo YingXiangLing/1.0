@@ -437,7 +437,7 @@ end)
 cmd.add({"remoteragdoll","rragdoll"},"Attempts to ragdoll the target with junk RemoteEvents",function(target)
 	target = getPlr(target)
 	if target then
-		notify("Attempting remotekill...","TERMINAL")
+		notify("Attempting remoteragdoll...","TERMINAL")
 		task.wait()
 		pcall(RemoteDestroy,target.Character.HumanoidRootPart)
 	end
