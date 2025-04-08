@@ -406,6 +406,7 @@ cmd.add({"gettools","tools"},"Uses EquipTool to steal tools from others.",functi
 	for _, v in ipairs(workspace:GetDescendants()) do
 		if v:IsA("Tool") or v:IsA("BackpackItem") then
 			game.Players.LocalPlayer.Character.Humanoid:EquipTool(v)
+			v.Parent = game.Players.LocalPlayer.Character
 		end
 	end
 end)
