@@ -34,6 +34,37 @@ game.Players.LocalPlayer.SimulationRadius = 1000
 game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
 workspace.CurrentCamera = cam
 wait(0.1)
+function RemoteDestroy(instance)
+	local remoteexists = {
+		game.ReplicatedFirst,
+		game.ReplicatedStorage,
+		game.Lighting,
+		game.Workspace
+	}
+	task.spawn(function()
+		pcall(function()
+			game:GetService("ReplicatedStorage").DeleteCar:FireServer(instance)
+		end)
+		for _, vservice in ipairs(remoteexists) do
+			for _, v in ipairs(vservice:GetDescendants()) do
+				if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
+					if v.Name:lower():find("delete") or v.Name:lower():find("destroy") or v.Name:lower():find("vehicle") or v.Name:lower():find("car") or v.Name:lower():find("paint") or v.Name:lower():find("despawn") then
+						pcall(function()
+							v:FireServer(instance)
+						end)
+						pcall(function()
+							v:InvokeServer(instance)
+						end)
+					else
+						continue
+					end
+				else
+					continue
+				end
+			end
+		end
+	end)
+end
 local admins = {
 
 }
@@ -360,6 +391,41 @@ weightValue.Value = 0
 weightValue.Changed:Connect(function(newValue)
 	animationTrack:AdjustWeight(newValue)
 end)
+local remotebans = {}
+task.spawn(function()
+	game.Players.PlayerAdded:Connect(function(p)
+		task.spawn(function()
+			task.wait(1)
+			if p:IsDescendantOf(game) and table.find(p.UserId,remotebans) then
+				RemoteDestroy(p)
+			end
+		end)
+	end)
+end)
+cmd.add({"clearbans"},"Clears the remoteban table.",function()
+	pcall(function()
+		table.clear(remotebans)
+	end)
+end)
+cmd.add({"remoteban","rban"},"Attempts to ban the target with junk RemoteEvents",function(target)
+	target = getPlr(target)
+	if target then
+		notify("Attempting remoteban...","TERMINAL")
+		local targetname;targetname = target.UserId
+		task.wait()
+		pcall(RemoteDestroy,target)
+		task.wait()
+		table.insert(remotebans,targetname)
+	end
+end)
+cmd.add({"remotekick","rkick"},"Attempts to kick the target with junk RemoteEvents",function(target)
+	target = getPlr(target)
+	if target then
+		notify("Attempting remotekick...","TERMINAL")
+		task.wait()
+		pcall(RemoteDestroy,target)
+	end
+end)
 cmd.add({"uninhead","unihead"},"Disables the inhead animation.",function()
 	local function start()
 		--if not isPlaying then
@@ -405,7 +471,6 @@ end)
 cmd.add({"respawnto","respawngoto","rto"},"Teleports you to another player's location by respawn, a bit more undetectable.",function(name)
 
 	if getPlr(name) then
-		humanoidrootpart2 = nil
 		local h = getPlr(name).Character:WaitForChild("HumanoidRootPart").CFrame
 		local cam = workspace.CurrentCamera
 		game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
