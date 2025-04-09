@@ -56,7 +56,7 @@ task.spawn(function()
 						txtlabel.TextScaled = true
 						txtlabel.Text = oldselectionbox.Adornee.Name.." ("..oldselectionbox.Adornee.ClassName..")"
 					else
-						
+
 						gui.Parent = oldselectionbox.Adornee
 						gui.TextLabel.Text = oldselectionbox.Adornee.Name.." ("..oldselectionbox.Adornee.ClassName..")"
 					end
@@ -124,11 +124,24 @@ function checkremotes()
 	return found
 end
 function RemoteDestroy(instance)
+	local namelist = {
+		"delete",
+		"remove",
+		"clear",
+		"clean",
+		"destroy",
+		"vehicle",
+		"car",
+		"paint",
+		"despawn",
+		"bullet", "bala", "shoot", "shot", "fire", "segway", "handless", "sword", "attack", "deletar", "apagar" -- "borrowed" from quirkycmd
+	}
 	local remoteexists = {
 		game.ReplicatedFirst,
 		game.ReplicatedStorage,
 		game.Lighting,
-		game.Workspace
+		game.Workspace,
+		game.Players.LocalPlayer
 	}
 	task.spawn(function()
 		pcall(function()
@@ -137,15 +150,17 @@ function RemoteDestroy(instance)
 		for _, vservice in ipairs(remoteexists) do
 			for _, v in ipairs(vservice:GetDescendants()) do
 				if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
-					if v.Name:lower():find("delete") or v.Name:lower():find("remove") or v.Name:lower():find("clear") or v.Name:lower():find("clean") or v.Name:lower():find("destroy") or v.Name:lower():find("vehicle") or v.Name:lower():find("car") or v.Name:lower():find("paint") or v.Name:lower():find("despawn") then
-						pcall(function()
-							v:FireServer(instance)
-						end)
-						pcall(function()
-							v:InvokeServer(instance)
-						end)
-					else
-						continue
+					for _, name in ipairs(namelist) do
+						if v.Name:lower():find(name) then
+							pcall(function()
+								v:FireServer(instance)
+							end)
+							pcall(function()
+								v:InvokeServer(instance)
+							end)
+						else
+							continue
+						end
 					end
 				else
 					continue
@@ -491,7 +506,7 @@ task.spawn(function()
 		end)
 	end)
 end)
-cmd.add({"gettools","tools"},"Uses EquipTool to steal tools from others.",function()
+cmd.add({"gettools","tools"},"Attempts to steal tools from others.",function()
 	for _, v in ipairs(workspace:GetDescendants()) do
 		if v:IsA("Tool") or v:IsA("BackpackItem") then
 			v.Parent = game.Players.LocalPlayer.Backpack
@@ -530,7 +545,7 @@ cmd.add({"remoteragdoll","rragdoll"},"Attempts to ragdoll the target with junk R
 		pcall(RemoteDestroy,target.Character.HumanoidRootPart)
 	end
 end)
-cmd.add({"remotehkill","rhkill"},"Attempts to kill the target's humanoid with junk RemoteEvents",function(target)
+cmd.add({"remotehumanoidkill","rhumanoidkill"},"Attempts to kill the target's humanoid with junk RemoteEvents",function(target)
 	target = getPlr(target)
 	if target then
 		notify("Attempting remotehumanoidkill...","TERMINAL")
