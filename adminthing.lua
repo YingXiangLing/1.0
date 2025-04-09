@@ -115,9 +115,6 @@ function checkremotes()
 		game.Players
 	}
 	task.spawn(function()
-		pcall(function()
-			game:GetService("ReplicatedStorage").DeleteCar:FireServer(instance)
-		end)
 		for _, vservice in ipairs(remoteexists) do
 			for _, v in ipairs(vservice:GetDescendants()) do
 				if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
