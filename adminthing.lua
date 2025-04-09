@@ -95,25 +95,43 @@ task.spawn(function()
 end)
 function checkremotes()
 	local found = false
+	local namelist = {
+		"delete",
+		"remove",
+		"clear",
+		"clean",
+		"destroy",
+		"vehicle",
+		"car",
+		"paint",
+		"despawn",
+		"bullet", "bala", "shoot", "shot", "fire", "segway", "handless", "sword", "attack", "deletar", "apagar" -- "borrowed" from quirkycmd
+	}
 	local remoteexists = {
 		game.ReplicatedFirst,
 		game.ReplicatedStorage,
 		game.Lighting,
-		game.Workspace
+		game.Workspace,
+		game.Players
 	}
 	task.spawn(function()
+		pcall(function()
+			game:GetService("ReplicatedStorage").DeleteCar:FireServer(instance)
+		end)
 		for _, vservice in ipairs(remoteexists) do
 			for _, v in ipairs(vservice:GetDescendants()) do
 				if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
-					if v.Name:lower():find("delete") or v.Name:lower():find("remove") or v.Name:lower():find("clear") or v.Name:lower():find("clean") or v.Name:lower():find("destroy") or v.Name:lower():find("vehicle") or v.Name:lower():find("car") or v.Name:lower():find("paint") or v.Name:lower():find("despawn") then
-						pcall(function()
-							found = true
-						end)
-						pcall(function()
-							found = true
-						end)
-					else
-						continue
+					for _, name in ipairs(namelist) do
+						if v.Name:lower():find(name) then
+							pcall(function()
+								found = true
+							end)
+							pcall(function()
+								found = true
+							end)
+						else
+							continue
+						end
 					end
 				else
 					continue
@@ -141,7 +159,7 @@ function RemoteDestroy(instance)
 		game.ReplicatedStorage,
 		game.Lighting,
 		game.Workspace,
-		game.Players.LocalPlayer
+		game.Players
 	}
 	task.spawn(function()
 		pcall(function()
