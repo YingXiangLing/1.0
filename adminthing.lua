@@ -1711,6 +1711,23 @@ cmd.add({"unview"},"Changes your camera back to normal.",function()
 		workspace.CurrentCamera.CameraSubject = targetc.Humanoid
 	end
 end)
+local im_going_mentally_insane
+cmd.add({"unantivoid","unantiv"},"it disable anti void",function()
+	im_going_mentally_insane:Disconnect()
+end)
+cmd.add({"antivoid","antiv"},"Stops the void from killing you.",function()
+	im_going_mentally_insane = game:GetService("RunService").Heartbeat:Connect(function()
+		if pc:GetPivot().Position.Y <= workspace.FallenPartsDestroyHeight+30 then
+			for _, v in ipairs(pc:GetChildren()) do
+				pcall(function()
+					v.Velocity = Vector3.new(0,0,0)
+					v.AssemblyLinearVelocity = Vector3.new(0,0,0)
+				end)
+			end
+			pc:PivotTo(pc:GetPivot()*CFrame.new(0,(workspace.FallenPartsDestroyHeight*-1)+50,0))
+		end
+	end)
+end)
 cmd.add({"cframefling","cffling","cframef"},"Flings someone using CFrame.",function(name)
 	local target = getPlr(name)
 	if target then
@@ -1727,15 +1744,15 @@ cmd.add({"cframefling","cffling","cframef"},"Flings someone using CFrame.",funct
 					local Target = targetc
 					pc:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0,9999,0)
 					if pc:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R15 then
-						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,5)
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,16)
 					else
-						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,5)
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,16)
 					end
 					game:GetService("RunService").Heartbeat:Wait()
 					if pc:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R15 then
-						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,-5)
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,-1)
 					else
-						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,-5)
+						HRP.CFrame = Target.HumanoidRootPart.CFrame*CFrame.new(0,0,-1)
 					end
 				end)
 			until done == true or targetc.HumanoidRootPart.Velocity.Magnitude >= 50 or targetc:FindFirstChild("Head") == nil
@@ -1755,8 +1772,6 @@ cmd.add({"cframefling","cffling","cframef"},"Flings someone using CFrame.",funct
 				task.wait()
 			until tick()-otick >= 1
 		end)
-		firetouchinterest(targetc:FindFirstChild("HumanoidRootPart"),pc:FindFirstChild("HumanoidRootPart"),0)
-		firetouchinterest(targetc:FindFirstChild("HumanoidRootPart"),pc:FindFirstChild("HumanoidRootPart"),1)
 		delay(3,function()
 			if not done then
 				done = not done
@@ -2015,58 +2030,77 @@ else
 		end)
 	end)
 end
+local oldcommand = ""
+local cooldown = false
 Imgl.MouseButton1Down:Connect(function()
-	if rawequal(TBox,nil) then
-		TBox = Instance.new("TextBox",Main)
-		TBox.ZIndex = 100000
-		TBox.PlaceholderText = "Command here"
-		TBox.Text = ""
-		TBox.PlaceholderColor3 = TBox.TextColor3
-		TBox.TextScaled = true
-		TBox.Position = UDim2.new(0.104, 0,0.882, 0)
-		TBox:TweenSize(UDim2.new(0.2, 0,0.097, 0),"InOut","Sine",0.5)
-		Instance.new("UICorner",TBox).CornerRadius = UDim.new(0, 8)
-		local h = Instance.new("UIStroke",TBox)
-		h.Thickness = 2
-		h.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-		h = nil
-		TBox.FocusLost:Connect(function()
-			pcall(function()
-				local g = TBox.Text
-				local cmde = nil
-				for _, v in pairs(cmd["list"]) do
-					if table.find(v.name,g:split(" ")[1]:lower()) then
-						cmde = v
+	if cooldown == false then
+		if rawequal(TBox,nil) then
+			TBox = Instance.new("TextBox",Main)
+			TBox.ZIndex = 100000
+			TBox.Size = UDim2.new(0.001,0,0.097,0)
+			TBox.PlaceholderText = "Command here"
+			TBox.Text = oldcommand
+			TBox.PlaceholderColor3 = TBox.TextColor3
+			TBox.TextScaled = true
+			TBox.Position = UDim2.new(0.104, 0,0.882, 0)
+			TBox:TweenSize(UDim2.new(0.2, 0,0.097, 0),"InOut",Enum.EasingStyle.Quad,0.5)
+			local sound = Instance.new("Sound",workspace)
+			sound.SoundId = "rbxassetid://127533251122014"
+			sound.Volume = 1.5
+			sound:Play()
+			cooldown = true
+			task.delay(0.5,function()
+				cooldown = false
+			end)
+			Instance.new("UICorner",TBox).CornerRadius = UDim.new(0, 8)
+			local h = Instance.new("UIStroke",TBox)
+			h.Thickness = 2
+			h.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+			h = nil
+			TBox.FocusLost:Connect(function()
+				pcall(function()
+					local g = TBox.Text
+					local cmde = nil
+					for _, v in pairs(cmd["list"]) do
+						if table.find(v.name,g:split(" ")[1]:lower()) then
+							cmde = v
+						end
 					end
-				end
-				if cmde then
-					local sound = Instance.new("Sound",workspace)
-					sound.SoundId = "rbxassetid://3450794184"
-					sound.Volume = 1
-					sound:Play()
-					game:GetService("Debris"):AddItem(sound,1.2)
-					notify("Executed command!","Command Loader")
-					cmde["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
-				else
-					local ge = safestring(g:split(" ")[1])
-					if not ge then
-						ge = "null"
-					end
-					if ge == "" then
+					if cmde then
+						local sound = Instance.new("Sound",workspace)
+						sound.SoundId = "rbxassetid://3450794184"
+						sound.Volume = 1
+						sound:Play()
+						game:GetService("Debris"):AddItem(sound,1.2)
+						notify("Executed command!","Command Loader")
+						cmde["function"](g:split(" ")[2],g:split(" ")[3],g:split(" ")[4],g:split(" ")[5])
 					else
-						notify("No command has been found with the name of '"..ge.."'.","Command Loader")
+						local ge = safestring(g:split(" ")[1])
+						if not ge then
+							ge = "null"
+						end
+						if ge == "" then
+						else
+							notify("No command has been found with the name of '"..ge.."'.","Command Loader")
+						end
 					end
-				end
+				end)
 			end)
-		end)
-	else
-		TBox:TweenSize(UDim2.new(0,0.001,0,0.001),"InOut","Sine",0.5)
-		delay(0.5,function()
-			pcall(function()
-				TBox:Destroy()
-				TBox = nil
+		else
+			TBox:TweenSize(UDim2.new(0.001,0,0.097,0),"InOut",Enum.EasingStyle.Quad,0.7)
+			local sound = Instance.new("Sound",workspace)
+			sound.SoundId = "rbxassetid://132442985525251"
+			sound.Volume = 1.5
+			sound:Play()
+			task.delay(0.65,function()
+				pcall(function()
+					oldcommand = TBox.Text
+					TBox:Destroy()
+					TBox = nil
+					cooldown = false
+				end)
 			end)
-		end)
+		end
 	end
 end)
 local h = Instance.new("UIStroke",Imgl)
