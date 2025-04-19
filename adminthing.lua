@@ -1319,6 +1319,46 @@ cmd.add({"aliasadd","adda"},"Adds an alias to a command (THIS CANNOT BE UNDONE)"
 		end
 	end
 end)
+cmd.add({"r15"},"Changes your parttype to R15.",function()
+	local function respawn()
+		local cf = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+		game.Players.LocalPlayer.Character.Humanoid.Health = 0
+		player.CharacterAdded:wait(1); wait(0.2);
+		character:WaitForChild("HumanoidRootPart").CFrame = cf
+	end
+
+	local avs = game:GetService("AvatarEditorService")
+	avs:PromptSaveAvatar(game.Players.LocalPlayer.Character.Humanoid.HumanoidDescription,Enum.HumanoidRigType.R15)
+	notify("Press allow","TERMINAL")
+	local result = avs.PromptSaveAvatarCompleted:Wait()
+	if result == Enum.AvatarPromptResult.Success
+	then
+		notify("You are now R15","TERMINAL")
+		respawn()
+	else
+		notify("An error has occured","TERMINAL")
+	end
+end)
+cmd.add({"r6"},"Changes your parttype to R6.",function()
+	local function respawn()
+		local cf = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+		game.Players.LocalPlayer.Character.Humanoid.Health = 0
+		player.CharacterAdded:wait(1); wait(0.2);
+		character:WaitForChild("HumanoidRootPart").CFrame = cf
+	end
+
+	local avs = game:GetService("AvatarEditorService")
+	avs:PromptSaveAvatar(game.Players.LocalPlayer.Character.Humanoid.HumanoidDescription,Enum.HumanoidRigType.R6)
+	notify("Press allow","TERMINAL")
+	local result = avs.PromptSaveAvatarCompleted:Wait()
+	if result == Enum.AvatarPromptResult.Success
+	then
+		notify("You are now R6","TERMINAL")
+		respawn()
+	else
+		notify("An error has occured","TERMINAL")
+	end
+end)
 cmd.add({"antifling","afling","antif"},"Stops other exploiters from flinging you. (WILL NOT WORK AGAINST PARTFLING)",function()
 	antiflinging = game:GetService("RunService").Heartbeat:Connect(function()
 		local otherplayers = game:GetService("Players"):GetPlayers()
