@@ -19,6 +19,12 @@ else
 	warn("not usable | getgenv")
 	getgenv = getfenv
 end
+if fireproximityprompt then
+else
+	fireproximityprompt = function()
+
+	end
+end
 if firetouchinterest then
 else
 	firetouchinterest = function()
@@ -782,6 +788,68 @@ cmd.add({"speedfling","sfling"},"speed fling speed fling",function(target)
 		end
 	end)
 end)
+cmd.add({"fpp","fireproximityprompts"},"Fires all of the proximityprompts in the game.",function()
+	local fti = 0
+	for _, v in ipairs(game:GetDescendants()) do
+		if v:IsA("ProximityPrompt")then
+			fti += 1
+			pcall(function()
+				fireproximityprompt(v)
+			end)
+		end
+	end
+	notify("Fired "..fti.." proximityprompts.","TERMINAL")
+end)
+cmd.add({"fireremotes","firer"},"Fires all of the remote events in the game.",function()
+	local fti = 0
+	for _, v in ipairs(game:GetDescendants()) do
+		if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
+			fti += 1
+			pcall(function()
+				v:FireServer()
+			end)
+			pcall(function()
+				v:InvokeServer()
+			end)
+		end
+	end
+	notify("Fired "..fti.." remotes.","TERMINAL")
+end)
+cmd.add({"firetouchinterests","fti"},"Fires all of the touch interests in workspace.",function()
+	local fti = 0
+	for _, v in ipairs(workspace:GetDescendants()) do
+		if v:IsA("TouchTransmitter") then
+			fti += 1
+			pcall(firetouchinterest,v.Parent,0)
+			pcall(firetouchinterest,v.Parent,1)
+		end
+	end
+	notify("Fired "..fti.." touchinterests.","TERMINAL")
+end)
+cmd.add({"bringunanchored","bringua"},"Brings unanchored parts to you.",function()
+	for _, v in ipairs(workspace:GetDescendants()) do
+		if v.ReceiveAge == 0 and v.Anchored == false and #v:GetConnectedParts() == 1 then
+			pcall(function()
+				v.CFrame = game:GetService("Players").LocalPlayer.Character:GetPivot()
+			end)
+		end
+	end
+end)
+cmd.add({"spook"},"spookey",function(target)
+	local Username = target
+	local Target = getPlr(Username)
+
+	local oldCF = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+	Target = getPlr(Username)    
+	local distancepl = 2
+	if Target.Character and Target.Character:FindFirstChild('Humanoid') then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame +  Target.Character.HumanoidRootPart.CFrame.lookVector * distancepl
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position, Target.Character.HumanoidRootPart.Position)
+		wait(.5)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = oldCF
+	end
+
+end)
 cmd.add({"seatbring","sbring"},"the seat kidnap 😱😱 real",function(target)
 	local target = getPlr(target)
 	if target then
@@ -796,16 +864,16 @@ cmd.add({"seatbring","sbring"},"the seat kidnap 😱😱 real",function(target)
 			local otick;otick = tick();
 			repeat
 				if seat ~= nil then
-					firetouchinterest(seat,target.Character.HumanoidRootPart,1)
 					firetouchinterest(seat,target.Character.HumanoidRootPart,0)
+					firetouchinterest(seat,target.Character.HumanoidRootPart,1)
 				end
-				pc:PivotTo((target.Character.HumanoidRootPart.CFrame+(target.Character:FindFirstChildOfClass("Humanoid").MoveDirection*8))*CFrame.new(-4,0,3))
+				pc:PivotTo((target.Character.HumanoidRootPart.CFrame+(target.Character:FindFirstChildOfClass("Humanoid").MoveDirection*9))*CFrame.new(-4,0,3))
 				game:GetService("RunService").Heartbeat:Wait()
 				if seat ~= nil then
-					firetouchinterest(seat,target.Character.HumanoidRootPart,1)
 					firetouchinterest(seat,target.Character.HumanoidRootPart,0)
+					firetouchinterest(seat,target.Character.HumanoidRootPart,1)
 				end
-				pc:PivotTo((target.Character.HumanoidRootPart.CFrame+(target.Character:FindFirstChildOfClass("Humanoid").MoveDirection*8))*CFrame.new(4,0,3))
+				pc:PivotTo((target.Character.HumanoidRootPart.CFrame+(target.Character:FindFirstChildOfClass("Humanoid").MoveDirection*9))*CFrame.new(4,0,3))
 				game:GetService("RunService").Heartbeat:Wait()
 				game:GetService("RunService").Heartbeat:Wait()
 			until tick()-otick >= 4 or seat ~= nil and seat:FindFirstChild("SeatWeld") or target.Character.Humanoid.Sit == true
@@ -1522,8 +1590,8 @@ cmd.add({"instakillreach","instksreach"},"Changes sword damage value to 1000 and
 				if v.Name == "HumanoidRootPart" and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name == "Head" and v.Parent:FindFirstChildOfClass("Humanoid") then
 					if (Tool.Handle.Position-v.Position).Magnitude <= reachsize then
 						for i=1,50 do
-							firetouchinterest(v,Tool.Handle,1)
 							firetouchinterest(v,Tool.Handle,0)
+							firetouchinterest(v,Tool.Handle,1)
 							task.wait()
 						end
 					end
@@ -1545,8 +1613,8 @@ cmd.add({"firetouchswordreach","ftireach","firetouchr"},"Adds extra range to you
 				if v.Name == "HumanoidRootPart" and v.Parent:FindFirstChildOfClass("Humanoid") or v.Name == "Head" and v.Parent:FindFirstChildOfClass("Humanoid") then
 					if (Tool.Handle.Position-v.Position).Magnitude <= reachsize then
 						for i=1,15 do
-							firetouchinterest(v,Tool.Handle,1)
 							firetouchinterest(v,Tool.Handle,0)
+							firetouchinterest(v,Tool.Handle,1)
 							task.wait()
 						end
 					end
