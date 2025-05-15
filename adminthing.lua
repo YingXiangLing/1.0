@@ -534,6 +534,121 @@ task.spawn(function()
 		end)
 	end)
 end)
+cmd.add({"partcontrol","pcontrol"},"networkownership goes brr",function()
+	notify("Currently fetching all parts, this might reset your character.","TERMINAL")
+	local RunService = game:GetService("RunService")
+	local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+	local cam = workspace.CurrentCamera
+	game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+	game.Players.LocalPlayer.SimulationRadius = 1000
+	wait(game.Players.RespawnTime + 0.5)
+	game.Players.LocalPlayer.SimulationRadius = 1000
+	game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
+	workspace.CurrentCamera = cam
+	task.wait(0.2)
+	local function NetworkCheck(Part)
+		return Part.ReceiveAge == 0
+	end
+	local foundpart = nil
+	for _, v in ipairs(workspace:GetDescendants()) do
+		pcall(function()
+			if not v.Anchored and #v:GetConnectedParts() <= 1 and NetworkCheck(v) == true then
+				foundpart = v
+			end
+		end)
+	end
+	if foundpart then
+		pc:WaitForChild("Animate"):Destroy()
+		notify("Controllable part was found, rejoin to end this command.","TERMINAL")
+		foundpart.CFrame = pc:GetPivot()
+		if NetworkCheck(foundpart) == true then
+			pcall(function()
+				task.spawn(function()
+					while task.wait(3) do
+						foundpart.Velocity = Vector3.new(14.46262424,14.46262424,14.46262424)+Vector3.new(0,math.cos(tick()*10)/100,0)
+						pc:PivotTo(foundpart.CFrame)
+						workspace.CurrentCamera.CameraSubject = pc:FindFirstChildOfClass("Humanoid")
+					end
+				end)
+			end)
+			RunService.Heartbeat:Connect(function()
+				local InAttack = false
+				pcall(function()
+					pcall(function()
+						for _, v in ipairs(game:GetService("Players"):GetPlayers()) do
+							if v ~= game.Players.LocalPlayer then
+								local part = Instance.new("Part",workspace)
+								part.Anchored = true
+								part.Size = Vector3.new(v.SimulationRadius,v.SimulationRadius,v.SimulationRadius)
+								part.Color = Color3.new(1,0,0)
+								part.Transparency = 0.99
+								part.CanCollide = false
+								part.CastShadow = false
+								part.CFrame = v.Character:GetPivot()
+								game:GetService("Debris"):AddItem(part,0.1)
+								if (pc.Head.Position-v.Character.Head.Position).Magnitude <= 18 then
+									InAttack = true
+								end
+								local part = Instance.new("Part",workspace)
+								part.Anchored = true
+								part.Size = Vector3.new(27,27,27)
+								part.Color = Color3.new(0,0,1)
+								part.Transparency = 0.99
+								part.CanCollide = false
+								part.CastShadow = false
+								part.CFrame = v.Character:GetPivot()
+								game:GetService("Debris"):AddItem(part,0.05)
+							end
+						end
+					end)
+					workspace.Gravity = 0
+					workspace.FallenPartsDestroyHeight = -9999999
+					foundpart.Velocity = Vector3.zero
+					foundpart.CanCollide = false
+					local oldpos = foundpart.Position
+					foundpart.CFrame = CFrame.lookAt(oldpos,workspace.CurrentCamera.CFrame*CFrame.new(0,0,-250).Position)
+					if NetworkCheck(foundpart) == true then
+						foundpart.Velocity = Vector3.zero
+						workspace.CurrentCamera.CameraSubject = foundpart
+						if InAttack == false then
+							pc:PivotTo(CFrame.new(foundpart.Position.X,foundpart.Position.Y-12,foundpart.Position.Z))
+						else
+							pc:PivotTo(CFrame.new(foundpart.Position.X,foundpart.Position.Y,foundpart.Position.Z))
+						end
+						local controlModule = require(game.Players.LocalPlayer.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+						local direction = controlModule:GetMoveVector()
+						if direction.X > 0 then
+							foundpart.CFrame*=CFrame.new(1,0,0)
+						end
+						if direction.X < 0 then
+							foundpart.CFrame*=CFrame.new(-1,0,0)
+						end
+						if direction.Y > 0 then
+							foundpart.CFrame*=CFrame.new(0,1,0)
+						end
+						if direction.Y < 0 then
+							foundpart.CFrame*=CFrame.new(0,-1,0)
+						end
+						if direction.Z > 0 then
+							foundpart.CFrame*=CFrame.new(0,0,1)
+						end
+						if direction.Z < 0 then
+							foundpart.CFrame*=CFrame.new(0,0,-1)
+						end
+					else
+						foundpart.Velocity = Vector3.new(14.46262424,14.46262424,14.46262424)+Vector3.new(0,math.cos(tick()*10)/100,0)
+						pc:PivotTo(foundpart.CFrame)
+						workspace.CurrentCamera.CameraSubject = pc:FindFirstChildOfClass("Humanoid")
+					end	
+				end)
+			end)
+		else
+			notify("Could not reposition part cframe: partcontrol cancelled.","TERMINAL")
+		end
+	else
+		notify("No controllable parts were found.","TERMINAL")
+	end
+end)
 cmd.add({"gettools","tools"},"Attempts to steal tools from others.",function()
 	for _, v in ipairs(workspace:GetDescendants()) do
 		if v:IsA("Tool") or v:IsA("BackpackItem") then
@@ -788,7 +903,7 @@ cmd.add({"speedfling","sfling"},"speed fling speed fling",function(target)
 		end
 	end)
 end)
-cmd.add({"fpp","fireproximityprompts"},"Fires all of the proximityprompts in the game.",function()
+cmd.add({"fireproximityprompts","fpp"},"Fires all of the proximityprompts in the game.",function()
 	local fti = 0
 	for _, v in ipairs(game:GetDescendants()) do
 		if v:IsA("ProximityPrompt")then
