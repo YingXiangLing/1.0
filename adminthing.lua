@@ -593,7 +593,7 @@ cmd.add({"partcontrol","pcontrol"},"networkownership goes brr",function()
 								part.Anchored = true
 								part.Size = Vector3.new(27,27,27)
 								part.Color = Color3.new(0,0,1)
-								part.Transparency = 0.99
+								part.Transparency = 0.77
 								part.CanCollide = false
 								part.CastShadow = false
 								part.CFrame = v.Character:GetPivot()
