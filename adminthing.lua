@@ -1,3 +1,5 @@
+-- feel free to skid off my script if you want
+
 if rawequal(game:IsLoaded(),false) then
 	game.Loaded:Wait()
 end
