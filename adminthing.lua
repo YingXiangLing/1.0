@@ -2400,6 +2400,18 @@ end)
 cmd.add({"rejoin","rj"},"Rejoins the server if terminal is broken.",function()
 	game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,Players.LocalPlayer)
 end)
+cmd.add({"teleporttool","clicktp",'tptool'},"Gives you a tool which teleports you to your cursor position.",function()
+	local ok = Instance.new('Tool',game.Players.LocalPlayer.Backpack)
+	ok.Name = "ClickTP"
+	ok.RequiresHandle = false
+	ok.Activated:Connect(function()
+		pcall(function()
+			if game:GetService("Players").LocalPlayer:GetMouse().Target ~= nil then
+				game:GetService("Players").LocalPlayer.Character:PivotTo(CFrame.new(game:GetService("Players").LocalPlayer:GetMouse().Hit.Position))
+			end
+		end)
+	end)
+end)
 cmd.add({"follow"},"Follows the selected player.",function(name,studs)
 	if not studs then
 		studs = 5
