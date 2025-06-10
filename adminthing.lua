@@ -1,4 +1,3 @@
--- feel free to skid off my script if you want
 
 if rawequal(game:IsLoaded(),false) then
 	game.Loaded:Wait()
@@ -931,6 +930,117 @@ cmd.add({"fireremotes","firer"},"Fires all of the remote events in the game.",fu
 		end
 	end
 	notify("Fired "..fti.." remotes.","TERMINAL")
+end)
+cmd.add({"godmode","god"},"nerdy stuff that makes u invincible, btw u cant stop this script so just rejoin",function()
+	task.defer(function()
+		notify("Godmode makes you unable to use tools, use it wisely.","Godmode Handler")
+		pc:FindFirstChildOfClass("Humanoid"):UnequipTools()
+		task.wait(0.15)
+		pc.Archivable = true
+		local real = pc
+		local fake = pc:Clone()
+		fake.Parent = workspace
+		fake.Animate:Destroy()
+		real.Animate:Clone().Parent = fake
+		game.Players.LocalPlayer.Character = fake
+		pc = fake
+		local realanimations = {}
+		local fakeanimations = {}
+		local respawning = false
+		local fakeexists = false
+		game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				if real:FindFirstChildOfClass("Humanoid").Health <= 0 and respawning == false then
+					respawning = true
+					notify("Please wait "..game.Players.RespawnTime.." seconds for godmode to load.","Godmode Handler")
+					task.wait(game.Players.RespawnTime+0.15)
+					real = workspace.CurrentCamera.CameraSubject.Parent
+					respawning = false
+					game.Players.LocalPlayer.Character = fake
+					pc = fake
+				end
+			end)
+			if respawning == true then return end
+			pcall(function()
+				workspace.CurrentCamera.CameraSubject = fake.Humanoid
+			end)
+			pcall(function()
+				for _, v in ipairs(fake:GetChildren()) do
+					pcall(function()
+						if v:IsA("Accessory") then
+							v:Destroy()
+						end
+					end)
+				end
+			end)
+			pcall(function()
+				for _, v in ipairs(fake:GetChildren()) do
+					pcall(function()
+						v.Transparency = 1
+					end)
+				end
+			end)
+			pcall(function()
+				for _, v in ipairs(real:GetChildren()) do
+					pcall(function()
+						v.CanCollide = false
+					end)
+				end
+			end)
+			pcall(function()
+				for _, v in ipairs(fake:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
+					if fakeanimations[v.Animation.AnimationId] then
+					else
+						fakeanimations[v.Animation.AnimationId] = v.Animation
+					end
+				end
+			end)
+			pcall(function()
+				for _, v2 in ipairs(realanimations) do
+					if fakeanimations[v2.Animation.AnimationId] then
+					else
+						v2:Stop()
+					end
+				end
+			end)
+			pcall(function()
+				for _, v in ipairs(fakeanimations) do
+					if not realanimations[v.Animation.AnimationId] then
+						pcall(function()
+							local lol = real:FindFirstChildOfClass("Humanoid"):LoadAnimation(v.Animation)
+							realanimations[v.Animation.AnimationId] = lol
+							lol:Play()
+						end)
+					end
+				end
+			end)
+			pcall(function()
+				real:PivotTo(fake:GetPivot())
+			end)
+		end)
+	end)
+end)
+cmd.add({"resetspawn","illusion"},"Makes your respawnpoint be the place where you died.",function()
+	local hi = false
+	local lastdied
+	game:GetService("RunService").Heartbeat:Connect(function()
+		if hi == false and pc:FindFirstChildOfClass("Humanoid").Health <= 0 then
+			hi = true
+			lastdied = pc:GetPivot()
+		end
+		if hi == true then
+			pcall(function()
+				if p.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
+					p.Character:PivotTo(lastdied)
+				end
+			end)
+			pcall(function()
+				if p.Character:FindFirstChildOfClass("Humanoid").Health > 1 then
+					hi = false
+				end
+			end)
+		end
+	end)
 end)
 cmd.add({"firetouchinterests","fti"},"Fires all of the touch interests in workspace.",function()
 	local fti = 0
@@ -2400,6 +2510,7 @@ end)
 cmd.add({"rejoin","rj"},"Rejoins the server if terminal is broken.",function()
 	game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId,Players.LocalPlayer)
 end)
+
 cmd.add({"teleporttool","clicktp",'tptool'},"Gives you a tool which teleports you to your cursor position.",function()
 	local ok = Instance.new('Tool',game.Players.LocalPlayer.Backpack)
 	ok.Name = "ClickTP"
