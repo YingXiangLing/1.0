@@ -991,95 +991,6 @@ cmd.add({"fireremotes","firer"},"Fires all of the remote events in the game.",fu
 	end
 	notify("Fired "..fti.." remotes.","TERMINAL")
 end)
-cmd.add({"godmode","god"},"nerdy stuff that makes u invincible, btw u cant stop this script so just rejoin",function()
-	task.defer(function()
-		notify("Godmode makes you unable to use tools, use it wisely.","Godmode Handler")
-		pc:FindFirstChildOfClass("Humanoid"):UnequipTools()
-		task.wait(0.15)
-		pc.Archivable = true
-		local real = pc
-		local fake = pc:Clone()
-		fake.Parent = workspace
-		fake.Animate:Destroy()
-		real.Animate:Clone().Parent = fake
-		game.Players.LocalPlayer.Character = fake
-		pc = fake
-		local realanimations = {}
-		local fakeanimations = {}
-		local respawning = false
-		local fakeexists = false
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				if real:FindFirstChildOfClass("Humanoid").Health <= 0 and respawning == false then
-					respawning = true
-					notify("Please wait "..game.Players.RespawnTime.." seconds for godmode to load.","Godmode Handler")
-					task.wait(game.Players.RespawnTime+0.15)
-					real = workspace.CurrentCamera.CameraSubject.Parent
-					respawning = false
-					game.Players.LocalPlayer.Character = fake
-					pc = fake
-				end
-			end)
-			if respawning == true then return end
-			pcall(function()
-				workspace.CurrentCamera.CameraSubject = fake.Humanoid
-			end)
-			pcall(function()
-				for _, v in ipairs(fake:GetChildren()) do
-					pcall(function()
-						if v:IsA("Accessory") then
-							v:Destroy()
-						end
-					end)
-				end
-			end)
-			pcall(function()
-				for _, v in ipairs(fake:GetChildren()) do
-					pcall(function()
-						v.Transparency = 1
-					end)
-				end
-			end)
-			pcall(function()
-				for _, v in ipairs(real:GetChildren()) do
-					pcall(function()
-						v.CanCollide = false
-					end)
-				end
-			end)
-			pcall(function()
-				for _, v in ipairs(fake:FindFirstChildOfClass("Humanoid"):GetPlayingAnimationTracks()) do
-					if fakeanimations[v.Animation.AnimationId] then
-					else
-						fakeanimations[v.Animation.AnimationId] = v.Animation
-					end
-				end
-			end)
-			pcall(function()
-				for _, v2 in ipairs(realanimations) do
-					if fakeanimations[v2.Animation.AnimationId] then
-					else
-						v2:Stop()
-					end
-				end
-			end)
-			pcall(function()
-				for _, v in ipairs(fakeanimations) do
-					if not realanimations[v.Animation.AnimationId] then
-						pcall(function()
-							local lol = real:FindFirstChildOfClass("Humanoid"):LoadAnimation(v.Animation)
-							realanimations[v.Animation.AnimationId] = lol
-							lol:Play()
-						end)
-					end
-				end
-			end)
-			pcall(function()
-				real:PivotTo(fake:GetPivot())
-			end)
-		end)
-	end)
-end)
 cmd.add({"resetspawn","illusion"},"Makes your respawnpoint be the place where you died.",function()
 	local hi = false
 	local lastdied
@@ -1904,7 +1815,7 @@ cmd.add({"fakelag","desync"},"Creates fake lag applied on your character.",funct
 		end
 	end)
 end)
-cmd.add({"instakillreach","instksreach"},"Changes sword damage value to 1000 and adds reach.",function(reach)
+cmd.add({"instakillreach","instksreach"},"Always applies newest damage inflicted 50 times and adds reach.",function(reach)
 	pcall(function()
 		local reachsize =  40
 		if tonumber(reach) then
@@ -2403,6 +2314,29 @@ cmd.add({"antivoid","antiv"},"Stops the void from killing you.",function()
 			pc:PivotTo(pc:GetPivot()*CFrame.new(0,(workspace.FallenPartsDestroyHeight*-1)+50,0))
 		end
 	end)
+end)
+cmd.add({"disabletouchevent","disablete"},"Disables the touched event of all parts using it.",function()
+	local connect
+	connect = game:GetService("RunService").Heartbeat:Connect(function()
+		if game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid").Health < 1 then
+			connect:Disconnect()
+			for _, v in ipairs(workspace:GetDescendants()) do
+				pcall(function()
+					v.CanTouch = true
+				end)
+			end
+		end
+		for _, v in ipairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
+			pcall(function()
+				v.CanTouch = false
+			end)
+		end
+	end)
+	for _, v in ipairs(workspace:GetDescendants()) do
+		pcall(function()
+			v.CanTouch = false
+		end)
+	end
 end)
 cmd.add({"cframefling","cffling","cframef"},"Flings someone using CFrame.",function(name)
 	local target = getPlr(name)
