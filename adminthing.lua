@@ -582,7 +582,7 @@ cmd.add({"partcontrol","pcontrol"},"networkownership goes brr",function()
 								part.Anchored = true
 								part.Size = Vector3.new(v.SimulationRadius,v.SimulationRadius,v.SimulationRadius)
 								part.Color = Color3.new(1,0,0)
-								part.Transparency = 0.99
+								part.Transparency = 1
 								part.CanCollide = false
 								part.CastShadow = false
 								part.CFrame = v.Character:GetPivot()
@@ -594,7 +594,7 @@ cmd.add({"partcontrol","pcontrol"},"networkownership goes brr",function()
 								part.Anchored = true
 								part.Size = Vector3.new(27,27,27)
 								part.Color = Color3.new(0,0,1)
-								part.Transparency = 0.77
+								part.Transparency = 1
 								part.CanCollide = false
 								part.CastShadow = false
 								part.CFrame = v.Character:GetPivot()
@@ -648,6 +648,52 @@ cmd.add({"partcontrol","pcontrol"},"networkownership goes brr",function()
 		end
 	else
 		notify("No controllable parts were found.","TERMINAL")
+	end
+end)
+cmd.add({"controltool","controlt"},"Gives you a tool that controls the remotes inside of others's tools, command is purely based if the game is well made or not.",function()
+	if not game.Players.LocalPlayer.Backpack:FindFirstChild("GunController-T") then
+		local tool = Instance.new("Tool",game.Players.LocalPlayer.Backpack)
+		tool.Name = "ToolController-T"
+		tool.RequiresHandle = false
+		tool.Activated:Connect(function()
+			for _, v in ipairs(workspace:GetDescendants()) do
+				if v:IsA("Tool") then
+					for _, v2 in ipairs(v:GetDescendants()) do
+						if v2:IsA("RemoteEvent") or v2:IsA("BindableEvent") or v2:IsA("RemoteFunction") then
+							pcall(function()
+								v2:Fire(game.Players.LocalPlayer:GetMouse().Hit)
+							end)
+							pcall(function()
+								v2:Fire(game.Players.LocalPlayer:GetMouse().Hit.Position)
+							end)
+							pcall(function()
+								v2:Fire(game.Players.LocalPlayer:GetMouse().Target)
+							end)
+							pcall(function()
+								v2:FireServer(game.Players.LocalPlayer:GetMouse().Hit)
+							end)
+							pcall(function()
+								v2:FireServer(game.Players.LocalPlayer:GetMouse().Hit.Position)
+							end)
+							pcall(function()
+								v2:FireServer(game.Players.LocalPlayer:GetMouse().Target)
+							end)
+							pcall(function()
+								v2:InvokeServer(game.Players.LocalPlayer:GetMouse().Hit)
+							end)
+							pcall(function()
+								v2:InvokeServer(game.Players.LocalPlayer:GetMouse().Hit.Position)
+							end)
+							pcall(function()
+								v2:InvokeServer(game.Players.LocalPlayer:GetMouse().Target)
+							end)
+						end
+					end
+				end
+			end
+		end)
+	else
+		notify("You already have this tool!","TERMINAL")
 	end
 end)
 cmd.add({"gettools","tools"},"Attempts to steal tools from others.",function()
@@ -915,6 +961,20 @@ cmd.add({"fireproximityprompts","fpp"},"Fires all of the proximityprompts in the
 		end
 	end
 	notify("Fired "..fti.." proximityprompts.","TERMINAL")
+end)
+cmd.add({"remotespam","rspam"},"Fires all of the remote events in the game to cause lag. This command can only be stopped by rejoining.",function()
+	game:GetService("RunService").Heartbeat:Connect(function()
+		for _, v in ipairs(game:GetDescendants()) do
+			if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
+				pcall(function()
+					v:FireServer()
+				end)
+				pcall(function()
+					v:InvokeServer()
+				end)
+			end
+		end
+	end)
 end)
 cmd.add({"fireremotes","firer"},"Fires all of the remote events in the game.",function()
 	local fti = 0
