@@ -34,12 +34,6 @@ else
 end
 local h = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 local cam = workspace.CurrentCamera
-game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-game.Players.LocalPlayer.SimulationRadius = 1000
-wait(game.Players.RespawnTime + 0.5)
-game.Players.LocalPlayer.SimulationRadius = 1000
-game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
-workspace.CurrentCamera = cam
 wait(0.1)
 local oldselectionbox = nil
 local gui = nil
