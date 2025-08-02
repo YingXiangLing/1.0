@@ -2506,7 +2506,7 @@ cmd.add({"teleporttool","clicktp",'tptool'},"Gives you a tool which teleports yo
 	ok.Activated:Connect(function()
 		pcall(function()
 			if game:GetService("Players").LocalPlayer:GetMouse().Target ~= nil then
-				game:GetService("Players").LocalPlayer.Character:PivotTo(CFrame.new(game:GetService("Players").LocalPlayer:GetMouse().Hit.Position))
+				game:GetService("Players").LocalPlayer.Character:PivotTo(CFrame.new(game:GetService("Players").LocalPlayer:GetMouse().Hit.Position+Vector3.new(0,4,0)))
 			end
 		end)
 	end)
