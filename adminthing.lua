@@ -2037,7 +2037,7 @@ cmd.add({"partfling","pf","partf"},"Flings someone using parts, far more undetec
 				else
 					game:GetService("Players").LocalPlayer.SimulationRadius = 1000
 					Part.Velocity = Vector3.new(0,500*5,0)
-					Part.CFrame = weld.Part1.CFrame+(weld.Part1.Parent:FindFirstChildOfClass("Humanoid").MoveDirection*11)
+					Part.CFrame = weld.Part1.CFrame
 				end
 			end)
 		end
