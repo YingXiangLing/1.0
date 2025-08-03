@@ -2034,7 +2034,7 @@ cmd.add({"partfling","pf","partf"},"Flings someone using parts, far more undetec
 			local oldcframepart;oldcframepart = Part.CFrame
 			local oldcf=game:GetService("Players").LocalPlayer.Character:GetPivot()
 			if NetworkCheck(Part) == false then
-				notify("Using resetsimulationrange makes partfling work a bit better!")
+				notify("Using resetsimulationrange makes partfling work a bit better!","PARTFLING")
 				repeat
 					game:GetService("Players").LocalPlayer.Character:PivotTo(Part.CFrame)
 					game:GetService("RunService").RenderStepped:Wait()
