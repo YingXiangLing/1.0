@@ -2012,6 +2012,7 @@ cmd.add({"partfling","pf","partf"},"Flings someone using parts, far more undetec
 			end
 			local Part = getclosestpart()
 			if Part == nil then return end
+			local oldcframepart;oldcframepart = Part.CFrame
 			local oldcf=game:GetService("Players").LocalPlayer.Character:GetPivot()
 			if NetworkCheck(Part) == false then
 				repeat
@@ -2031,6 +2032,7 @@ cmd.add({"partfling","pf","partf"},"Flings someone using parts, far more undetec
 					pcall(function()
 						Part.Position = oldpos
 						Part.Velocity = Vector3.zero
+						Part.CFrame = oldcframepart
 					end)
 				else
 					game:GetService("Players").LocalPlayer.SimulationRadius = 1000
