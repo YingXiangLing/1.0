@@ -530,6 +530,44 @@ task.spawn(function()
 		end)
 	end)
 end)
+cmd.add({"respawnteleporttool","rtptool","respawnclicktp","rclicktp"},"Same thing as teleporttool but more undetectable",function()
+	local alreadytping = false
+	local function teleport()
+		pcall(function()
+			task.spawn(function()
+				if alreadytping == true then return end
+				if game:GetService("Players").LocalPlayer:GetMouse().Target ~= nil then
+					local spawnlocation = Instance.new('Part',workspace)
+					spawnlocation.Size = Vector3.new(1,2,1)
+					spawnlocation.CanCollide = false
+					spawnlocation.Anchored = true
+					spawnlocation.Transparency = 1
+					alreadytping = true
+					spawnlocation.Position = game:GetService("Players").LocalPlayer:GetMouse().Hit.Position+Vector3.new(0,1,0)
+					local cam = workspace.CurrentCamera
+					game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+					local okconnect = game:GetService("RunService").Heartbeat:Connect(function()
+						xpcall(function()
+							game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = spawnlocation.CFrame*CFrame.new(0,4,0)
+						end,warn)
+					end)
+					task.wait(game.Players.RespawnTime + 1.5)
+					okconnect:Disconnect()
+					workspace.CurrentCamera = cam
+					local ok = Instance.new('Tool',game.Players.LocalPlayer.Backpack)
+					ok.Name = "RClickTP"
+					ok.RequiresHandle = false
+					alreadytping = false
+					ok.Activated:Connect(teleport)
+				end
+			end)
+		end)
+	end
+	local ok = Instance.new('Tool',game.Players.LocalPlayer.Backpack)
+	ok.Name = "RClickTP"
+	ok.RequiresHandle = false
+	ok.Activated:Connect(teleport)
+end)
 cmd.add({"partcontrol","pcontrol"},"networkownership goes brr",function()
 	notify("Currently fetching all parts, this might reset your character.","TERMINAL")
 	local RunService = game:GetService("RunService")
@@ -1191,11 +1229,11 @@ cmd.add({"respawnto","respawngoto","rto"},"Teleports you to another player's loc
 		local cam = workspace.CurrentCamera
 		game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
 		local okconnect = game:GetService("RunService").Heartbeat:Connect(function()
-		    pcall(function()
-		        game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = h
-		    end)
+			pcall(function()
+				game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = h
+			end)
 		end)
-		wait(game.Players.RespawnTime + 0.5)
+		wait(game.Players.RespawnTime + 1.5)
 		okconnect:Disconnect()
 		workspace.CurrentCamera = cam
 	end
