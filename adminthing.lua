@@ -1190,10 +1190,13 @@ cmd.add({"respawnto","respawngoto","rto"},"Teleports you to another player's loc
 		local h = getPlr(name).Character:WaitForChild("HumanoidRootPart").CFrame
 		local cam = workspace.CurrentCamera
 		game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
-		game.Players.LocalPlayer.SimulationRadius = 1000
+		local okconnect = game:GetService("RunService").Heartbeat:Connect(function()
+		    pcall(function()
+		        game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame = h
+		    end)
+		end)
 		wait(game.Players.RespawnTime + 0.5)
-		game.Players.LocalPlayer.SimulationRadius = 1000
-		game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = h
+		okconnect:Disconnect()
 		workspace.CurrentCamera = cam
 	end
 end)
