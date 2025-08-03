@@ -37,6 +37,7 @@ local cam = workspace.CurrentCamera
 wait(0.1)
 local oldselectionbox = nil
 local gui = nil
+local resettedsimrange = false
 task.spawn(function()
 	game:GetService("RunService").Heartbeat:Connect(function()
 		if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Delete") and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Delete"):FindFirstChild("HarkedyesokgoodTerminal") then
@@ -1448,6 +1449,24 @@ cmd.add({"partjail","jail","pjail"},"Eternally jails someone with moving parts."
 		flingaura(target)
 	end
 end)
+cmd.add({"resetsimulationrange","resetsimrange","resetsr"},"Resets your simulationradius to 1000 and forces partfling to stop",function()
+	notify("Currently fetching all parts, this might reset your character.","TERMINAL")
+	task.spawn(function()
+		resettedsimrange = true
+		local old = game:GetService("Players").LocalPlayer.Character:GetPivot()
+		local success = false
+		pcall(function()
+			game:GetService("Players").LocalPlayer.SimulationRadius = 1000
+			game:GetService("Players").LocalPlayer.Character:BreakJoints()
+			success = true
+		end)
+		task.wait(0.01)
+		task.wait(game:GetService("Players").RespawnTime+0.5)
+		game:GetService("Players").LocalPlayer.Character:PivotTo(old)
+		task.wait(1)
+		resettedsimrange = false
+	end)
+end)
 cmd.add({"deleteunanchored","deleteua","delua","delunanchored"},"Deletes every unanchored part across the map.",function()
 	notify("Currently fetching all parts, this might reset your character.","TERMINAL")
 	task.spawn(function()
@@ -2015,10 +2034,11 @@ cmd.add({"partfling","pf","partf"},"Flings someone using parts, far more undetec
 			local oldcframepart;oldcframepart = Part.CFrame
 			local oldcf=game:GetService("Players").LocalPlayer.Character:GetPivot()
 			if NetworkCheck(Part) == false then
+				notify("Using resetsimulationrange makes partfling work a bit better!")
 				repeat
 					game:GetService("Players").LocalPlayer.Character:PivotTo(Part.CFrame)
 					game:GetService("RunService").RenderStepped:Wait()
-				until NetworkCheck(Part) == true
+				until NetworkCheck(Part) == true or resettedsimrange == true
 			end
 			game:GetService("Players").LocalPlayer.Character:PivotTo(oldcf)
 			game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Running)
